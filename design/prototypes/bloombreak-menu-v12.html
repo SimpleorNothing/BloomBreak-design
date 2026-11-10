@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BloomBreak 메뉴 개편 시안 v12.2</title>
+<title>BloomBreak 메뉴 개편 시안 v12.2.2</title>
 <style>
 :root{
   --bg:#f3f4ee; --sheet:#fdf9ee; --card:#e7ece4; --card2:#eef1ea; --soft:#d8e5cf;
@@ -734,12 +734,17 @@ img.abIc{object-fit:cover;padding:0;background:none}
 <body>
 
 <details class="designHistory" id="design-history" open>
-<summary>디자인 시안 v12.2 · 수정이력</summary>
-<p>기준일: 2026-11-08 (한국 시간) · APK 반영: 이 시안과 일치하는 빌드는 아직 확인하지 않았습니다.</p>
+<summary>디자인 시안 v12.2.2 · 수정이력</summary>
+<p>기준일: 2026-11-09 (한국 시간) · APK 반영: 아래 4개 항목은 이미 앱 소스(build215 브랜치)의 모양을 시안에 반영한 것입니다. 이 시안과 전체가 일치하는 빌드는 아직 확인하지 않았고 실기기 확인도 없습니다.</p>
 <p><a href="https://github.com/SimpleorNothing/BloomBreak-design">공개 시안·관리 가이드</a> · <a href="https://github.com/SimpleorNothing/BloomBreak-design/commits/main/design/prototypes/bloombreak-menu-v12.html">파일 변경 내역</a> · 시안은 아래에서 조작할 수 있습니다. 이력은 접어서 볼 수 있습니다.</p>
 <div class="historyScroll" role="region" aria-label="디자인 변경 이력" tabindex="0"><table>
 <thead><tr><th>버전 / 날짜</th><th>메뉴·항목</th><th>변경 전 → 변경 후</th><th>APK 반영</th></tr></thead>
 <tbody>
+<tr><td>v12.2.2 / 2026-11-09</td><td>새 화분 심기 1단계</td><td>공간 목록 끝의 ‘내 사진으로 만들기’ 타일 표시 → 제거. 사진으로 공간 만들기는 공간 메뉴에서만 진입.</td><td>앱 소스가 이미 이 구조(build215 공간 진입 결정, docs/BUILD215_REVIEW.md) · 실기기 미확인</td></tr>
+<tr><td>v12.2.1 / 2026-11-09</td><td>더보기</td><td>‘내 기록’·‘설정’·‘BloomBreak’ 그룹 제목 표시, 응원하기는 BloomBreak 그룹 안 → 그룹 제목 없이 간격만 두고 응원하기를 별도 그룹으로 분리(내 기록 · 설정 · 응원하기 · BloomBreak).</td><td>앱 소스가 이미 이 모양(#859, 그룹 순서 테스트) · 실기기 미확인</td></tr>
+<tr><td>v12.2.1 / 2026-11-09</td><td>날씨와 시간</td><td>날씨 → 시간 순서에서 시간 → 날씨 순서로 변경.</td><td>앱 소스가 이미 이 모양(build212 날씨 시트, tests/weather-sheet.test.cjs) · 실기기 미확인</td></tr>
+<tr><td>v12.2.1 / 2026-11-09</td><td>공간</td><td>만들기 타일 문구 “나만의 공간 만들기” → “내 사진으로 만들기”.</td><td>앱 소스가 이미 이 문구(build215 공간 진입, tests/build215-integration.test.cjs) · 실기기 미확인</td></tr>
+<tr><td>v12.2.1 / 2026-11-09</td><td>응원하기</td><td>금액·주기 선택 다음에 소품 소개 → 소품 소개(“응원해 주시면 드려요”)가 먼저, 그 아래 금액·주기 선택.</td><td>앱 소스가 이미 이 순서(D019 기존 최신 소스 유지, STATUS213) · 실기기 미확인</td></tr>
 <tr><td>v12.2 / 2026-11-08</td><td>시안 관리·이력</td><td>파일 내 이력 없음 → 처음 열면 수정이력 표시. 공개 GitHub 경로와 시안·APK 동기화 기준 추가.</td><td>관리 화면만 변경, APK 신규 제작 없음</td></tr>
 <tr><td>v12.2 / 2026-11-08</td><td>시작 화면 재생</td><td>동작 줄이기 설정에서 GIF 숨김·0.3초 종료 → GIF 표시·약 7.2초 재생. 페이지 재진입과 보이지 않던 탭 활성화 시 처음부터 재생.</td><td>미확인</td></tr>
 <tr><td>v12.2 / 2026-11-08</td><td>시작 화면 라인</td><td>GIF만 표시 → 초록색 라인 로딩 표시 추가. 동작 줄이기 설정에서는 보조 라인을 정지 표시.</td><td>미확인</td></tr>
@@ -927,7 +932,7 @@ img.abIc{object-fit:cover;padding:0;background:none}
             <span class="kebab" onclick="pop(event,'space')" aria-label="더 보기"><svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span>
           </button>
           <button class="tile addTile" onclick="openSheet('makeSpace')">
-            <span class="plus">＋</span>나만의 공간<br>만들기
+            <span class="plus">＋</span>내 사진으로<br>만들기
           </button>
         </div>
         <p class="hint">💡 날씨·바람·시간대는 홈 왼쪽 위 <b>날씨 칩</b>을 눌러 바꿔요.</p>
@@ -989,13 +994,13 @@ img.abIc{object-fit:cover;padding:0;background:none}
       <div class="sHead"><h2>날씨와 시간</h2><button class="x" onclick="closeSheet()" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <p class="sDesc">창밖 날씨와 시간을 골라요.</p>
       <div class="sBody">
-        <div class="secT">날씨</div>
-        <div class="opt pick1" data-group="weather">
-          <button data-v="📍 실제 날씨">📍 실제 날씨</button><button data-v="☀️ 맑음">☀️ 맑음</button><button class="on" data-v="🌧 비">🌧 비</button><button data-v="❄️ 눈">❄️ 눈</button>
-        </div>
         <div class="secT">시간대</div>
         <div class="opt pick1" data-group="time">
           <button class="on" data-v="지금 시간">지금 시간</button><button data-v="낮">낮</button><button data-v="저녁">저녁</button><button data-v="밤">밤</button>
+        </div>
+        <div class="secT">날씨</div>
+        <div class="opt pick1" data-group="weather">
+          <button data-v="📍 실제 날씨">📍 실제 날씨</button><button data-v="☀️ 맑음">☀️ 맑음</button><button class="on" data-v="🌧 비">🌧 비</button><button data-v="❄️ 눈">❄️ 눈</button>
         </div>
         <div class="rowItem">
           <div class="t"><b>바람 효과</b><span>나뭇잎과 꽃이 살랑 흔들려요</span></div>
@@ -1014,21 +1019,20 @@ img.abIc{object-fit:cover;padding:0;background:none}
       <div class="handle"></div>
       <div class="sHead"><h2>더보기</h2><button class="x" onclick="closeSheet()" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="sBody" style="padding-top:6px">
-        <div class="listT">내 기록</div>
         <div class="list">
           <button onclick="openSheet('growth')"><span class="ic">📈</span><span>성장 기록<small>쉰 시간과 화분별 성장</small></span><span class="chev">›</span></button>
           <button onclick="openSheet('codex')"><span class="ic">📖</span><span>꽃 이야기<small>키울 수 있는 꽃 8종의 이야기</small></span><span class="chev">›</span></button>
           <button onclick="openSheet('backup')"><span class="ic">💾</span><span>기록 저장<small>자동 저장 · 백업 파일 만들기와 불러오기</small></span><span class="chev" id="backupChev">›</span></button>
           <button onclick="openSheet('widget')"><span class="ic">🪴</span><span>홈 화면 위젯<small>바탕화면에서 꽃을 바로 보기</small></span><span class="chev">›</span></button>
         </div>
-        <div class="listT">설정</div>
-        <div class="list">
+        <div class="list" style="margin-top:12px">
           <button onclick="openSheet('notify')"><span class="ic">🔔</span><span>알림<small id="notifySub">꺼짐</small></span><span class="chev">›</span></button>
           <button onclick="openSheet('display')"><span class="ic">🌗</span><span>화면 테마<small id="themeSub">밝은 화면</small></span><span class="chev">›</span></button>
         </div>
-        <div class="listT">BloomBreak</div>
-        <div class="list">
+        <div class="list" style="margin-top:12px">
           <button onclick="openSheet('support')"><span class="ic">💛</span><span>응원하기<small id="supSub">응원 소품 2개가 열려요</small></span><span class="chev">›</span></button>
+        </div>
+        <div class="list" style="margin-top:12px">
           <button onclick="openSheet('help')"><span class="ic">❔</span><span>도움말과 문의<small>사용법 다시 보기 · 자주 묻는 질문 · 1:1 문의</small></span><span class="chev">›</span></button>
           <button onclick="openSheet('about')"><span class="ic">ℹ️</span><span>앱 정보<small>v 0.4.168 · 업데이트 소식</small></span><span class="chev">›</span></button>
         </div>
@@ -1279,14 +1283,14 @@ img.abIc{object-fit:cover;padding:0;background:none}
       <div class="sHead"><button class="back" onclick="openSheet('more')" aria-label="뒤로"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><h2>BloomBreak 응원하기</h2><button class="x" onclick="closeSheet(true)" aria-label="닫기"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
       <div class="sBody" id="supBody">
         <p class="supLead">작은 응원이 더 많은 사람의 쉼을 이어가요.<br>응원하지 않아도 꽃멍과 정원은 모두 무료예요.</p>
-        <div class="seg" data-seg="supType"><button class="on" data-v="once">한 번 응원</button><button data-v="month">매월 응원</button></div>
-        <div class="amtGrid" id="amtGrid"><button data-v="3000" class="on">3,000원</button><button data-v="5000">5,000원</button><button data-v="10000">10,000원</button><button data-v="c">직접 정하기</button></div>
-        <input class="qInput" id="amtInput" inputmode="numeric" placeholder="1,000~50,000원 · 1,000원 단위" hidden>
-        <p class="rnErr" id="amtErr" hidden>1,000~50,000원을 1,000원 단위로 적어 주세요.</p>
         <div class="supGift">
           <b>응원해 주시면 드려요</b>
           <div class="sgItems"><span><img data-i="deco_house" src="" alt="">유리 집 조명</span><span><img data-i="deco_jar" src="" alt="">별빛 유리병</span><span id="sgBadge" hidden><i>🌸</i>응원 멤버 배지</span></div>
         </div>
+        <div class="seg" data-seg="supType"><button class="on" data-v="once">한 번 응원</button><button data-v="month">매월 응원</button></div>
+        <div class="amtGrid" id="amtGrid"><button data-v="3000" class="on">3,000원</button><button data-v="5000">5,000원</button><button data-v="10000">10,000원</button><button data-v="c">직접 정하기</button></div>
+        <input class="qInput" id="amtInput" inputmode="numeric" placeholder="1,000~50,000원 · 1,000원 단위" hidden>
+        <p class="rnErr" id="amtErr" hidden>1,000~50,000원을 1,000원 단위로 적어 주세요.</p>
         <p class="hint" id="supTerms">한 번만 결제하며 자동으로 갱신되지 않아요.</p>
         <div class="supLinks"><button onclick="toast('Google Play에서 구매 내역을 확인해요')">구매 복원</button><button id="supManage" hidden onclick="toast('Google Play 정기 결제 관리가 열려요')">정기 응원 관리·해지</button></div>
       </div>
@@ -2187,7 +2191,7 @@ const pl={s:1,space:null,pot:'natural',potName:'하루',fl:'calendula',flName:'�
 const SPACE_LIST=()=>Object.keys(SPACE_IMG);
 function plReset(){
   pl.s=1; pl.space=P().space; pl.name='';
-  $('#plSpaces').innerHTML=SPACE_LIST().map(s=>`<button class="tile ${s===pl.space?'on':''}" data-s="${s}"><div class="im"><img src="${SPACE_IMG[s]}" alt=""></div><div class="lb">${s}</div></button>`).join('')+`<button class="tile addTile" onclick="openSheet('makeSpace');ms.from='plant'"><span class="plus">＋</span>내 사진으로<br>만들기</button>`;
+  $('#plSpaces').innerHTML=SPACE_LIST().map(s=>`<button class="tile ${s===pl.space?'on':''}" data-s="${s}"><div class="im"><img src="${SPACE_IMG[s]}" alt=""></div><div class="lb">${s}</div></button>`).join('');
   $('#plName').value=''; plShow();
 }
 function plGo(n){pl.s=n;plShow()}
