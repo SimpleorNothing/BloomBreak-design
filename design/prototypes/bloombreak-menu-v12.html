@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>BloomBreak 메뉴 개편 시안 v12.2.4</title>
+<title>BloomBreak 메뉴 개편 시안 v12.2.5</title>
 <style>
 :root{
   --bg:#f3f4ee; --sheet:#fdf9ee; --card:#e7ece4; --card2:#eef1ea; --soft:#d8e5cf;
@@ -741,12 +741,13 @@ img.abIc{object-fit:cover;padding:0;background:none}
 <body>
 
 <details class="designHistory" id="design-history" open>
-<summary>디자인 시안 v12.2.4 · 수정이력</summary>
-<p>기준일: 2026-11-13 (한국 시간) · APK 반영: v12.2.1 이후 항목은 이미 앱 소스(build215, APK 소스 407ce735 포함)의 모양을 시안에 반영한 것입니다. 이 시안과 전체가 일치하는 빌드는 아직 확인하지 않았고 실기기 확인도 없습니다.</p>
+<summary>디자인 시안 v12.2.5 · 수정이력</summary>
+<p>기준일: 2026-11-15 (한국 시간) · APK 반영: v12.2.1 이후 항목은 이미 앱 소스(build215, APK 소스 407ce735 포함)의 모양을 시안에 반영한 것입니다. 이 시안과 전체가 일치하는 빌드는 아직 확인하지 않았고 실기기 확인도 없습니다.</p>
 <p><a href="https://github.com/SimpleorNothing/BloomBreak-design">공개 시안·관리 가이드</a> · <a href="https://github.com/SimpleorNothing/BloomBreak-design/commits/main/design/prototypes/bloombreak-menu-v12.html">파일 변경 내역</a> · 시안은 아래에서 조작할 수 있습니다. 이력은 접어서 볼 수 있습니다.</p>
 <div class="historyScroll" role="region" aria-label="디자인 변경 이력" tabindex="0"><table>
 <thead><tr><th>버전 / 날짜</th><th>메뉴·항목</th><th>변경 전 → 변경 후</th><th>APK 반영</th></tr></thead>
 <tbody>
+<tr><td>v12.2.5 / 2026-11-15</td><td>내 화분 · 화분 ⋮ 메뉴</td><td>이름 바꾸기 · 위치·크기 조정 · 공간 바꾸기 · 화분 정리하기 → ‘공간 바꾸기’ 항목 삭제(나머지 항목은 그대로). 사용자가 직접 지시한 변경.</td><td>미반영 · 앱 소스에는 시안과 같은 ‘공간 바꾸기’ 항목이 없어 APK 확인 전</td></tr>
 <tr><td>v12.2.4 / 2026-11-13</td><td>공간</td><td>‘내 사진으로 만들기’ 점선 타일(내가 만든 공간 그리드 안) → 내가 만든 공간 목록 아래 전체 폭 점선 카드 ‘내 공간 추가’(원형 ＋). 사용자가 앱 위치를 직접 지시한 변경(#1001).</td><td>앱 소스 6e3780c3(build219)에 이미 반영 · 실기기 미확인</td></tr>
 <tr><td>v12.2.4 / 2026-11-13</td><td>꽃멍</td><td>왼쪽 위 ⤢ 화분 크기 버튼과 크기 패널 삭제(소리 버튼만 남김). 사용자가 꽃멍의 화분 크기 조절 UI를 일부러 제거한 변경(#800).</td><td>앱 소스가 이미 이 모양(v201) · 실기기 미확인</td></tr>
 <tr><td>v12.2.3 / 2026-11-11</td><td>시작 화면</td><td>받은 로딩 GIF + 초록 라인 + 약 7.2초 → 앱 시작 화면(금잔화가 선으로 그려지며 피는 Canvas 재생)을 9.7초 그대로 녹화한 384×832 GIF로 교체, 초록 라인 제거, 재생 시간 9.7초. 탭하여 건너뛰기와 “화면을 누르면 바로 시작해요” 안내는 그대로. 앞의 v12.2 시작 화면 3개 행은 과거 기록으로 보존.</td><td>앱 소스가 이미 이 재생(#901 승인, build215) · 실기기 미확인</td></tr>
@@ -1649,7 +1650,6 @@ img.abIc{object-fit:cover;padding:0;background:none}
       <button onclick="hidePop();toast('정원에 놓았어요')">정원에 놓기</button>
       <button onclick="hidePop();openSheet('rename')">이름 바꾸기</button>
       <button onclick="hidePop();editFromMenu()">위치·크기 조정</button>
-      <button onclick="hidePop();toast('놓을 공간 바꾸기')">공간 바꾸기</button>
       <button class="del" onclick="hidePop();askDeletePot()">화분 정리하기</button>
     </div>
     <div class="pop" id="pop-space">
