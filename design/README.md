@@ -4,6 +4,7 @@
 
 - 누구나 읽는 공개 저장소: https://github.com/SimpleorNothing/BloomBreak-design
 - 기준 시안: [bloombreak-menu-v12.html](prototypes/bloombreak-menu-v12.html) (파일 내부 버전 v12.2.9).
+- 함께 보기 대화 최신 시안: [bloombreak-chat-two-states.html](prototypes/bloombreak-chat-two-states.html) (v1.0.0, 2026-11-18). 기존 기준 시안의 ‘대화 기록’ 화면을 이 두 상태로 대체한다.
 - GitHub 파일 화면에서는 HTML이 실행되지 않는다. 저장소의 **Code → Download ZIP**으로 받은 뒤 압축을 풀고 HTML을 브라우저로 연다. 이미지·시작 GIF·수정이력은 파일에 내장되어 별도 서버 없이 작동한다.
 - 공개 저장소의 같은 경로 `design/prototypes/bloombreak-menu-v12.html`과 앱 저장소의 이 파일은 같은 내용으로 유지한다. 앱 저장소는 비공개이므로 외부 참조는 공개 저장소 링크를 사용한다.
 - 파일명 v12는 시안 계열이다. 작은 변경은 파일 내부 버전을 올리고 Git 변경 내역으로 보존한다. 큰 개편은 새 계열 파일을 만들고 이 문서에서 최신 기준본을 갱신한다.
