@@ -1,0 +1,23 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>사진 분석 안내 v1.0.0</title><style>/* Optional photo transmission uses the same readable dialog in both themes. */
+:root body .bbPhotoAnalysisControl{margin:12px 16px;padding:12px 16px;border:1px solid #393939;border-radius:16px;background:#242424;color:#f5f5f5;text-align:left}
+:root body .bbPhotoAnalysisControl[hidden]{display:none!important}
+:root body .bbPhotoAnalysisControl p{font-size:14px;line-height:1.6;margin:0 0 10px}
+:root body .bbPhotoAnalysisControl button{appearance:none;min-height:44px;width:100%;padding:10px 12px;font:600 14px/1.5 var(--bb-font-ui,system-ui,sans-serif);border:1px solid #555;border-radius:12px;background:#242424;color:#f5f5f5;white-space:normal}
+:root body.bbBrightTheme .bbPhotoAnalysisControl{background:#fffaf0;color:#283d2f;border-color:#d8dfd6}
+:root body.bbBrightTheme .bbPhotoAnalysisControl button{background:#e6ece3;color:#283d2f;border-color:#d8dfd6}
+body.flowerGazing .bbPhotoAnalysisControl{display:none!important}
+:root body dialog.bbPhotoConsent{box-sizing:border-box;width:min(480px,calc(100vw - 32px));max-width:calc(100vw - 32px);max-height:calc(100dvh - 32px);overflow:auto;margin:auto;padding:24px;border:1px solid #393939;border-radius:24px;background:#090909;color:#f5f5f5;font:16px/1.6 var(--bb-font-ui,system-ui,sans-serif);text-align:left;overflow-wrap:anywhere}
+:root body.bbBrightTheme dialog.bbPhotoConsent{background:#fffaf0;color:#283d2f;border-color:#d8dfd6}
+.bbPhotoConsent::backdrop{background:rgba(0,0,0,.64)}
+:root body .bbPhotoConsent .bbMenuHeader{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+:root body .bbPhotoConsent h2{flex:1;min-width:0;font-size:19px;line-height:1.5;margin:0}
+:root body .bbPhotoConsent p{font-size:14px;line-height:1.65;margin:12px 0}
+:root body .bbPhotoConsentPreview{display:block;width:100%;max-height:160px;object-fit:contain;border-radius:12px;background:#242424}
+:root body .bbPhotoConsentActions{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:20px}
+:root body .bbPhotoConsentActions button{appearance:none;min-height:56px;white-space:normal;padding:12px 16px;border:1px solid #555;border-radius:16px;background:#242424;color:#f5f5f5;font:600 16px/1.5 var(--bb-font-ui,system-ui,sans-serif);cursor:pointer}
+:root body .bbPhotoConsentActions [data-photo-send]{background:#f5f5f5;color:#111;border-color:#f5f5f5}
+:root body.bbBrightTheme .bbPhotoConsentActions button{background:#e6ece3;color:#283d2f;border-color:#d8dfd6}
+:root body.bbBrightTheme .bbPhotoConsentActions [data-photo-send]{background:#47765b;color:white;border-color:#47765b}
+:root body .bbPhotoConsent button:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+@media(max-width:359px){:root body dialog.bbPhotoConsent{padding:20px}}
+body{font-family:system-ui;background:#e6ece3;margin:16px}#design-history{max-width:480px;margin:0 auto 20px}summary{cursor:pointer} .bbMenuClose{width:44px;height:44px;border:0;border-radius:50%;font-size:28px}.bbPhotoConsent{position:static;display:block}</style><body class="bbBrightTheme"><details id="design-history" open><summary>v1.0.0 · 2026-11-20 · 수정이력</summary><p>D006 사진 분석 안내: 긴 3문단 → 핵심 2문장과 접힌 전송 정보. ‘사진만 사용’ → ‘분석 없이 사용’, ‘이 사진 전송하고 분석’ → ‘전송하고 분석’. 미리보기·버튼 배치·취소·전송 동작 유지. 웹·Android 개발 소스 적용, 발행 APK·실기기 미확인.</p></details><dialog open class="bbPhotoConsent" aria-labelledby="bbPhotoConsentTitle"><div class="bbMenuHeader"><h2 id="bbPhotoConsentTitle">이 사진을 분석할까요?</h2><button type="button" class="bbMenuClose" data-photo-close aria-label="사진 분석 확인 닫기">×</button></div><div style="height:140px;background:#e6ece3;border-radius:16px" aria-label="선택한 사진 미리보기"></div><div id="bbPhotoConsentDisclosure"><p>사진 축소본을 Cloudflare AI로 보내 창문과 눈·비 효과 위치를 분석해요. 사람·개인정보도 전송될 수 있어요.</p><details><summary>전송 정보</summary><p>JPEG(긴 쪽 최대 1024px)을 BloomBreak의 Cloudflare 서버(bloom-photo-analysis.cw120-park.workers.dev/analyze)로 보내요. Cloudflare Workers AI의 Qwen 모델이 실내·실외와 창문 영역을 분석해요. 사진 속 사람이나 개인 정보도 함께 전송될 수 있어요.</p><p>분석 없이도 배경으로 사용할 수 있어요. 동의는 저장하지 않고 전송할 때마다 물어봐요.</p></details></div><div class="bbPhotoConsentActions"><button type="button" data-photo-local>분석 없이 사용</button><button type="button" data-photo-send>전송하고 분석</button></div></dialog></body></html>
