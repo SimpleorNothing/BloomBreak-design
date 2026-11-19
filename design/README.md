@@ -2,6 +2,8 @@
 
 ## 경로와 열기
 
+- 함께 보기 아이콘 최신 시안: [bloombreak-together-avatars.html](prototypes/bloombreak-together-avatars.html), v1.0.0 (2026-11-19). 사용자 승인 1번 색연필 강아지와 강아지·곰·고양이·토끼 순서를 이 시안으로 우선한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
+
 - 누구나 읽는 공개 저장소: https://github.com/SimpleorNothing/BloomBreak-design
 - 기준 시안: [bloombreak-menu-v12.html](prototypes/bloombreak-menu-v12.html) (파일 내부 버전 v12.2.10).
 - 함께 보기 대화 최신 시안: [bloombreak-chat-two-states.html](prototypes/bloombreak-chat-two-states.html) (v1.0.2, 2026-11-19). 기존 기준 시안의 ‘대화 기록’ 화면을 이 두 상태로 대체한다.
@@ -68,5 +70,6 @@
 
 - v12.2: 제공된 v12.1 기준본에 시작 GIF·라인 애니메이션·재진입 재생 수정과 수정이력 화면을 기록했다.
 - 이번 작업은 시안 등록과 관리 체계 변경이다. APK를 새로 제작하지 않았으며 기존 APK와 시안 전체의 일치 여부는 미확인이다.
+
 
 
