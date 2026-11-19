@@ -2,6 +2,8 @@
 
 ## 경로와 열기
 
+- 기록 불러오기 비교 최신 시안: [bloombreak-restore-records.html](prototypes/bloombreak-restore-records.html), v1.0.0 (2026-11-20). 한 줄 제목, 카드별 선택, 하단 ‘선택한 기록 사용’ 하나. 시작 시 기록 충돌 시안은 유지. 웹·Android 소스 반영, 발행 APK·실기기 미확인.
+
 - 사진 분석 안내 최신 시안: [bloombreak-photo-consent.html](prototypes/bloombreak-photo-consent.html), v1.0.0 (2026-11-20). D006 후속: 핵심 두 문장과 접힌 전송 정보, 분석 없이 사용 / 전송하고 분석. 개발 소스 적용, 발행 APK·실기기 미확인.
 
 - 함께 보기 아이콘 최신 시안: [bloombreak-together-avatars.html](prototypes/bloombreak-together-avatars.html), v1.0.0 (2026-11-19). 사용자 승인 1번 색연필 강아지와 강아지·곰·고양이·토끼 순서를 이 시안으로 우선한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
@@ -72,6 +74,3 @@
 
 - v12.2: 제공된 v12.1 기준본에 시작 GIF·라인 애니메이션·재진입 재생 수정과 수정이력 화면을 기록했다.
 - 이번 작업은 시안 등록과 관리 체계 변경이다. APK를 새로 제작하지 않았으며 기존 APK와 시안 전체의 일치 여부는 미확인이다.
-
-
-
