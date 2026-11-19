@@ -74,6 +74,10 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
   content: ""; position: absolute; top: calc(100% - 2px); left: 50%; transform: translateX(-50%);
   border: 1.6cqw solid transparent; border-top-color: #fff5e9;
 }
+.phone[data-visible="false"] .toolbar, .phone[data-visible="false"] .room-clock { visibility:hidden; }
+.room-clock { position:absolute;top:15%;left:0;right:0;text-align:center;color:white;pointer-events:none; }
+.room-clock strong { display:block;font-size:6cqw; }
+.room-clock span { font-size:3cqw; }
 .me .bubble:last-child::after { border-top-color: #e2f2e5; }
 .composer {
   position: absolute; bottom: 2.35%; left: 3.8%; right: 3.8%; display: flex; align-items: center; gap: 2.2cqw;
@@ -98,7 +102,9 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
     <p>풍경을 터치하면 말풍선이 나타나고, 마지막 터치 5초 후 사라집니다.</p>
   </header>
   <details id="design-history" open>
-    <summary>수정 이력 · v1.0.0 · 2026-11-18</summary>
+    <summary>수정 이력 · v1.0.1 · 2026-11-19</summary>
+    <p>v1.0.1: 초대자·친구 모두 계속 보이던 상단 상태·시간/날씨·더보기·시계·함께 본 시간을 마지막 조작 5초 뒤 숨기고 터치하면 다시 표시한다. 메뉴·프로필·메시지 입력 중에는 숨김을 보류한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.</p>
+    <p>v1.0.0 · 2026-11-18</p>
     <p>함께 보기의 ‘대화 기록’ 버튼과 별도 반투명 대화창을 없앴다. 풍경을 터치하면 최근 두 개의 메시지를 보낸 사람 아이콘 위에 작은 말풍선으로 표시한다. 5초 후 말풍선과 이름이 사라진다. 입력창은 유지한다.</p>
     <p>웹과 Android 개발 소스에 적용. 발행 APK 및 실기기 미확인.</p>
   </details>
@@ -112,6 +118,7 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
         <span class="chip">노을 · 흐림</span>
         <span class="menu" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></span>
       </div>
+      <div class="room-clock"><strong>12:33</strong><span>함께 본 시간 4분 38초</span></div>
       <div class="participants">
         <div class="person">
           <div class="messages" aria-hidden="false"><div class="bubble">노을 예쁘다</div><div class="bubble">여기서 같이 볼까?</div></div>
@@ -130,7 +137,7 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
     </div>
   </article>
   <article>
-    <div class="caption"><h2>5초 후</h2><p>말풍선이 사라지고 참여자 아이콘만 남습니다.</p></div>
+    <div class="caption"><h2>5초 후</h2><p>상단 정보·시계·말풍선이 사라지고 참여자 아이콘과 입력창은 남습니다.</p></div>
     <div class="phone" data-visible="false">
       <button class="scene" aria-expanded="false" type="button" aria-label="풍경 터치로 최근 대화 보기"></button>
       <div class="toolbar">
@@ -138,6 +145,7 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
         <span class="chip">노을 · 흐림</span>
         <span class="menu" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg></span>
       </div>
+      <div class="room-clock"><strong>12:33</strong><span>함께 본 시간 4분 38초</span></div>
       <div class="participants">
         <div class="person">
           <div class="messages" aria-hidden="true"><div class="bubble">노을 예쁘다</div><div class="bubble">여기서 같이 볼까?</div></div>
@@ -198,3 +206,4 @@ for (const phone of document.querySelectorAll('.phone')) {
 </script>
 </body>
 </html>
+
