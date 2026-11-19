@@ -2,6 +2,8 @@
 
 ## 경로와 열기
 
+- 사진 분석 안내 최신 시안: [bloombreak-photo-consent.html](prototypes/bloombreak-photo-consent.html), v1.0.0 (2026-11-20). D006 후속: 핵심 두 문장과 접힌 전송 정보, 분석 없이 사용 / 전송하고 분석. 개발 소스 적용, 발행 APK·실기기 미확인.
+
 - 함께 보기 아이콘 최신 시안: [bloombreak-together-avatars.html](prototypes/bloombreak-together-avatars.html), v1.0.0 (2026-11-19). 사용자 승인 1번 색연필 강아지와 강아지·곰·고양이·토끼 순서를 이 시안으로 우선한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
 
 - 누구나 읽는 공개 저장소: https://github.com/SimpleorNothing/BloomBreak-design
