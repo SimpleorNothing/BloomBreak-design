@@ -2,6 +2,8 @@
 
 ## 경로와 열기
 
+- 알림 하단 문구 최신 시안: [bloombreak-notification-copy.html](prototypes/bloombreak-notification-copy.html), v1.0.0 (2026-11-20). 하단 안내는 ‘꽃이 피면 알림은 밤 10시~아침 8시를 피해 보내요.’ 한 문장만 표시한다. 기존 알림 시안의 하단 문구에 우선하며 예약·권한 요청 동작은 유지한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
+
 - 기록 불러오기 비교 최신 시안: [bloombreak-restore-records.html](prototypes/bloombreak-restore-records.html), v1.0.0 (2026-11-20). 한 줄 제목, 카드별 선택, 하단 ‘선택한 기록 사용’ 하나. 시작 시 기록 충돌 시안은 유지. 웹·Android 소스 반영, 발행 APK·실기기 미확인.
 
 - 사진 분석 안내 최신 시안: [bloombreak-photo-consent.html](prototypes/bloombreak-photo-consent.html), v1.0.0 (2026-11-20). D006 후속: 핵심 두 문장과 접힌 전송 정보, 분석 없이 사용 / 전송하고 분석. 개발 소스 적용, 발행 APK·실기기 미확인.

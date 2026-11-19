@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BloomBreak 알림 안내 v1.0.0</title>
+<style>
+:root{color-scheme:light dark;--bg:#fcfaed;--fg:#293b31;--muted:#768174;--line:#dedfd3;--green:#4b7f5b}
+@media(prefers-color-scheme:dark){:root{--bg:#19211c;--fg:#e2e8df;--muted:#b2beaf;--line:#3c493f}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif}
+main{max-width:430px;margin:auto;padding:20px}details{max-width:800px;margin:16px auto;padding:16px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding:16px 0}
+small{display:block;color:var(--muted)}.switch{width:56px;height:32px;border-radius:20px;background:var(--green);flex:none;padding:4px}
+.switch:after{content:"";display:block;width:24px;height:24px;border-radius:50%;background:white;margin-left:auto}
+.hint{font-size:13px;color:var(--muted);margin:12px 0}
+</style>
+<details open id="design-history"><summary>수정이력 · v1.0.0 · 2026-11-20</summary>
+<p>알림 하단 안내 문구 변경. 이전: “쉬는 시간 알림은 24시간, 횟수 제한 없이 설정할 수 있어요. 꽃이 피면 알림은 밤 10시~아침 8시를 피해 보내요. 알림을 켜면 휴대폰에서 알림 허용을 한 번 물어봐요.”</p>
+<p>변경: “꽃이 피면 알림은 밤 10시~아침 8시를 피해 보내요.”</p>
+<p>문구만 변경. 예약·권한 요청·토글 동작과 저장 데이터 유지. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인. 이 시안은 알림 하단 문구만 정의한다.</p></details>
+<main aria-label="알림 하단 문구 시안"><div class="row"><span><strong>꽃이 피면 알림</strong><small>‘모모가 활짝 피었어요’</small></span><span class="switch" role="img" aria-label="켜짐 예시"></span></div>
+<p class="hint">꽃이 피면 알림은 밤 10시~아침 8시를 피해 보내요.</p></main></html>
