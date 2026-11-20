@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>도심 거실 화분 기본 위치 · v1.0.0</title>
+<style>body{margin:24px;background:#f4f5ed;color:#253a2b;font:16px/1.6 system-ui}main{max-width:640px;margin:auto}details{padding:16px;background:white;border-radius:16px}svg{width:100%;max-height:520px;background:#fffaf0;border-radius:20px}p{margin:12px 0}</style>
+<main><h1>화분 기본 위치 · v1.0.0</h1>
+<details id="design-history" open><summary>수정이력</summary><p>2026-11-20 · 도심 거실 / 홈·꽃멍</p><p>변경 전: 테이블 뒤쪽에 걸쳐 보이는 기본 화분. 변경 후: 크기를 유지하고 상판 가운데에 받침이 놓이도록 아래로 이동.</p><p>709×1536 원본 기준 래퍼 앵커 (445, 1005) → (444, 1030), 너비 24% 유지. 작은 화분은 105% 기준점 아래의 투명 여백을 제외하면 받침 하단이 약 y=1017에 놓인다.</p><p>새 화분을 만들 때의 기본값에 적용한다. 기존 저장 위치·크기와 이전 배경 좌표는 보존한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 반영 미확인.</p></details>
+<p>아래는 위치 관계를 보여 주는 도식이며 실제 배경·화분 이미지를 대신하지 않습니다.</p>
+<svg viewBox="250 870 390 300" role="img" aria-label="테이블 상판 중앙에 놓인 화분">
+<ellipse cx="445" cy="1017" rx="177" ry="48" fill="#a77351"/>
+<path d="M310 1048v100h268v-100" fill="#835135"/>
+<ellipse cx="444" cy="1018" rx="55" ry="12" fill="#463025" opacity=".2"/>
+<ellipse cx="444" cy="1012" rx="53" ry="12" fill="#d7bd95"/>
+<path d="M388 930l11 69q45 23 90 0l11-69" fill="#e5ccaa"/>
+<ellipse cx="444" cy="930" rx="56" ry="15" fill="#f1ddbd"/>
+<ellipse cx="444" cy="930" rx="49" ry="10" fill="#523825"/>
+</svg></main></html>
