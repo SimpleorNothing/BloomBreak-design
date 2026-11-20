@@ -107,3 +107,7 @@
 - [bloombreak-widget-picker.html](prototypes/bloombreak-widget-picker.html), v1.0.0. D026 후속: 미리보기 축소, 홈과 같은 순서의 좌우 넘김으로 위젯 화분 선택. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
 
 
+## 공통 버튼 색상 최신 기준 (2026-11-20)
+
+- 뒤로가기·닫기 최신 시안: [bloombreak-navigation-buttons.html](prototypes/bloombreak-navigation-buttons.html), v1.0.0 (2026-11-20). 기존 메뉴 시안의 뒤로가기·닫기 색상은 이 시안을 우선한다. Bright/Dark 모두 흰색 바탕·진한 초록 기호, 44px 원형. 개발 소스 반영, 발행 APK·실기기 미확인.
+
