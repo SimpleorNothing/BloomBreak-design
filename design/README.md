@@ -26,7 +26,7 @@
 
 ## 앱 정보 최신 여부 (2026-11-20)
 
-- [최신 여부 시안](prototypes/bloombreak-app-update-status.html) v1.0.0: D023 후속. 버전·빌드 아래 확인 중·최신·새 버전·검토 버전·확인 불가 안내. 웹·Android 개발 소스 적용, 발행 APK·운영 메타데이터·실기기 미확인.
+- [최신 여부 시안](prototypes/bloombreak-app-update-status.html) v1.1.0: D023 후속. 버전·빌드 아래 상태 안내. 다시 확인 버튼 삭제, 앱 시작 업데이트 / 나중에 팝업·새 버전 업데이트 링크 추가. 웹·Android 개발 소스 적용, 발행 APK·운영 메타데이터·실기기 미확인.
 
 ## 기록 선택 이동·닫기 후속 기준 (2026-11-20)
 
@@ -108,10 +108,17 @@
 
 ## 홈 화면 위젯 최신 시안 (2026-11-20)
 
-- [bloombreak-widget-picker.html](prototypes/bloombreak-widget-picker.html), v1.0.0. D026 후속: 미리보기 축소, 홈과 같은 순서의 좌우 넘김으로 위젯 화분 선택. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
+- [bloombreak-widget-picker.html](prototypes/bloombreak-widget-picker.html), v1.0.1. 헤더의 상위 메뉴·닫기 버튼은 처음 열 때 테두리 없이 표시한다. D026 후속: 미리보기 축소, 홈과 같은 순서의 좌우 넘김으로 위젯 화분 선택. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
 
 
 ## 공통 버튼 색상 최신 기준 (2026-11-20)
 
 - 뒤로가기·닫기 최신 시안: [bloombreak-navigation-buttons.html](prototypes/bloombreak-navigation-buttons.html), v1.0.0 (2026-11-20). 기존 메뉴 시안의 뒤로가기·닫기 색상은 이 시안을 우선한다. Bright/Dark 모두 흰색 바탕·진한 초록 기호, 44px 원형. 개발 소스 반영, 발행 APK·실기기 미확인.
+
+
+
+### PR #1162 최신 main 조정 (2026-11-20)
+장식 없음 카드만 제거한다. 기본 3종 선택, 소품 놓기 스위치와 마지막 선택 복원, 기존 위치·크기 편집 및 저장값을 보존한다. 웹/Android 개발 소스 검증이며 새 APK 반영과 구분한다.
+### PR #1154 최신 main 조정 (2026-11-20)
+상위 메뉴 `<`만 투명한 44px 버튼으로 표시하고 실제 직전 부모·포커스로 복귀한다. #1171의 진짜 닫기 흰색, 복원 취소·소품 편집 동작은 보존한다. 웹/Android 소스 검증이며 새 APK·운영 배포 확인이 아니다.
 
