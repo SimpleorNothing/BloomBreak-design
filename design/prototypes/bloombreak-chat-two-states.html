@@ -93,6 +93,7 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
   .comparisons { grid-template-columns: 1fr; gap: 25px; }
 }
 @media (prefers-reduced-motion: reduce) { .messages { transition: none; } }
+.emoji-preview{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;width:320px;max-width:100%;max-height:168px;overflow-y:auto;padding:8px;border-radius:20px;background:#fffaf0;color:#243b2e;margin:12px 0}.emoji-preview button{height:48px;min-width:44px;border:0;background:transparent;font-size:28px}
 </style>
 </head>
 <body>
@@ -102,13 +103,15 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
     <p>풍경을 터치하면 말풍선이 나타나고, 마지막 터치 5초 후 사라집니다.</p>
   </header>
   <details id="design-history" open>
-    <summary>수정 이력 · v1.0.2 · 2026-11-19</summary>
+    <summary>수정 이력 · v1.0.3 · 2026-11-19</summary>
+    <p>v1.0.3: 반응 이모티콘을 🌅·💛·🌸 3개에서 표정·하트·꽃·자연·날씨·손동작 36개로 확장. 입력창 위 6열·최대 3줄 높이의 스크롤 선택창을 초대자와 친구에게 동일하게 제공한다. 누르면 즉시 전송하고 선택창은 닫히며 작성 중인 글은 보존한다. 웹·Android 개발 소스 반영, 발행 APK·운영 배포·실기기 미확인.</p>
     <p>v1.0.2: 친구 노을 입장 동작을 초대 생성 시각의 진행 장면에서 프레임 로딩 후 첫 장면부터 5분 단방향 재생으로 변경한다. 늦은 입장도 시작 장면부터 보며 메시지 갱신·재연결·화면 복귀로 반복 시작하지 않는다. 초대자의 재생과 함께 본 시간·만료는 유지한다. 모양·배치·제품 문구 변경 없음. 웹·Android 개발 소스 반영, 발행 APK·운영 방문자 번들·실기기 미확인.</p>
     <p>v1.0.1: 초대자·친구 모두 계속 보이던 상단 상태·시간/날씨·더보기·시계·함께 본 시간을 마지막 조작 5초 뒤 숨기고 터치하면 다시 표시한다. 메뉴·프로필·메시지 입력 중에는 숨김을 보류한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.</p>
     <p>v1.0.0 · 2026-11-18</p>
     <p>함께 보기의 ‘대화 기록’ 버튼과 별도 반투명 대화창을 없앴다. 풍경을 터치하면 최근 두 개의 메시지를 보낸 사람 아이콘 위에 작은 말풍선으로 표시한다. 5초 후 말풍선과 이름이 사라진다. 입력창은 유지한다.</p>
     <p>웹과 Android 개발 소스에 적용. 발행 APK 및 실기기 미확인.</p>
   </details>
+  <section aria-label="이모티콘 선택" lang="ko"><h2>이모티콘 선택 · 초대자와 친구 공통</h2><p>입력창의 웃는 얼굴을 누르면 열립니다. 아래로 스크롤해 더 고를 수 있어요.</p><div class="emoji-preview" role="group" aria-label="반응 아이콘"><button type="button">🌅</button><button type="button">💛</button><button type="button">🌸</button><button type="button">😊</button><button type="button">😄</button><button type="button">🥰</button><button type="button">😍</button><button type="button">🤗</button><button type="button">😌</button><button type="button">🥹</button><button type="button">😂</button><button type="button">🥺</button><button type="button">❤️</button><button type="button">🧡</button><button type="button">💚</button><button type="button">💙</button><button type="button">💜</button><button type="button">💕</button><button type="button">🌷</button><button type="button">🌻</button><button type="button">🌼</button><button type="button">🌹</button><button type="button">🍀</button><button type="button">🌱</button><button type="button">☀️</button><button type="button">🌤️</button><button type="button">🌙</button><button type="button">⭐</button><button type="button">✨</button><button type="button">🌈</button><button type="button">☔</button><button type="button">❄️</button><button type="button">👍</button><button type="button">👏</button><button type="button">🙌</button><button type="button">🙏</button></div></section>
   <div class="comparisons">
   <article>
     <div class="caption"><h2>터치 직후</h2><p>친구는 왼쪽, 나는 오른쪽. 메시지는 보낸 사람 위에 표시됩니다.</p></div>
@@ -207,5 +210,7 @@ for (const phone of document.querySelectorAll('.phone')) {
 </script>
 </body>
 </html>
+
+
 
 
