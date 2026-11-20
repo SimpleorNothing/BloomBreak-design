@@ -1,5 +1,7 @@
 # 디자인 시안 관리
 
+- 내 공간 사진 선택 최신 시안: [bloombreak-space-photo-entry.html](prototypes/bloombreak-space-photo-entry.html), v1.0.0 (2026-11-20). D014 후속: 사진 찍기 / 앨범 선택 중앙 정렬 카드, 짧은 안내, 한 줄 AI 준비 표시, 배경 없는 뒤로·닫기. 기존 시안의 만들기 사진 단계보다 우선한다. 웹·Android 개발 소스 반영, 발행 APK·실기기·브라우저 배치 미확인.
+
 ## 경로와 열기
 
 - 문의 로그인 최신 시안: [bloombreak-inquiry-login.html](prototypes/bloombreak-inquiry-login.html), v1.0.0 (2026-11-20). Google / Apple 세로 2행을 기존 문의 로그인 선택보다 우선한다. Apple 운영 설정·실계정 인증 및 발행 APK·실기기 미확인.
@@ -17,7 +19,7 @@
 
 - 누구나 읽는 공개 저장소: https://github.com/SimpleorNothing/BloomBreak-design
 - 기준 시안: [bloombreak-menu-v12.html](prototypes/bloombreak-menu-v12.html) (파일 내부 버전 v12.2.10).
-- 함께 보기 대화 최신 시안: [bloombreak-chat-two-states.html](prototypes/bloombreak-chat-two-states.html) (v1.0.3, 2026-11-19). 기존 기준 시안의 ‘대화 기록’ 화면을 이 두 상태로 대체한다.
+- 함께 보기 대화 최신 시안: [bloombreak-chat-two-states.html](prototypes/bloombreak-chat-two-states.html) (v1.0.2, 2026-11-19). 기존 기준 시안의 ‘대화 기록’ 화면을 이 두 상태로 대체한다.
 - GitHub 파일 화면에서는 HTML이 실행되지 않는다. 저장소의 **Code → Download ZIP**으로 받은 뒤 압축을 풀고 HTML을 브라우저로 연다. 이미지·시작 GIF·수정이력은 파일에 내장되어 별도 서버 없이 작동한다.
 - 공개 저장소의 같은 경로 `design/prototypes/bloombreak-menu-v12.html`과 앱 저장소의 이 파일은 같은 내용으로 유지한다. 앱 저장소는 비공개이므로 외부 참조는 공개 저장소 링크를 사용한다.
 - 파일명 v12는 시안 계열이다. 작은 변경은 파일 내부 버전을 올리고 Git 변경 내역으로 보존한다. 큰 개편은 새 계열 파일을 만들고 이 문서에서 최신 기준본을 갱신한다.
@@ -37,8 +39,6 @@
 7. 앱 저장소 PR 검증·머지 후 공개 저장소에 시안·이 관리 가이드를 동기화하고 두 파일의 해시를 확인한다. 공개 저장소에는 앱 코드, 사용자 데이터, 인증정보, 비공개 문서를 올리지 않는다.
 
 ## 현재 상태 (2026-11-19)
-
-- 함께 보기 대화 v1.0.3: 반응 이모티콘 3개 → 36개. 입력창 위 6열·최대 3줄 높이 스크롤 선택창을 초대자·친구에게 동일 적용. 선택 즉시 전송·선택창 닫기·초안 보존. 웹·Android 소스 반영, 발행 APK·운영 배포·실기기 미확인.
 
 - 꽃멍 시계 배치 [v1.0.0](prototypes/bloombreak-clock-parity.html): D028 시계 크기·기본 위치는 이 시안을 우선한다. 혼자 보기의 시계·날짜·쉼 시간을 함께 보기의 26px·12px 및 안전영역 아래 99px에 맞춘다. 문구·숨김 동작 유지. 발행 APK·실기기 미확인.
 
@@ -91,5 +91,3 @@
 ## 홈 화면 위젯 최신 시안 (2026-11-20)
 
 - [bloombreak-widget-picker.html](prototypes/bloombreak-widget-picker.html), v1.0.0. D026 후속: 미리보기 축소, 홈과 같은 순서의 좌우 넘김으로 위젯 화분 선택. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
-
-
