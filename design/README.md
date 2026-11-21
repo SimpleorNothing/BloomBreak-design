@@ -1,3 +1,7 @@
+## 초대 풍경 확대 (2026-11-22)
+
+- [초대 참여 시안](prototypes/bloombreak-join-compact.html) v1.0.1. 최신 사용자 요청: 풍경 미리보기 높이를 기본128–260px(30dvh)로 확대. 높이544px에서 약71px → 163px. 높이480px 이하에서는80–128px로 조정하며 입력·버튼·스크롤을 유지한다. BB-SCREEN:join / #883 후속. 웹·Android 소스 반영, 기존 APK251에는 미포함. 실제 iPhone 확인 전.
+
 ## Google·Apple 로그인 후 문의함 이동 (2026-11-22)
 
 - [문의 로그인 시안](prototypes/bloombreak-inquiry-login.html) v1.4.0: Google·Apple 모두 성공 알림을 4초간 표시하며 1:1 문의함으로 연결한다. 사용자가 선택한 Google 로그인 성공 후 문의함을 한 번 열고, 이미 로그인 상태의 같은 진입도 문의함을 연다. 저장된 로그인 복원·중복 콜백·일반 앱 복귀에는 창을 열지 않는다. 웹·Android 내장 소스 적용 대상, 새 발행 APK·실기기 전환 미확인.
