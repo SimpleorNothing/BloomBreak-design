@@ -1,3 +1,7 @@
+## Google·Apple 로그인 후 문의함 이동 (2026-11-22)
+
+- [문의 로그인 시안](prototypes/bloombreak-inquiry-login.html) v1.4.0: Google·Apple 모두 성공 알림을 4초간 표시하며 1:1 문의함으로 연결한다. 사용자가 선택한 Google 로그인 성공 후 문의함을 한 번 열고, 이미 로그인 상태의 같은 진입도 문의함을 연다. 저장된 로그인 복원·중복 콜백·일반 앱 복귀에는 창을 열지 않는다. 웹·Android 내장 소스 적용 대상, 새 발행 APK·실기기 전환 미확인.
+
 ## Apple 전용 로그인 후속 (2026-11-22)
 
 - [문의 로그인 시안](prototypes/bloombreak-inquiry-login.html) v1.3.0: Apple 선택 뒤 준비·취소·실패에도 일반 3개 버튼을 표시하지 않는다. Apple 재연결과 명시적인 다른 방법 선택을 제공한다. 호스팅 웹 구현 대상이며 실제 계정 인증 및 Google 등록 해결과 구분한다.
