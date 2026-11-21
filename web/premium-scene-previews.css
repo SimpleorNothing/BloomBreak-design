@@ -45,14 +45,18 @@
 .bbPremiumPrecipitation { clip-path: var(--bb-outside); }
 .bbPremiumCloudMask { clip-path: var(--bb-sky); }
 .bbPremiumWindWater, .bbPremiumSurfMask { clip-path: var(--bb-water); }
-.bbPremiumSurfMask .bbPremiumSurfLoop {
+.bbPremiumSurfMask :is(.bbPremiumSurfLoop, .bbPremiumSurfMotion) {
   position: absolute;
   /* The animation covers rows 413–637 of the 1024-pixel scenery plate. */
   inset: 40.332% 0 auto;
+  width: 100%;
   height: 21.973%;
+  object-fit: fill;
 }
-.bbPremiumPreviewStage[data-time="sunset"] .bbPremiumSurfLoop { filter: sepia(.2) brightness(.85) saturate(.86); }
-.bbPremiumPreviewStage[data-time="night"] .bbPremiumSurfLoop { filter: brightness(.63) saturate(.72); }
+.bbPremiumSurfMotion { opacity: 0; mask-image: linear-gradient(transparent 2%, #000 13%); }
+.bbPremiumSurfMask[data-playing="true"] .bbPremiumSurfMotion { opacity: 1; }
+.bbPremiumPreviewStage[data-time="sunset"] :is(.bbPremiumSurfLoop, .bbPremiumSurfMotion) { filter: sepia(.2) brightness(.85) saturate(.86); }
+.bbPremiumPreviewStage[data-time="night"] :is(.bbPremiumSurfLoop, .bbPremiumSurfMotion) { filter: brightness(.63) saturate(.72); }
 .bbPremiumPreviewStage[data-wind="true"] .bbPremiumSwayingTrees { animation: bbPremiumTrees 3.3s ease-in-out infinite alternate; }
 .bbPremiumPreviewStage[data-wind="true"] .bbPremiumCloudMask {
   background: radial-gradient(ellipse 8% 2% at 68% 30%, #eef8ff6b 28%, transparent 100%),
