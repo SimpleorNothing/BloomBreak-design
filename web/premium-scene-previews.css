@@ -5,23 +5,23 @@
 .bbPremiumPreviewControls select { min-height: 44px; padding: .25rem; font: inherit; }
 .bbPremiumPreviewStatus { flex-basis: 100%; margin: 0; }
 .bbPremiumPreviewStage { position: relative; overflow: hidden; isolation: isolate; width: min(100%, 17rem); margin: 0; border-radius: .75rem; }
-.bbPremiumPreviewArtwork, .bbPremiumPreviewArtwork img { display: block; width: 100%; height: 100%; }
+.bbPremiumPreviewArtwork, .bbPremiumPreviewArtwork img, .bbPremiumPreviewArtwork canvas { display: block; width: 100%; height: 100%; }
 .bbPremiumPreviewArtwork { position: absolute; inset: 0; }
 .bbPremiumPreviewArtwork img { object-fit: fill; }
-.bbPremiumPreviewArtwork img[hidden] { display: none; }
+.bbPremiumPreviewArtwork [hidden] { display: none; }
 
 .bbPremiumPreviewStage[data-scene="seoul-rooftop"] {
   --bb-outside: polygon(14% 7.5%, 91% 10.7%, 91% 59.6%, 8.9% 59.6%, 10.1% 54%);
   --bb-sky: polygon(14% 7.5%, 91% 10.7%, 91% 30.2%, 80% 32%, 72% 31%, 60% 32%, 46% 34%, 30% 34%, 13% 29%);
   --bb-trees: polygon(13.4% 31%, 17.2% 30.6%, 22.6% 32.8%, 24.8% 33.5%, 24.5% 35%, 13.4% 35%);
-  --bb-window: polygon(93.1% 8.5%, 96.7% 8.7%, 96.7% 62%, 94.1% 62%, 85.1% 57.2%, 85.1% 14.25%);
+  --bb-window: polygon(9.6% 6.3%, 14.2% 6.3%, 26.8% 11.6%, 26.8% 57.9%, 14.2% 61.3%, 9.6% 61.3%);
 }
 .bbPremiumPreviewStage[data-scene="east-sea-lighthouse"] {
   --bb-outside: polygon(15.5% 13.8%, 90% 12.6%, 88% 59.4%, 15.5% 59.4%);
   --bb-sky: polygon(15.5% 13.5%, 90.3% 12.1%, 90% 33.7%, 77.8% 34.8%, 64% 38.9%, 39% 39%, 15.5% 39%);
   --bb-trees: polygon(82% 35.5%, 90% 34.1%, 90% 37.3%, 83% 37.6%);
   --bb-water: polygon(15.5% 39.4%, 65.2% 39.4%, 70% 38.7%, 69% 42.5%, 87.8% 43.1%, 88% 47.1%, 62.1% 52.1%, 44% 57.2%, 15.5% 58.1%);
-  --bb-window: polygon(86.8% 11.9%, 90.2% 11.9%, 90.2% 63%, 88.4% 63%, 79% 59.8%, 79% 16.1%);
+  --bb-window: polygon(10.8% 12.3%, 14% 12.3%, 24.6% 16.7%, 24.6% 60%, 14% 62.9%, 10.8% 62.9%);
 }
 .bbPremiumPreviewStage[data-scene="lakeside-cabin"] {
   --bb-outside: polygon(15% 9%, 99% 2%, 100% 70%, 23% 67%, 10% 61%, 14% 38%);
@@ -29,19 +29,20 @@
   --bb-trees: polygon(14% 10.8%, 26% 8.3%, 40.4% 7.3%, 43.5% 10.5%, 30% 14.6%, 22.4% 19.8%, 14% 19.2%);
   --bb-water: polygon(14.5% 42%, 100% 41%, 100% 53.6%, 89% 50.5%, 71.2% 48.6%, 65% 51.5%, 91% 61.8%, 54% 59%, 14.5% 54.5%);
 }
-.bbPremiumWindowLayer, .bbPremiumTreeMask, .bbPremiumWeatherShade, .bbPremiumCloudMask,
+.bbPremiumRegisteredPlate, .bbPremiumWindowLayer, .bbPremiumTreeMask, .bbPremiumWeatherShade, .bbPremiumCloudMask,
 .bbPremiumPrecipitation, .bbPremiumWindWater { position: absolute; inset: 0; pointer-events: none; }
-.bbPremiumWindowLayer { clip-path: var(--bb-window); }
-  .bbPremiumPreviewStage[data-scene="seoul-rooftop"][data-time="day"] .bbPremiumWindowLayer {
-    clip-path: polygon(93.2% 7.8%, 97% 7.8%, 97% 49.2%, 94% 49.2%, 84% 43.3%, 84% 14.5%);
-    transform: translateY(-1.4%) scaleY(1.31);
-    transform-origin: top;
-  }
-  .bbPremiumPreviewStage[data-scene="east-sea-lighthouse"][data-time="sunset"] .bbPremiumWindowLayer {
-    clip-path: polygon(90.4% 10.1%, 93.7% 10.1%, 93.7% 62.5%, 91.8% 62.5%, 83.4% 57.3%, 83.4% 15.6%);
-    transform: translate(-3%,.6%) scaleY(.96);
-    transform-origin: top;
-  }
+.bbPremiumWindowLayer { clip-path: var(--bb-window); transform-origin: top left; }
+.bbPremiumPreviewStage[data-scene="seoul-rooftop"][data-time="day"] .bbPremiumWindowLayer {
+  clip-path: polygon(9.2% 6.9%, 12.1% 6.9%, 25% 12.6%, 25% 44.2%, 12.1% 48.5%, 9.2% 48.5%);
+  transform: translateY(-2.4%) scaleY(1.35);
+}
+.bbPremiumPreviewStage[data-scene="seoul-rooftop"][data-time="sunset"] .bbPremiumWindowLayer {
+  transform: scaleY(1.045);
+}
+.bbPremiumPreviewStage[data-scene="east-sea-lighthouse"][data-time="sunset"] .bbPremiumWindowLayer {
+  clip-path: polygon(11.2% 12%, 15.5% 12%, 26.1% 16.4%, 26.1% 58%, 15.5% 60.9%, 11.2% 60.9%);
+  transform: scaleY(1.04);
+}
 .bbPremiumTreeMask { clip-path: var(--bb-trees); }
 .bbPremiumTreeMask, .bbPremiumCloudMask, .bbPremiumWindWater { visibility: hidden; }
 .bbPremiumPreviewStage[data-wind="true"] :is(.bbPremiumTreeMask, .bbPremiumCloudMask, .bbPremiumWindWater) { visibility: visible; }
@@ -68,22 +69,10 @@
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='107' height='138' viewBox='0 0 107 138'%3E%3Cg fill='%23fff' fill-opacity='.88'%3E%3Ccircle cx='13' cy='7' r='1.4'/%3E%3Ccircle cx='55' cy='21' r='1.9'/%3E%3Ccircle cx='89' cy='18' r='1.1'/%3E%3Ccircle cx='24' cy='70' r='1.6'/%3E%3Ccircle cx='76' cy='82' r='2.0'/%3E%3Ccircle cx='102' cy='105' r='1.3'/%3E%3Ccircle cx='39' cy='118' r='1.7'/%3E%3C/g%3E%3C/svg%3E");
   animation: bbPremiumSnow 7s linear infinite;
 }
-.bbPremiumPreviewStage[data-wind="true"] .bbPremiumWindWater {
-  --bb-water-motion: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='56' viewBox='0 0 140 56'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M3 16q12-4 24-1t19-1m20 27q11-4 22-1t16-1m7-30q8-2 21-1' stroke='%23edfaff' opacity='.45'/%3E%3Cpath d='M8 27q15-3 35-1m22 26q12-2 24-1m20-27q9-2 24-2' stroke='%23182e42' opacity='.45'/%3E%3C/g%3E%3C/svg%3E");
-  background: var(--bb-water-motion);
-  animation: bbPremiumRipple 5s linear infinite;
-}
-.bbPremiumPreviewStage[data-scene="east-sea-lighthouse"][data-wind="true"] .bbPremiumWindWater {
-  background-size: 140px 56px;
-  background-image: var(--bb-water-motion), repeating-linear-gradient(165deg, transparent 0 7px,#9ac7dc61 10px,#ecf6f7a6 11px,transparent 14px 26px);
-  animation: bbPremiumWave 3.4s ease-in-out infinite alternate;
-}
 @keyframes bbPremiumTrees { from { transform: translateX(-.7%); } to { transform: translateX(.9%); } }
 @keyframes bbPremiumCloudDrift { 0% { background-position: -7rem 0; opacity: .18; } 43% { opacity: .8; } 100% { background-position: 9rem 0; opacity: .16; } }
 @keyframes bbPremiumRain { to { background-position: -17px 110px; } }
 @keyframes bbPremiumSnow { to { background-position: 12px 138px; } }
-@keyframes bbPremiumRipple { to { background-position: 140px 0; } }
-@keyframes bbPremiumWave { from { background-position: 0 0,0 0; opacity: .56; } to { background-position: 42px 15px,10px 23px; opacity: .9; } }
 @media (prefers-reduced-motion: reduce) {
   .bbPremiumPreviewStage *, .bbPremiumPreviewStage::before, .bbPremiumPreviewStage::after { animation: none !important; }
 }
