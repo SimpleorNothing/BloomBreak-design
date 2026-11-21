@@ -6,7 +6,7 @@
 
 ## 공간 미리보기에서 화분 놓기 (2026-11-21)
 
-- [공간 순환·화분 놓기 시안](prototypes/bloombreak-space-preview-planting.html), v1.0.0. 공간 카드 → 6장면 3초 순환 팝업 → ‘이 공간에 화분 놓기’ → 선택 공간을 유지한 화분 선택(2/5). 취소 시 해당 공간 팝업으로 돌아오며 기존 내 화분 추가도 유지한다. BB-SCREEN:space D005·#890, 새 화분 D013 후속. 이 항목은 기존 공간 카드의 비활성 동작보다 우선한다. 웹·Android 개발 소스 반영, 발행 APK·실기기·브라우저 배치 확인 전.
+- [공간 순환·화분 놓기 시안](prototypes/bloombreak-space-preview-planting.html), v1.1.0. 화면 높이에 맞춰 원본 비율의 이미지를 축소하고 제목·장면 전환·화분 놓기를 스크롤 없이 한 화면에 표시한다. 공간 카드 → 6장면 3초 순환 팝업 → ‘이 공간에 화분 놓기’ → 선택 공간을 유지한 화분 선택(2/5). 취소 시 해당 공간 팝업으로 돌아오며 기존 내 화분 추가도 유지한다. BB-SCREEN:space D005·#890, 새 화분 D013 후속. 이 항목은 기존 공간 카드의 비활성 동작보다 우선한다. 웹·Android 개발 소스 반영, 발행 APK·실기기·브라우저 배치 확인 전.
 
 # 디자인 시안 관리
 
@@ -14,7 +14,7 @@
 
 ## 경로와 열기
 
-- 문의 로그인 최신 시안: [bloombreak-inquiry-login.html](prototypes/bloombreak-inquiry-login.html), v1.1.0 (2026-11-20). 더보기의 앱 정보 바로 아래에 심사 계정 로그인 행을 추가한다. Google / Apple 세로 2행을 기존 문의 로그인 선택보다 우선한다. Apple 운영 설정·실계정 인증 및 발행 APK·실기기 미확인.
+- 문의 로그인 최신 시안: [bloombreak-inquiry-login.html](prototypes/bloombreak-inquiry-login.html), v1.2.0 (2026-11-21). Apple 선택 즉시 공식 인증 페이지로 이동하며 로그인 방법을 다시 선택하지 않는다. 더보기의 앱 정보 바로 아래에 심사 계정 로그인 행을 추가한다. Google / Apple 세로 2행을 기존 문의 로그인 선택보다 우선한다. Apple 운영 설정·실계정 인증 및 발행 APK·실기기 미확인.
 
 - 알림 하단 문구 최신 시안: [bloombreak-notification-copy.html](prototypes/bloombreak-notification-copy.html), v1.0.0 (2026-11-20). 하단 안내는 ‘꽃이 피면 알림은 밤 10시~아침 8시를 피해 보내요.’ 한 문장만 표시한다. 기존 알림 시안의 하단 문구에 우선하며 예약·권한 요청 동작은 유지한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
 
