@@ -14,7 +14,7 @@
 
 ## 경로와 열기
 
-- 문의 로그인 최신 시안: [bloombreak-inquiry-login.html](prototypes/bloombreak-inquiry-login.html), v1.1.0 (2026-11-20). 더보기의 앱 정보 바로 아래에 심사 계정 로그인 행을 추가한다. Google / Apple 세로 2행을 기존 문의 로그인 선택보다 우선한다. Apple 운영 설정·실계정 인증 및 발행 APK·실기기 미확인.
+- 문의 로그인 최신 시안: [bloombreak-inquiry-login.html](prototypes/bloombreak-inquiry-login.html), v1.2.0 (2026-11-21). Apple 선택 즉시 공식 인증 페이지로 이동하며 로그인 방법을 다시 선택하지 않는다. 더보기의 앱 정보 바로 아래에 심사 계정 로그인 행을 추가한다. Google / Apple 세로 2행을 기존 문의 로그인 선택보다 우선한다. Apple 운영 설정·실계정 인증 및 발행 APK·실기기 미확인.
 
 - 알림 하단 문구 최신 시안: [bloombreak-notification-copy.html](prototypes/bloombreak-notification-copy.html), v1.0.0 (2026-11-20). 하단 안내는 ‘꽃이 피면 알림은 밤 10시~아침 8시를 피해 보내요.’ 한 문장만 표시한다. 기존 알림 시안의 하단 문구에 우선하며 예약·권한 요청 동작은 유지한다. 웹·Android 개발 소스 반영, 발행 APK·실기기 미확인.
 
