@@ -17,7 +17,7 @@
     }
   };
   const water = {
-    'east-sea-lighthouse': { first: .405, last: .58, bands: 11, swell: true },
+    'east-sea-lighthouse': { first: .407, last: .619, bands: 11, swell: true },
     'lakeside-cabin': { first: .442, last: .618, bands: 17, swell: false }
   };
 
@@ -141,24 +141,28 @@
     const low = Math.floor(profile.first * height), high = Math.ceil(profile.last * height);
     const night = time === 'night';
     const naturalRoughWater = profile.swell && roughSea?.complete && roughSea.naturalWidth;
+    const surfLighting = night ? 'brightness(.63) saturate(.72)'
+      : time === 'sunset' ? 'sepia(.2) brightness(.85) saturate(.86)' : 'none';
     for (let y = low; y < high; y += 3) {
       const depth = (y - low) / (high - low);
       const shift = Math.sin(depth * (profile.swell ? 22 : 50) - seconds * 3.4) * depth * (profile.swell ? 8 : 3);
-      context.drawImage(surface, 0, y, width, 3, shift, y, width, 3);
+      context.drawImage(surface, 0, y, width, 3, naturalRoughWater ? 0 : shift, y, width, 3);
       if (!naturalRoughWater) continue;
-      const roll = Math.sin(y * .094 - seconds * 4.6) * Math.min(12, 3 + depth * 11);
-      context.globalAlpha = (night ? .29 : time === 'sunset' ? .64 : .88) * Math.min(1, depth * 4);
+      const roll = Math.sin(y * .094 - seconds * 4.6) * Math.min(8, 2 + depth * 8);
+      context.filter = surfLighting;
+      context.globalAlpha = Math.min(1, depth * 8);
       context.drawImage(roughSea, 0, y + roll, width, 3, shift * 1.2, y, width, 3);
       context.globalAlpha = 1;
+      context.filter = 'none';
     }
     for (let i = 0; i < profile.bands; i++) {
       const band = waterBand(profile, i, seconds);
       const y = band.y * height;
       const size = band.height * height;
-      const brightness = night ? .79 : 1;
+      const brightness = (night ? .79 : 1) * (naturalRoughWater ? .5 : 1);
       const stroke = context.createLinearGradient(0, y - size, 0, y + size);
       stroke.addColorStop(0, 'transparent');
-      stroke.addColorStop(.41, 'rgba(10,40,59,' + (band.fade * .43) + ')');
+      stroke.addColorStop(.41, 'rgba(10,40,59,' + (band.fade * .43 * brightness) + ')');
       stroke.addColorStop(.52, 'rgba(210,238,250,' + (band.fade * .74 * brightness) + ')');
       stroke.addColorStop(1, 'transparent');
       function crestAt(x) {
@@ -186,7 +190,7 @@
     }
   }
 
-  const imageRevision = '?v=day-framing-wind-1';
+  const imageRevision = '?v=day-framing-wind-2';
   const surfPhoto = 'assets/premium-scene-previews/east-sea-lighthouse-wind-surf.webp';
   const language = () => /^en/i.test(root.document.documentElement.lang) ? 1 : 0;
 
@@ -241,7 +245,6 @@
     const usesDayGeometry = Boolean(fixedViews[scene.id]);
     const daylight = usesDayGeometry ? doc.createElement('img') : null;
     const roughSea = scene.id === 'east-sea-lighthouse' ? doc.createElement('img') : null;
-    if (roughSea) roughSea.src = resolve(surfPhoto);
     const waterCanvas = water[scene.id] ? makeCanvas(artwork, 'WindWater') : null;
     const waterContext = waterCanvas?.getContext?.('2d');
     const treeMask = layer(artwork, 'TreeMask');
@@ -291,6 +294,7 @@
     let registered = false;
     let waterFrame = 0;
     let lastFrame = -Infinity;
+    let waterPhase = 0;
     const motion = root.matchMedia?.('(prefers-reduced-motion: reduce)');
     function stopWater() {
       if (waterFrame) root.cancelAnimationFrame(waterFrame);
@@ -301,17 +305,27 @@
       waterFrame = 0;
       if (stage.dataset.wind !== 'true' || !registered || motion?.matches || doc.hidden) return;
       if (now - lastFrame > 30) {
-        paintWater(waterContext, normalized, scene.id, now / 1000, stage.dataset.time, roughSea);
+        if (Number.isFinite(lastFrame)) waterPhase += (now - lastFrame) / 1000;
+        paintWater(waterContext, normalized, scene.id, waterPhase, stage.dataset.time, roughSea);
         lastFrame = now;
       }
       waterFrame = root.requestAnimationFrame(animateWater);
     }
-    function updateWater() {
+    function updateWater(refresh = false) {
       if (!waterContext) return;
-      if (stage.dataset.wind !== 'true' || !registered || motion?.matches || doc.hidden) {
+      if (stage.dataset.wind !== 'true' || !registered) {
         stopWater();
+        waterPhase = 0;
         waterContext.clearRect(0, 0, waterCanvas.width, waterCanvas.height);
-      } else if (!waterFrame) {
+        return;
+      }
+      // The swell is part of the windy scene even before the browser runs an
+      // animation frame and when the user's motion preference pauses playback.
+      if (refresh || !waterFrame) {
+        paintWater(waterContext, normalized, scene.id, waterPhase, stage.dataset.time, roughSea);
+      }
+      if (motion?.matches || doc.hidden) stopWater();
+      else if (!waterFrame) {
         waterFrame = root.requestAnimationFrame(animateWater);
       }
     }
@@ -327,7 +341,7 @@
       }
       if (registered && treeContext) treeContext.drawImage(normalized, 0, 0);
       normalized.hidden = !registered;
-      updateWater();
+      updateWater(true);
     }
     normalized.hidden = true;
     plate.addEventListener('load', readyPlate);
@@ -337,8 +351,13 @@
       normalized.hidden = true;
       updateWater();
     });
-    motion?.addEventListener?.('change', updateWater);
-    doc.addEventListener('visibilitychange', updateWater);
+    const refreshWater = () => updateWater(true);
+    if (roughSea) {
+      roughSea.addEventListener('load', refreshWater);
+      roughSea.src = resolve(surfPhoto);
+    }
+    motion?.addEventListener?.('change', refreshWater);
+    doc.addEventListener('visibilitychange', refreshWater);
     function draw() {
       const current = getEnvironment();
       const selected = viewState({
@@ -383,10 +402,13 @@
     return () => {
       root.clearInterval(timer);
       stopWater();
-      motion?.removeEventListener?.('change', updateWater);
-      doc.removeEventListener('visibilitychange', updateWater);
+      roughSea?.removeEventListener('load', refreshWater);
+      motion?.removeEventListener?.('change', refreshWater);
+      doc.removeEventListener('visibilitychange', refreshWater);
     };
   }
 
-  root.BloomBreakPremiumScenePreviews = { scenes, mount };
-})(window);
+  const api = { scenes, viewState, imagePath, windowPath, sourcePosition, waterBand, mount };
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.BloomBreakPremiumScenePreviews = api;
+})(typeof window === 'undefined' ? globalThis : window);
