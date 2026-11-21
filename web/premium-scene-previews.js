@@ -2,9 +2,9 @@
   'use strict';
 
   const scenes = [
-    { id: 'seoul-rooftop', title: ['서울 옥탑방', 'Seoul Rooftop Room'], width: 720, height: 1366, windowLayer: 'closed' },
-    { id: 'east-sea-lighthouse', title: ['동해 등대가 보이는 집', 'Korean Seaside Cottage'], width: 720, height: 1560, windowLayer: 'open' },
-    { id: 'lakeside-cabin', title: ['호숫가 오두막', 'Lakeside Cabin Porch'], width: 720, height: 1560 }
+    { id: 'seoul-rooftop', title: ['서울 옥탑방', 'Seoul Rooftop Room'], width: 510, height: 1024, windowLayer: 'open' },
+    { id: 'east-sea-lighthouse', title: ['동해 등대가 보이는 집', 'Korean Seaside Cottage'], width: 510, height: 1024, windowLayer: 'open' },
+    { id: 'lakeside-cabin', title: ['호숫가 오두막', 'Lakeside Cabin Porch'], width: 510, height: 1024 }
   ];
   const language = () => /^en/i.test(root.document.documentElement.lang) ? 1 : 0;
 
@@ -14,12 +14,14 @@
     return { time, weather: weather === 'wind' ? 'clear' : weather, wind: wind || weather === 'wind', windowOpen: time !== 'night' && clear && !cold };
   }
 
-  function imagePath(scene) {
-    return 'assets/premium-scene-previews/' + scene.id + '.webp';
+  function imagePath(scene, time = 'day', weather = 'clear') {
+    const plateWeather = weather === 'rain' || weather === 'snow' ? weather : 'clear';
+    return 'assets/premium-scene-previews/' + scene.id + '-' + time + '-' + plateWeather + '.webp';
   }
 
-  function windowPath(scene) {
-    return scene.windowLayer ? 'assets/premium-scene-previews/' + scene.id + '-' + scene.windowLayer + '.webp' : undefined;
+  function windowPath(scene, time = 'day') {
+    if (!scene.windowLayer || time === 'night') return undefined;
+    return 'assets/premium-scene-previews/' + scene.id + '-' + time + '-open.webp';
   }
 
   function mount(host, options = {}) {
@@ -38,7 +40,6 @@
     artwork.className = 'bbPremiumPreviewArtwork';
     const plate = doc.createElement('img');
     plate.alt = scene.title[lang];
-    plate.src = resolve(imagePath(scene));
     artwork.append(plate);
     function layer(parent, name, tag = 'div') {
       const element = doc.createElement(tag);
@@ -49,13 +50,12 @@
       return element;
     }
     const treeMask = layer(artwork, 'TreeMask');
-    layer(treeMask, 'SwayingTrees', 'img').src = plate.src;
+    const trees = layer(treeMask, 'SwayingTrees', 'img');
     const windowLayer = scene.windowLayer ? layer(artwork, 'WindowLayer', 'img') : null;
-    if (windowLayer) windowLayer.src = resolve(windowPath(scene));
+    if (windowLayer) windowLayer.hidden = true;
     stage.append(artwork);
     layer(stage, 'WeatherShade');
     layer(stage, 'CloudMask');
-    layer(stage, 'WetSurface');
     layer(stage, 'Precipitation');
     if (scene.id !== 'seoul-rooftop') layer(stage, 'WindWater');
 
@@ -89,6 +89,8 @@
     if (windowLayer) controls.append(status);
     host.replaceChildren(controls, stage);
 
+    let shownPlate;
+    let shownWindow;
     function draw() {
       const current = getEnvironment();
       const selected = viewState({
@@ -100,8 +102,19 @@
       stage.dataset.time = selected.time;
       stage.dataset.weather = selected.weather;
       stage.dataset.wind = String(selected.wind);
+      const nextPlate = resolve(imagePath(scene, selected.time, selected.weather));
+      if (shownPlate !== nextPlate) {
+        plate.src = nextPlate;
+        trees.src = nextPlate;
+        shownPlate = nextPlate;
+      }
       if (windowLayer) {
-        windowLayer.hidden = selected.windowOpen !== (scene.windowLayer === 'open');
+        const nextWindow = selected.windowOpen && windowPath(scene, selected.time);
+        if (nextWindow && shownWindow !== nextWindow) {
+          windowLayer.src = resolve(nextWindow);
+          shownWindow = nextWindow;
+        }
+        windowLayer.hidden = !nextWindow;
         const message = selected.windowOpen ? t('창문 열림', 'Window open') : t('창문 닫힘', 'Window closed');
         if (status.textContent !== message) status.textContent = message;
       }

@@ -9,40 +9,43 @@
 .bbPremiumPreviewArtwork { position: absolute; inset: 0; }
 .bbPremiumPreviewArtwork img { object-fit: fill; }
 .bbPremiumPreviewArtwork img[hidden] { display: none; }
-.bbPremiumPreviewStage[data-time="day"] .bbPremiumPreviewArtwork { filter: brightness(1.14) saturate(.75); }
-.bbPremiumPreviewStage[data-time="night"] { background: #101c34; }
-.bbPremiumPreviewStage[data-time="night"] .bbPremiumPreviewArtwork { filter: brightness(.34) saturate(.53); mix-blend-mode: screen; }
 
 .bbPremiumPreviewStage[data-scene="seoul-rooftop"] {
-  --bb-outside: polygon(14% 7.5%, 91% 10.7%, 91% 61.1%, 8.9% 61.1%, 10.1% 54%);
+  --bb-outside: polygon(14% 7.5%, 91% 10.7%, 91% 59.6%, 8.9% 59.6%, 10.1% 54%);
   --bb-sky: polygon(14% 7.5%, 91% 10.7%, 91% 30.2%, 80% 32%, 72% 31%, 60% 32%, 46% 34%, 30% 34%, 13% 29%);
   --bb-trees: polygon(13.4% 31%, 17.2% 30.6%, 22.6% 32.8%, 24.8% 33.5%, 24.5% 35%, 13.4% 35%);
-  --bb-ground: polygon(16.7% 53.9%, 69.6% 54.1%, 80% 55.7%, 90.8% 55.5%, 90.8% 61.1%, 8.8% 61.1%);
-  --bb-window: polygon(13.4% 6.4%, 94.5% 9.1%, 94.5% 63.5%, 8.6% 63.5%, 9.8% 56%);
+  --bb-window: polygon(93.1% 8.5%, 96.7% 8.7%, 96.7% 62%, 94.1% 62%, 85.1% 57.2%, 85.1% 14.25%);
 }
 .bbPremiumPreviewStage[data-scene="east-sea-lighthouse"] {
-  --bb-outside: polygon(15.5% 13.5%, 90.3% 12.1%, 88.5% 58.3%, 15.5% 58.3%);
+  --bb-outside: polygon(15.5% 13.8%, 90% 12.6%, 88% 59.4%, 15.5% 59.4%);
   --bb-sky: polygon(15.5% 13.5%, 90.3% 12.1%, 90% 33.7%, 77.8% 34.8%, 64% 38.9%, 39% 39%, 15.5% 39%);
   --bb-trees: polygon(82% 35.5%, 90% 34.1%, 90% 37.3%, 83% 37.6%);
-  --bb-ground: polygon(74% 53.8%, 89% 50.9%, 88.5% 58%, 64% 58%);
   --bb-water: polygon(15.5% 39.4%, 65.2% 39.4%, 70% 38.7%, 69% 42.5%, 87.8% 43.1%, 88% 47.1%, 62.1% 52.1%, 44% 57.2%, 15.5% 58.1%);
-  --bb-window: polygon(87.8% 12.1%, 90.6% 12.1%, 90.6% 58.6%, 88% 58.6%, 83.5% 55%, 83.5% 41%, 81.6% 40%, 81.6% 37.6%, 83.5% 37.6%, 83.5% 15.1%);
+  --bb-window: polygon(86.8% 11.9%, 90.2% 11.9%, 90.2% 63%, 88.4% 63%, 79% 59.8%, 79% 16.1%);
 }
 .bbPremiumPreviewStage[data-scene="lakeside-cabin"] {
   --bb-outside: polygon(15% 9%, 99% 2%, 100% 70%, 23% 67%, 10% 61%, 14% 38%);
   --bb-sky: polygon(15% 9%, 99% 2%, 100% 33.8%, 91% 35.3%, 80% 36.5%, 58% 35.8%, 31% 36.4%, 14% 37.4%);
   --bb-trees: polygon(14% 10.8%, 26% 8.3%, 40.4% 7.3%, 43.5% 10.5%, 30% 14.6%, 22.4% 19.8%, 14% 19.2%);
-  --bb-ground: polygon(17% 58%, 35% 60.2%, 67% 62.5%, 100% 63.6%, 100% 70.3%, 18% 66%);
   --bb-water: polygon(14.5% 42%, 100% 41%, 100% 53.6%, 89% 50.5%, 71.2% 48.6%, 65% 51.5%, 91% 61.8%, 54% 59%, 14.5% 54.5%);
 }
 .bbPremiumWindowLayer, .bbPremiumTreeMask, .bbPremiumWeatherShade, .bbPremiumCloudMask,
-.bbPremiumWetSurface, .bbPremiumPrecipitation, .bbPremiumWindWater { position: absolute; inset: 0; pointer-events: none; }
+.bbPremiumPrecipitation, .bbPremiumWindWater { position: absolute; inset: 0; pointer-events: none; }
 .bbPremiumWindowLayer { clip-path: var(--bb-window); }
+  .bbPremiumPreviewStage[data-scene="seoul-rooftop"][data-time="day"] .bbPremiumWindowLayer {
+    clip-path: polygon(93.2% 7.8%, 97% 7.8%, 97% 49.2%, 94% 49.2%, 84% 43.3%, 84% 14.5%);
+    transform: translateY(-1.4%) scaleY(1.31);
+    transform-origin: top;
+  }
+  .bbPremiumPreviewStage[data-scene="east-sea-lighthouse"][data-time="sunset"] .bbPremiumWindowLayer {
+    clip-path: polygon(90.4% 10.1%, 93.7% 10.1%, 93.7% 62.5%, 91.8% 62.5%, 83.4% 57.3%, 83.4% 15.6%);
+    transform: translate(-3%,.6%) scaleY(.96);
+    transform-origin: top;
+  }
 .bbPremiumTreeMask { clip-path: var(--bb-trees); }
 .bbPremiumTreeMask, .bbPremiumCloudMask, .bbPremiumWindWater { visibility: hidden; }
 .bbPremiumPreviewStage[data-wind="true"] :is(.bbPremiumTreeMask, .bbPremiumCloudMask, .bbPremiumWindWater) { visibility: visible; }
-.bbPremiumWeatherShade, .bbPremiumPrecipitation { clip-path: var(--bb-outside); }
-.bbPremiumWetSurface { clip-path: var(--bb-ground); }
+.bbPremiumPrecipitation { clip-path: var(--bb-outside); }
 .bbPremiumCloudMask { clip-path: var(--bb-sky); }
 .bbPremiumWindWater { clip-path: var(--bb-water); }
 .bbPremiumPreviewStage[data-wind="true"] .bbPremiumSwayingTrees { animation: bbPremiumTrees 3.3s ease-in-out infinite alternate; }
@@ -53,11 +56,10 @@
     radial-gradient(ellipse 14% 2.7% at 33% 21.5%, #edf7ff70 30%, transparent 100%);
   animation: bbPremiumCloudDrift 24s linear infinite;
 }
-.bbPremiumPreviewStage:is([data-weather="cloudy"], [data-weather="rain"], [data-weather="snow"]) .bbPremiumWeatherShade {
+.bbPremiumPreviewStage[data-weather="cloudy"] .bbPremiumWeatherShade {
+  clip-path: var(--bb-sky);
   background: linear-gradient(180deg,#627b9a82,#8fa9c362 56%,#637a9a0f);
 }
-.bbPremiumPreviewStage[data-weather="rain"] .bbPremiumWetSurface { background: linear-gradient(180deg,transparent,#91b4d43a 71%,#b6d1e13f); }
-.bbPremiumPreviewStage[data-weather="snow"] .bbPremiumWetSurface { background: linear-gradient(180deg,transparent,#e7f2f875 74%,#f5f9f6c9); }
 .bbPremiumPreviewStage[data-weather="rain"] .bbPremiumPrecipitation {
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='110' viewBox='0 0 104 110'%3E%3Cpath d='M13 3l-3 17M51 20l-4 25M90 4l-4 22M105 66l-3 18M29 63l-4 21M70 75l-3 20' stroke='%23e7f4ff' stroke-opacity='.63' stroke-width='.8'/%3E%3C/svg%3E");
   animation: bbPremiumRain .62s linear infinite;
