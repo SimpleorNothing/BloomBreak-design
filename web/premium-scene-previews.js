@@ -190,9 +190,10 @@
     }
   }
 
-  const imageRevision = '?v=rocky-coast-surf-1';
+  const imageRevision = '?v=sea-motion-video-1';
   const surfPhoto = 'assets/premium-scene-previews/east-sea-lighthouse-wind-surf.webp';
   const surfLoop = 'assets/premium-scene-previews/east-sea-lighthouse-surf-loop.webp';
+  const surfMotion = 'assets/premium-scene-previews/east-sea-lighthouse-surf-motion.mp4';
   const language = () => /^en/i.test(root.document.documentElement.lang) ? 1 : 0;
 
   function viewState({ time, weather, temperature, wind = false }) {
@@ -249,8 +250,16 @@
     const waterCanvas = water[scene.id] ? makeCanvas(artwork, 'WindWater') : null;
     const waterContext = waterCanvas?.getContext?.('2d');
     const surfMask = roughSea ? layer(artwork, 'SurfMask') : null;
+    const surfVideo = surfMask ? layer(surfMask, 'SurfMotion', 'video') : null;
     const animatedSurf = surfMask ? layer(surfMask, 'SurfLoop', 'img') : null;
     if (surfMask) surfMask.hidden = true;
+    if (surfVideo) {
+      surfVideo.defaultMuted = true;
+      surfVideo.muted = true;
+      surfVideo.loop = true;
+      surfVideo.playsInline = true;
+      surfVideo.preload = 'auto';
+    }
     const treeMask = layer(artwork, 'TreeMask');
     const trees = makeCanvas(treeMask, 'SwayingTrees');
     const treeContext = trees.getContext?.('2d');
@@ -301,6 +310,10 @@
     let waterPhase = 0;
     let surfRequested = false;
     let surfFailed = false;
+    let videoRequested = false;
+    let videoFailed = false;
+    let videoPlaying = false;
+    let playbackRequest = 0;
     const motion = root.matchMedia?.('(prefers-reduced-motion: reduce)');
     const playWater = () => wind.value === 'on' || !motion?.matches;
     function stopWater() {
@@ -318,24 +331,58 @@
       }
       waterFrame = root.requestAnimationFrame(animateWater);
     }
+    function releaseSurfVideo() {
+      if (!videoRequested) return;
+      videoRequested = false;
+      videoPlaying = false;
+      playbackRequest++;
+      surfVideo.pause();
+      surfVideo.removeAttribute('src');
+      surfVideo.load();
+    }
+    function fallbackToSurfImage() {
+      if (!videoRequested) return;
+      videoFailed = true;
+      releaseSurfVideo();
+      updateWater(true);
+    }
+    function resumeSurfVideo() {
+      if (!videoRequested || !surfVideo.paused || doc.hidden) return;
+      const request = ++playbackRequest;
+      surfVideo.play()?.catch(() => {
+        if (request === playbackRequest) fallbackToSurfImage();
+      });
+    }
     function updateWater(refresh = false) {
-      const windy = stage.dataset.wind === 'true' && registered;
-      const showMotion = windy && playWater();
+      const windActive = stage.dataset.wind === 'true';
+      const windy = windActive && registered;
+      const showMotion = windActive && playWater();
       if (animatedSurf) {
-        if (showMotion && !surfRequested && !surfFailed) {
+        if (showMotion && !videoRequested && !videoFailed) {
+          videoRequested = true;
+          surfVideo.src = resolve(surfMotion);
+          resumeSurfVideo();
+        } else if (!showMotion) {
+          releaseSurfVideo();
+          videoFailed = false;
+        }
+        const tryImage = showMotion && videoFailed;
+        if (tryImage && !surfRequested && !surfFailed) {
           surfRequested = true;
           animatedSurf.src = resolve(surfLoop);
-        } else if (!showMotion && surfRequested) {
+        } else if (!tryImage && surfRequested) {
           surfRequested = false;
           surfFailed = false;
           animatedSurf.removeAttribute('src');
         }
-        const playing = showMotion && surfRequested && !surfFailed &&
+        const showVideo = windy && showMotion && videoPlaying;
+        const showImage = windy && tryImage && surfRequested && !surfFailed &&
           animatedSurf.complete && animatedSurf.naturalWidth > 0;
-        surfMask.hidden = !playing;
-        // The image decoder keeps the surf moving without page animation frames.
-        if (waterCanvas) waterCanvas.hidden = playing;
-        if (playing) {
+        surfMask.hidden = !videoRequested && !showImage;
+        surfMask.dataset.playing = String(showVideo);
+        animatedSurf.hidden = !showImage;
+        if (waterCanvas) waterCanvas.hidden = showVideo || showImage;
+        if (showVideo || showImage) {
           stopWater();
           return;
         }
@@ -380,19 +427,29 @@
       updateWater();
     });
     const refreshWater = () => updateWater(true);
-    const useStaticSurf = () => {
+    const fallbackToCanvas = () => {
       if (!surfRequested) return;
       surfFailed = true;
       refreshWater();
     };
+    const onSurfPlaying = () => {
+      videoPlaying = videoRequested;
+      refreshWater();
+    };
+    const onVisibilityChange = () => {
+      resumeSurfVideo();
+      refreshWater();
+    };
+    surfVideo?.addEventListener('playing', onSurfPlaying);
+    surfVideo?.addEventListener('error', fallbackToSurfImage);
     animatedSurf?.addEventListener('load', refreshWater);
-    animatedSurf?.addEventListener('error', useStaticSurf);
+    animatedSurf?.addEventListener('error', fallbackToCanvas);
     if (roughSea) {
       roughSea.addEventListener('load', refreshWater);
       roughSea.src = resolve(surfPhoto);
     }
     motion?.addEventListener?.('change', refreshWater);
-    doc.addEventListener('visibilitychange', refreshWater);
+    doc.addEventListener('visibilitychange', onVisibilityChange);
     function draw() {
       const current = getEnvironment();
       const selected = viewState({
@@ -437,12 +494,15 @@
     return () => {
       root.clearInterval(timer);
       stopWater();
+      surfVideo?.removeEventListener('playing', onSurfPlaying);
+      surfVideo?.removeEventListener('error', fallbackToSurfImage);
+      releaseSurfVideo();
       animatedSurf?.removeEventListener('load', refreshWater);
-      animatedSurf?.removeEventListener('error', useStaticSurf);
+      animatedSurf?.removeEventListener('error', fallbackToCanvas);
       if (surfRequested) animatedSurf.removeAttribute('src');
       roughSea?.removeEventListener('load', refreshWater);
       motion?.removeEventListener?.('change', refreshWater);
-      doc.removeEventListener('visibilitychange', refreshWater);
+      doc.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }
 
