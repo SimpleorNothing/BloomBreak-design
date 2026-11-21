@@ -9,18 +9,6 @@
   // Pixel correspondences against each scene's clear daytime plate: eaves,
   // outdoor landmarks, sill/waterline and the front/back edges of the table.
   const framing = {
-    'seoul-rooftop': {
-      day: [0, 78, 306, 528, 645, 752, 924, 1024],
-      sunset: [0, 75, 301, 518, 624, 723, 884, 1024],
-      night: [0, 75, 294, 507, 615, 716, 882, 1024],
-      offset: { sunset: [9, 9, 15, 10, 2, 0, 0, 0], night: [4, 4, 11, 7, 2, 0, 0, 0] }
-    },
-    'east-sea-lighthouse': {
-      day: [0, 127, 378, 415, 647, 771, 993, 1024],
-      sunset: [0, 123, 369, 405, 626, 755, 993, 1024],
-      night: [0, 128, 375, 412, 637, 761, 988, 1024],
-      offset: { sunset: [0, 0, -2, 0, 0, 0, 0, 0], night: [-1, -1, -1, 0, 0, 0, 0, 0] }
-    },
     'lakeside-cabin': {
       day: [0, 87, 447, 532, 619, 778, 1024],
       sunset: [0, 85, 438, 520, 608, 772, 1024],
@@ -29,12 +17,77 @@
     }
   };
   const water = {
-    'east-sea-lighthouse': { first: .405, last: .58, bands: 16, swell: true },
-    'lakeside-cabin': { first: .442, last: .618, bands: 21, swell: false }
+    'east-sea-lighthouse': { first: .405, last: .58, bands: 11, swell: true },
+    'lakeside-cabin': { first: .442, last: .618, bands: 17, swell: false }
   };
+
+  const fixedViews = {
+    'seoul-rooftop': {
+      outside: [[.104,.073],[.922,.099],[.922,.626],[.087,.626],[.101,.511]],
+      sky: [[.106,.074],[.921,.099],[.92,.311],[.85,.31],[.79,.314],[.698,.313],[.695,.264],[.681,.264],[.679,.314],[.6,.319],[.51,.331],[.41,.343],[.26,.341],[.18,.323],[.106,.309]],
+      lights: [[.143,.353],[.167,.354],[.191,.363],[.214,.366],[.257,.363],[.371,.394],[.462,.396],[.507,.421],[.572,.425],[.624,.412],[.736,.421],[.80,.423],[.845,.396]]
+    },
+    'east-sea-lighthouse': {
+      outside: [[.149,.131],[.899,.12],[.891,.618],[.149,.618]],
+      sky: [[.15,.132],[.898,.121],[.896,.355],[.839,.364],[.791,.377],[.788,.348],[.768,.348],[.765,.387],[.708,.389],[.615,.398],[.5,.405],[.15,.405]],
+      lights: [[.779,.354]]
+    }
+  };
+
+  function clipRegion(context, polygon, width, height) {
+    context.beginPath();
+    for (const [index, [x, y]] of polygon.entries()) {
+      if (index === 0) context.moveTo(x * width, y * height);
+      else context.lineTo(x * width, y * height);
+    }
+    context.closePath();
+    context.clip();
+  }
+
+  function paintFixedView(daylight, skyImage, context, scene, time) {
+    const { width, height } = scene;
+    const profile = fixedViews[scene.id];
+    const night = time === 'night';
+    context.drawImage(daylight, 0, 0, width, height);
+    if (time === 'day') return;
+    context.save();
+    // Lighting and sky are composites made over the daytime photograph. The
+    // architecture, foreground and outdoor objects are never replaced or moved.
+    context.globalCompositeOperation = 'soft-light';
+    context.fillStyle = night ? 'rgba(241,151,71,.43)' : 'rgba(255,141,84,.25)';
+    context.fillRect(0, 0, width, height);
+    context.restore();
+
+    context.save();
+    clipRegion(context, profile.outside, width, height);
+    context.globalCompositeOperation = 'multiply';
+    context.fillStyle = night ? '#27394d' : '#daa797';
+    context.fillRect(0, 0, width, height);
+    context.restore();
+
+    context.save();
+    clipRegion(context, profile.sky, width, height);
+    const sw = skyImage.naturalWidth, sh = skyImage.naturalHeight;
+    context.drawImage(skyImage, sw * .21, sh * .145, sw * .62, sh * .154,
+      width * .086, height * .062, width * .85, height * .346);
+    context.restore();
+
+    if (night) {
+      for (const [x, y] of profile.lights) {
+        const size = scene.id === 'east-sea-lighthouse' ? 7 : 3.5;
+        const glow = context.createRadialGradient(x * width, y * height, 0, x * width, y * height, size);
+        glow.addColorStop(0, 'rgba(255,218,152,.97)');
+        glow.addColorStop(.3, 'rgba(255,194,118,.77)');
+        glow.addColorStop(1, 'rgba(255,184,99,0)');
+        context.fillStyle = glow;
+        context.fillRect(x * width - size, y * height - size, 2 * size, 2 * size);
+      }
+    }
+  }
 
   function sourcePosition(sceneId, time, y) {
     const profile = framing[sceneId];
+    if (!profile) return { x: 0, y };
     const dst = profile.day;
     const src = profile[time];
     let index = 0;
@@ -47,7 +100,7 @@
     };
   }
 
-  function registerArtwork(image, canvas, context, scene, time) {
+  function registerArtwork(image, context, scene, time) {
     if (!context || !image.naturalWidth || !image.naturalHeight) return false;
     const { width, height } = scene;
     const sx = image.naturalWidth / width, sy = image.naturalHeight / height;
@@ -72,67 +125,74 @@
   }
 
   function waterBand(profile, index, seconds) {
-    const travel = profile.swell ? .24 : .16;
+    const travel = profile.swell ? .27 : .12;
     const location = ((index / profile.bands + seconds * travel) % 1 + 1) % 1;
-    const depth = location ** 1.7;
+    const depth = location ** 1.6;
     const y = profile.first + (profile.last - profile.first) * depth;
     const fade = Math.sin(Math.PI * location);
-    const height = (profile.swell ? .018 : .004) * (.2 + depth * .8);
-    return { y, depth, fade, height, phase: index * 1.9 + seconds * 1.1 };
+    const height = (profile.swell ? .024 : .0045) * (.2 + depth * .8);
+    return { y, depth, fade, height, phase: index * 1.9 + seconds * 1.4 };
   }
 
-  function paintWater(context, surface, sceneId, seconds, night) {
+  function paintWater(context, surface, sceneId, seconds, time, roughSea) {
     const profile = water[sceneId];
     const { width, height } = surface;
     context.clearRect(0, 0, width, height);
-    const lo = Math.floor(profile.first * height), hi = Math.ceil(profile.last * height);
-    const bright = night ? .58 : 1;
-    // Gently bend actual water reflections along each moving horizontal strip.
-    for (let y = lo; y < hi; y += 3) {
-      const depth = (y - lo) / (hi - lo);
-      const shift = Math.sin(depth * (profile.swell ? 24 : 55) - seconds * 3.1) * depth * (profile.swell ? 5 : 2);
+    const low = Math.floor(profile.first * height), high = Math.ceil(profile.last * height);
+    const night = time === 'night';
+    const naturalRoughWater = profile.swell && roughSea?.complete && roughSea.naturalWidth;
+    for (let y = low; y < high; y += 3) {
+      const depth = (y - low) / (high - low);
+      const shift = Math.sin(depth * (profile.swell ? 22 : 50) - seconds * 3.4) * depth * (profile.swell ? 8 : 3);
       context.drawImage(surface, 0, y, width, 3, shift, y, width, 3);
+      if (!naturalRoughWater) continue;
+      const roll = Math.sin(y * .094 - seconds * 4.6) * Math.min(12, 3 + depth * 11);
+      context.globalAlpha = (night ? .29 : time === 'sunset' ? .64 : .88) * Math.min(1, depth * 4);
+      context.drawImage(roughSea, 0, y + roll, width, 3, shift * 1.2, y, width, 3);
+      context.globalAlpha = 1;
     }
     for (let i = 0; i < profile.bands; i++) {
       const band = waterBand(profile, i, seconds);
       const y = band.y * height;
       const size = band.height * height;
-      const stroke = context.createLinearGradient(0, y - size, 0, y + size * 2);
+      const brightness = night ? .79 : 1;
+      const stroke = context.createLinearGradient(0, y - size, 0, y + size);
       stroke.addColorStop(0, 'transparent');
-      stroke.addColorStop(.45, 'rgba(15,41,58,' + (band.fade * .24 * bright) + ')');
-      stroke.addColorStop(.66, 'rgba(191,220,233,' + (band.fade * .5 * bright) + ')');
+      stroke.addColorStop(.41, 'rgba(10,40,59,' + (band.fade * .43) + ')');
+      stroke.addColorStop(.52, 'rgba(210,238,250,' + (band.fade * .74 * brightness) + ')');
       stroke.addColorStop(1, 'transparent');
-      context.beginPath();
-      for (let x = 0; x <= width; x += 10) {
-        const wave = y + Math.sin(x / width * (profile.swell ? 6 : 21) + band.phase) * size;
-        if (x === 0) context.moveTo(x, wave);
-        else context.lineTo(x, wave);
+      function crestAt(x) {
+        const phase = x / width * (profile.swell ? 7 : 23) + band.phase;
+        return y + (Math.sin(phase) * .55 + Math.sin(phase * 2.2) * .24) * size;
       }
+      context.beginPath();
+      context.moveTo(0, crestAt(0));
+      for (let x = 7; x <= width; x += 7) context.lineTo(x, crestAt(x));
       context.strokeStyle = stroke;
-      context.lineWidth = Math.max(1, size * (profile.swell ? 1.5 : .85));
+      context.lineWidth = Math.max(1.3, size * (profile.swell ? 1.5 : .92));
       context.stroke();
-      if (!profile.swell || band.depth < .28) continue;
-      // Breaking crests leave short, irregular foam lines only on the sea.
+      if (!profile.swell || band.depth < .19) continue;
+      // Broken white crests travel with the wave. No foam is painted on the lake.
       context.beginPath();
-      for (let x = 12; x < width; x += 12) {
-        if (Math.sin(x * .087 + band.phase * 1.3) < .22) continue;
-        const crest = y + Math.sin(x / width * 6 + band.phase) * size;
+      for (let x = 0; x < width; x += 9) {
+        if (Math.sin(x * .057 + band.phase * 1.8) < -.12) continue;
+        const crest = crestAt(x);
         context.moveTo(x, crest);
-        context.quadraticCurveTo(x + 4, crest - 1.5, x + 9, crest + .6);
+        context.quadraticCurveTo(x + 5, crest - 2, x + 12, crestAt(x + 12));
       }
-      context.lineWidth = .75 + band.depth;
-      context.strokeStyle = 'rgba(232,246,250,' + (band.fade * bright * .67) + ')';
+      context.lineWidth = 1.8 + band.depth * 3.5;
+      context.strokeStyle = 'rgba(234,249,255,' + (band.fade * brightness * .94) + ')';
       context.stroke();
     }
   }
 
-  const imageRevision = '?v=roof-flowerbed-1';
+  const imageRevision = '?v=day-framing-wind-1';
+  const surfPhoto = 'assets/premium-scene-previews/east-sea-lighthouse-wind-surf.webp';
   const language = () => /^en/i.test(root.document.documentElement.lang) ? 1 : 0;
 
   function viewState({ time, weather, temperature, wind = false }) {
     const cold = Number.isFinite(temperature) && temperature < 10;
-    const clear = weather === 'clear' || weather === 'wind';
-    return { time, weather: weather === 'wind' ? 'clear' : weather, wind: wind || weather === 'wind', windowOpen: time !== 'night' && clear && !cold };
+    return { time, weather, wind, windowOpen: time !== 'night' && weather === 'clear' && !cold };
   }
 
   function imagePath(scene, time = 'day', weather = 'clear') {
@@ -142,7 +202,7 @@
 
   function windowPath(scene, time = 'day') {
     if (!scene.windowLayer || time === 'night') return undefined;
-    return 'assets/premium-scene-previews/' + scene.id + '-' + time + '-left-open.webp';
+    return 'assets/premium-scene-previews/' + scene.id + '-day-left-open.webp';
   }
 
   function mount(host, options = {}) {
@@ -178,6 +238,10 @@
     }
     const normalized = makeCanvas(artwork, 'RegisteredPlate');
     const plateContext = normalized.getContext?.('2d');
+    const usesDayGeometry = Boolean(fixedViews[scene.id]);
+    const daylight = usesDayGeometry ? doc.createElement('img') : null;
+    const roughSea = scene.id === 'east-sea-lighthouse' ? doc.createElement('img') : null;
+    if (roughSea) roughSea.src = resolve(surfPhoto);
     const waterCanvas = water[scene.id] ? makeCanvas(artwork, 'WindWater') : null;
     const waterContext = waterCanvas?.getContext?.('2d');
     const treeMask = layer(artwork, 'TreeMask');
@@ -208,7 +272,8 @@
     }
     const time = select(t('시간', 'Time'), [['day', t('낮', 'Day')], ['sunset', t('저녁(노을)', 'Evening (sunset)')], ['night', t('밤', 'Night')]]);
     time.value = getEnvironment().time;
-    const weather = select(t('날씨', 'Weather'), [['current', t('현재 설정', 'Current')], ['clear', t('맑음', 'Clear')], ['rain', t('비', 'Rain')], ['snow', t('눈', 'Snow')], ['wind', t('바람', 'Wind')]]);
+    const weather = select(t('날씨', 'Weather'), [['current', t('현재 설정', 'Current')], ['clear', t('맑음', 'Clear')], ['rain', t('비', 'Rain')], ['snow', t('눈', 'Snow')]]);
+    const wind = select(t('바람', 'Wind'), [['current', t('현재 설정', 'Current')], ['off', t('꺼짐', 'Off')], ['on', t('켜짐', 'On')]]);
     const temperature = windowLayer ? select(t('기온', 'Temperature'), [
       ['current', t('LIVE 기온', 'Live temperature')],
       ['18', '18 °C'],
@@ -221,6 +286,7 @@
     host.replaceChildren(controls, stage);
 
     let shownPlate;
+    let shownDaylight;
     let shownWindow;
     let registered = false;
     let waterFrame = 0;
@@ -235,7 +301,7 @@
       waterFrame = 0;
       if (stage.dataset.wind !== 'true' || !registered || motion?.matches || doc.hidden) return;
       if (now - lastFrame > 30) {
-        paintWater(waterContext, normalized, scene.id, now / 1000, stage.dataset.time === 'night');
+        paintWater(waterContext, normalized, scene.id, now / 1000, stage.dataset.time, roughSea);
         lastFrame = now;
       }
       waterFrame = root.requestAnimationFrame(animateWater);
@@ -250,13 +316,22 @@
       }
     }
     function readyPlate() {
-      registered = registerArtwork(plate, normalized, plateContext, scene, stage.dataset.time);
+      const time = stage.dataset.time;
+      if (!plateContext || !plate.complete || !plate.naturalWidth) return;
+      if (usesDayGeometry && time !== 'day') {
+        if (!daylight.complete || !daylight.naturalWidth) return;
+        paintFixedView(daylight, plate, plateContext, scene, time);
+        registered = true;
+      } else {
+        registered = registerArtwork(plate, plateContext, scene, time);
+      }
       if (registered && treeContext) treeContext.drawImage(normalized, 0, 0);
       normalized.hidden = !registered;
       updateWater();
     }
     normalized.hidden = true;
     plate.addEventListener('load', readyPlate);
+    daylight?.addEventListener('load', readyPlate);
     plate.addEventListener('error', () => {
       registered = false;
       normalized.hidden = true;
@@ -269,7 +344,7 @@
       const selected = viewState({
         time: time.value,
         weather: weather.value === 'current' ? current.weather : weather.value,
-        wind: weather.value === 'current' && current.wind,
+        wind: wind.value === 'current' ? Boolean(current.wind) : wind.value === 'on',
         temperature: temperature && temperature.value !== 'current' ? Number(temperature.value) : current.temperature
       });
       stage.dataset.time = selected.time;
@@ -281,6 +356,14 @@
         shownPlate = nextPlate;
         plate.src = nextPlate;
       }
+      if (daylight && selected.time !== 'day') {
+        const nextDaylight = resolve(imagePath(scene, 'day', selected.weather));
+        if (shownDaylight !== nextDaylight) {
+          shownDaylight = nextDaylight;
+          daylight.src = nextDaylight;
+        }
+      }
+      if (!registered) readyPlate();
       updateWater();
       if (windowLayer) {
         const nextWindow = selected.windowOpen && windowPath(scene, selected.time);

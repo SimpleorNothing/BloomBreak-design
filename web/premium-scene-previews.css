@@ -32,16 +32,12 @@
 .bbPremiumRegisteredPlate, .bbPremiumWindowLayer, .bbPremiumTreeMask, .bbPremiumWeatherShade, .bbPremiumCloudMask,
 .bbPremiumPrecipitation, .bbPremiumWindWater { position: absolute; inset: 0; pointer-events: none; }
 .bbPremiumWindowLayer { clip-path: var(--bb-window); transform-origin: top left; }
-.bbPremiumPreviewStage[data-scene="seoul-rooftop"][data-time="day"] .bbPremiumWindowLayer {
+.bbPremiumPreviewStage[data-scene="seoul-rooftop"] .bbPremiumWindowLayer {
   clip-path: polygon(9.2% 6.9%, 12.1% 6.9%, 25% 12.6%, 25% 44.2%, 12.1% 48.5%, 9.2% 48.5%);
   transform: translateY(-2.4%) scaleY(1.35);
 }
-.bbPremiumPreviewStage[data-scene="seoul-rooftop"][data-time="sunset"] .bbPremiumWindowLayer {
-  transform: scaleY(1.045);
-}
-.bbPremiumPreviewStage[data-scene="east-sea-lighthouse"][data-time="sunset"] .bbPremiumWindowLayer {
-  clip-path: polygon(11.2% 12%, 15.5% 12%, 26.1% 16.4%, 26.1% 58%, 15.5% 60.9%, 11.2% 60.9%);
-  transform: scaleY(1.04);
+.bbPremiumPreviewStage[data-time="sunset"] .bbPremiumWindowLayer {
+  filter: brightness(.87) sepia(.29) saturate(1.06);
 }
 .bbPremiumTreeMask { clip-path: var(--bb-trees); }
 .bbPremiumTreeMask, .bbPremiumCloudMask, .bbPremiumWindWater { visibility: hidden; }
