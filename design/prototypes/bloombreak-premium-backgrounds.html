@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BloomBreak 유료 배경 미리보기</title>
+<link rel="stylesheet" href="../../web/premium-scene-previews.css">
+<style>
+body{margin:0;padding:1rem;font:1rem system-ui,sans-serif;background:#f4f3ed;color:#202b24}
+main{max-width:65rem;margin:auto}h1{font-size:1.5rem}h2{font-size:1rem}
+details{padding:.5rem .8rem;background:#fff;border-radius:.6rem}
+#previews{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem}
+section{padding:.75rem;background:#fff;border-radius:.8rem}
+</style>
+<script src="../../web/premium-scene-previews.js" defer></script>
+</head>
+<body>
+<main>
+<h1>유료 배경 미리보기</h1>
+<details id="design-history" open>
+<summary>수정 이력 · v1.1.0</summary>
+<p>2026-11-21 · v1.1.0 · 낮·저녁(노을)·밤. 각 공간에 비·눈·바람 마스크 추가. 바람에 구름과 나무가 움직이고 동해에는 파도와 포말이 생김. 서울 옥탑방의 중앙 창살과 잠금쇠 제거, 동해 등대집과 서울 옥탑방에 열린 창과 닫힌 창 표현을 분리. APK 발행 전.</p>
+<p>2026-11-21 · v1.0.0 · 공간 메뉴에 서울 옥탑방, 동해 등대가 보이는 집, 호숫가 오두막 카드와 시간·날씨 선택을 추가. 서울 옥탑방에서 10°C 미만이나 밤·눈·비·흐림을 선택하면 창이 닫힘. APK 발행 및 실제 기기 확인 전.</p>
+</details>
+<div id="previews"></div>
+</main>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const previews = document.querySelector('#previews');
+  const api = window.BloomBreakPremiumScenePreviews;
+  for (const scene of api.scenes) {
+    const section = document.createElement('section');
+    const title = document.createElement('h2');
+    const view = document.createElement('div');
+    title.textContent = scene.title[0];
+    section.append(title, view);
+    previews.append(section);
+    api.mount(view, { sceneId: scene.id, base: new URL('../../web/', location.href) });
+  }
+});
+</script>
+</body>
+</html>

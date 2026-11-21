@@ -1,0 +1,87 @@
+.bbPremiumPreviewDialog { width: min(94vw, 460px); }
+.bbPremiumPreview { display: grid; justify-items: center; gap: .65rem; }
+.bbPremiumPreviewControls { width: 100%; display: flex; gap: .5rem; flex-wrap: wrap; align-items: end; }
+.bbPremiumPreviewControls label { display: grid; gap: .2rem; font-size: .8rem; }
+.bbPremiumPreviewControls select { min-height: 44px; padding: .25rem; font: inherit; }
+.bbPremiumPreviewStatus { flex-basis: 100%; margin: 0; }
+.bbPremiumPreviewStage { position: relative; overflow: hidden; isolation: isolate; width: min(100%, 17rem); margin: 0; border-radius: .75rem; }
+.bbPremiumPreviewArtwork, .bbPremiumPreviewArtwork img { display: block; width: 100%; height: 100%; }
+.bbPremiumPreviewArtwork { position: absolute; inset: 0; }
+.bbPremiumPreviewArtwork img { object-fit: fill; }
+.bbPremiumPreviewArtwork img[hidden] { display: none; }
+.bbPremiumPreviewStage[data-time="day"] .bbPremiumPreviewArtwork { filter: brightness(1.14) saturate(.75); }
+.bbPremiumPreviewStage[data-time="night"] { background: #101c34; }
+.bbPremiumPreviewStage[data-time="night"] .bbPremiumPreviewArtwork { filter: brightness(.34) saturate(.53); mix-blend-mode: screen; }
+
+.bbPremiumPreviewStage[data-scene="seoul-rooftop"] {
+  --bb-outside: polygon(14% 7.5%, 91% 10.7%, 91% 61.1%, 8.9% 61.1%, 10.1% 54%);
+  --bb-sky: polygon(14% 7.5%, 91% 10.7%, 91% 30.2%, 80% 32%, 72% 31%, 60% 32%, 46% 34%, 30% 34%, 13% 29%);
+  --bb-trees: polygon(13.4% 31%, 17.2% 30.6%, 22.6% 32.8%, 24.8% 33.5%, 24.5% 35%, 13.4% 35%);
+  --bb-ground: polygon(16.7% 53.9%, 69.6% 54.1%, 80% 55.7%, 90.8% 55.5%, 90.8% 61.1%, 8.8% 61.1%);
+  --bb-window: polygon(13.4% 6.4%, 94.5% 9.1%, 94.5% 63.5%, 8.6% 63.5%, 9.8% 56%);
+}
+.bbPremiumPreviewStage[data-scene="east-sea-lighthouse"] {
+  --bb-outside: polygon(15.5% 13.5%, 90.3% 12.1%, 88.5% 58.3%, 15.5% 58.3%);
+  --bb-sky: polygon(15.5% 13.5%, 90.3% 12.1%, 90% 33.7%, 77.8% 34.8%, 64% 38.9%, 39% 39%, 15.5% 39%);
+  --bb-trees: polygon(82% 35.5%, 90% 34.1%, 90% 37.3%, 83% 37.6%);
+  --bb-ground: polygon(74% 53.8%, 89% 50.9%, 88.5% 58%, 64% 58%);
+  --bb-water: polygon(15.5% 39.4%, 65.2% 39.4%, 70% 38.7%, 69% 42.5%, 87.8% 43.1%, 88% 47.1%, 62.1% 52.1%, 44% 57.2%, 15.5% 58.1%);
+  --bb-window: polygon(87.8% 12.1%, 90.6% 12.1%, 90.6% 58.6%, 88% 58.6%, 83.5% 55%, 83.5% 41%, 81.6% 40%, 81.6% 37.6%, 83.5% 37.6%, 83.5% 15.1%);
+}
+.bbPremiumPreviewStage[data-scene="lakeside-cabin"] {
+  --bb-outside: polygon(15% 9%, 99% 2%, 100% 70%, 23% 67%, 10% 61%, 14% 38%);
+  --bb-sky: polygon(15% 9%, 99% 2%, 100% 33.8%, 91% 35.3%, 80% 36.5%, 58% 35.8%, 31% 36.4%, 14% 37.4%);
+  --bb-trees: polygon(14% 10.8%, 26% 8.3%, 40.4% 7.3%, 43.5% 10.5%, 30% 14.6%, 22.4% 19.8%, 14% 19.2%);
+  --bb-ground: polygon(17% 58%, 35% 60.2%, 67% 62.5%, 100% 63.6%, 100% 70.3%, 18% 66%);
+  --bb-water: polygon(14.5% 42%, 100% 41%, 100% 53.6%, 89% 50.5%, 71.2% 48.6%, 65% 51.5%, 91% 61.8%, 54% 59%, 14.5% 54.5%);
+}
+.bbPremiumWindowLayer, .bbPremiumTreeMask, .bbPremiumWeatherShade, .bbPremiumCloudMask,
+.bbPremiumWetSurface, .bbPremiumPrecipitation, .bbPremiumWindWater { position: absolute; inset: 0; pointer-events: none; }
+.bbPremiumWindowLayer { clip-path: var(--bb-window); }
+.bbPremiumTreeMask { clip-path: var(--bb-trees); }
+.bbPremiumTreeMask, .bbPremiumCloudMask, .bbPremiumWindWater { visibility: hidden; }
+.bbPremiumPreviewStage[data-wind="true"] :is(.bbPremiumTreeMask, .bbPremiumCloudMask, .bbPremiumWindWater) { visibility: visible; }
+.bbPremiumWeatherShade, .bbPremiumPrecipitation { clip-path: var(--bb-outside); }
+.bbPremiumWetSurface { clip-path: var(--bb-ground); }
+.bbPremiumCloudMask { clip-path: var(--bb-sky); }
+.bbPremiumWindWater { clip-path: var(--bb-water); }
+.bbPremiumPreviewStage[data-wind="true"] .bbPremiumSwayingTrees { animation: bbPremiumTrees 3.3s ease-in-out infinite alternate; }
+.bbPremiumPreviewStage[data-wind="true"] .bbPremiumCloudMask {
+  background: radial-gradient(ellipse 8% 2% at 68% 30%, #eef8ff6b 28%, transparent 100%),
+    radial-gradient(ellipse 13% 2.5% at 56% 31.5%, #ecf5ff91 15%, transparent 100%),
+    radial-gradient(ellipse 8% 2.2% at 23% 20%, #f1f6ff86 13%, transparent 100%),
+    radial-gradient(ellipse 14% 2.7% at 33% 21.5%, #edf7ff70 30%, transparent 100%);
+  animation: bbPremiumCloudDrift 24s linear infinite;
+}
+.bbPremiumPreviewStage:is([data-weather="cloudy"], [data-weather="rain"], [data-weather="snow"]) .bbPremiumWeatherShade {
+  background: linear-gradient(180deg,#627b9a82,#8fa9c362 56%,#637a9a0f);
+}
+.bbPremiumPreviewStage[data-weather="rain"] .bbPremiumWetSurface { background: linear-gradient(180deg,transparent,#91b4d43a 71%,#b6d1e13f); }
+.bbPremiumPreviewStage[data-weather="snow"] .bbPremiumWetSurface { background: linear-gradient(180deg,transparent,#e7f2f875 74%,#f5f9f6c9); }
+.bbPremiumPreviewStage[data-weather="rain"] .bbPremiumPrecipitation {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='104' height='110' viewBox='0 0 104 110'%3E%3Cpath d='M13 3l-3 17M51 20l-4 25M90 4l-4 22M105 66l-3 18M29 63l-4 21M70 75l-3 20' stroke='%23e7f4ff' stroke-opacity='.63' stroke-width='.8'/%3E%3C/svg%3E");
+  animation: bbPremiumRain .62s linear infinite;
+}
+.bbPremiumPreviewStage[data-weather="snow"] .bbPremiumPrecipitation {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='107' height='138' viewBox='0 0 107 138'%3E%3Cg fill='%23fff' fill-opacity='.88'%3E%3Ccircle cx='13' cy='7' r='1.4'/%3E%3Ccircle cx='55' cy='21' r='1.9'/%3E%3Ccircle cx='89' cy='18' r='1.1'/%3E%3Ccircle cx='24' cy='70' r='1.6'/%3E%3Ccircle cx='76' cy='82' r='2.0'/%3E%3Ccircle cx='102' cy='105' r='1.3'/%3E%3Ccircle cx='39' cy='118' r='1.7'/%3E%3C/g%3E%3C/svg%3E");
+  animation: bbPremiumSnow 7s linear infinite;
+}
+.bbPremiumPreviewStage[data-wind="true"] .bbPremiumWindWater {
+  --bb-water-motion: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='56' viewBox='0 0 140 56'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M3 16q12-4 24-1t19-1m20 27q11-4 22-1t16-1m7-30q8-2 21-1' stroke='%23edfaff' opacity='.45'/%3E%3Cpath d='M8 27q15-3 35-1m22 26q12-2 24-1m20-27q9-2 24-2' stroke='%23182e42' opacity='.45'/%3E%3C/g%3E%3C/svg%3E");
+  background: var(--bb-water-motion);
+  animation: bbPremiumRipple 5s linear infinite;
+}
+.bbPremiumPreviewStage[data-scene="east-sea-lighthouse"][data-wind="true"] .bbPremiumWindWater {
+  background-size: 140px 56px;
+  background-image: var(--bb-water-motion), repeating-linear-gradient(165deg, transparent 0 7px,#9ac7dc61 10px,#ecf6f7a6 11px,transparent 14px 26px);
+  animation: bbPremiumWave 3.4s ease-in-out infinite alternate;
+}
+@keyframes bbPremiumTrees { from { transform: translateX(-.7%); } to { transform: translateX(.9%); } }
+@keyframes bbPremiumCloudDrift { 0% { background-position: -7rem 0; opacity: .18; } 43% { opacity: .8; } 100% { background-position: 9rem 0; opacity: .16; } }
+@keyframes bbPremiumRain { to { background-position: -17px 110px; } }
+@keyframes bbPremiumSnow { to { background-position: 12px 138px; } }
+@keyframes bbPremiumRipple { to { background-position: 140px 0; } }
+@keyframes bbPremiumWave { from { background-position: 0 0,0 0; opacity: .56; } to { background-position: 42px 15px,10px 23px; opacity: .9; } }
+@media (prefers-reduced-motion: reduce) {
+  .bbPremiumPreviewStage *, .bbPremiumPreviewStage::before, .bbPremiumPreviewStage::after { animation: none !important; }
+}
