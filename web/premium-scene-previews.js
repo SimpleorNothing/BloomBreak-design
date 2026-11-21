@@ -190,7 +190,7 @@
     }
   }
 
-  const imageRevision = '?v=day-framing-wind-3';
+  const imageRevision = '?v=rocky-coast-surf-1';
   const surfPhoto = 'assets/premium-scene-previews/east-sea-lighthouse-wind-surf.webp';
   const surfLoop = 'assets/premium-scene-previews/east-sea-lighthouse-surf-loop.webp';
   const language = () => /^en/i.test(root.document.documentElement.lang) ? 1 : 0;
