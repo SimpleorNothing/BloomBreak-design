@@ -190,8 +190,9 @@
     }
   }
 
-  const imageRevision = '?v=day-framing-wind-2';
+  const imageRevision = '?v=day-framing-wind-3';
   const surfPhoto = 'assets/premium-scene-previews/east-sea-lighthouse-wind-surf.webp';
+  const surfLoop = 'assets/premium-scene-previews/east-sea-lighthouse-surf-loop.webp';
   const language = () => /^en/i.test(root.document.documentElement.lang) ? 1 : 0;
 
   function viewState({ time, weather, temperature, wind = false }) {
@@ -247,6 +248,9 @@
     const roughSea = scene.id === 'east-sea-lighthouse' ? doc.createElement('img') : null;
     const waterCanvas = water[scene.id] ? makeCanvas(artwork, 'WindWater') : null;
     const waterContext = waterCanvas?.getContext?.('2d');
+    const surfMask = roughSea ? layer(artwork, 'SurfMask') : null;
+    const animatedSurf = surfMask ? layer(surfMask, 'SurfLoop', 'img') : null;
+    if (surfMask) surfMask.hidden = true;
     const treeMask = layer(artwork, 'TreeMask');
     const trees = makeCanvas(treeMask, 'SwayingTrees');
     const treeContext = trees.getContext?.('2d');
@@ -295,7 +299,10 @@
     let waterFrame = 0;
     let lastFrame = -Infinity;
     let waterPhase = 0;
+    let surfRequested = false;
+    let surfFailed = false;
     const motion = root.matchMedia?.('(prefers-reduced-motion: reduce)');
+    const playWater = () => wind.value === 'on' || !motion?.matches;
     function stopWater() {
       if (waterFrame) root.cancelAnimationFrame(waterFrame);
       waterFrame = 0;
@@ -303,7 +310,7 @@
     }
     function animateWater(now) {
       waterFrame = 0;
-      if (stage.dataset.wind !== 'true' || !registered || motion?.matches || doc.hidden) return;
+      if (stage.dataset.wind !== 'true' || !registered || !playWater() || doc.hidden) return;
       if (now - lastFrame > 30) {
         if (Number.isFinite(lastFrame)) waterPhase += (now - lastFrame) / 1000;
         paintWater(waterContext, normalized, scene.id, waterPhase, stage.dataset.time, roughSea);
@@ -312,8 +319,29 @@
       waterFrame = root.requestAnimationFrame(animateWater);
     }
     function updateWater(refresh = false) {
+      const windy = stage.dataset.wind === 'true' && registered;
+      const showMotion = windy && playWater();
+      if (animatedSurf) {
+        if (showMotion && !surfRequested && !surfFailed) {
+          surfRequested = true;
+          animatedSurf.src = resolve(surfLoop);
+        } else if (!showMotion && surfRequested) {
+          surfRequested = false;
+          surfFailed = false;
+          animatedSurf.removeAttribute('src');
+        }
+        const playing = showMotion && surfRequested && !surfFailed &&
+          animatedSurf.complete && animatedSurf.naturalWidth > 0;
+        surfMask.hidden = !playing;
+        // The image decoder keeps the surf moving without page animation frames.
+        if (waterCanvas) waterCanvas.hidden = playing;
+        if (playing) {
+          stopWater();
+          return;
+        }
+      }
       if (!waterContext) return;
-      if (stage.dataset.wind !== 'true' || !registered) {
+      if (!windy) {
         stopWater();
         waterPhase = 0;
         waterContext.clearRect(0, 0, waterCanvas.width, waterCanvas.height);
@@ -324,7 +352,7 @@
       if (refresh || !waterFrame) {
         paintWater(waterContext, normalized, scene.id, waterPhase, stage.dataset.time, roughSea);
       }
-      if (motion?.matches || doc.hidden) stopWater();
+      if (!showMotion || doc.hidden) stopWater();
       else if (!waterFrame) {
         waterFrame = root.requestAnimationFrame(animateWater);
       }
@@ -352,6 +380,13 @@
       updateWater();
     });
     const refreshWater = () => updateWater(true);
+    const useStaticSurf = () => {
+      if (!surfRequested) return;
+      surfFailed = true;
+      refreshWater();
+    };
+    animatedSurf?.addEventListener('load', refreshWater);
+    animatedSurf?.addEventListener('error', useStaticSurf);
     if (roughSea) {
       roughSea.addEventListener('load', refreshWater);
       roughSea.src = resolve(surfPhoto);
@@ -402,6 +437,9 @@
     return () => {
       root.clearInterval(timer);
       stopWater();
+      animatedSurf?.removeEventListener('load', refreshWater);
+      animatedSurf?.removeEventListener('error', useStaticSurf);
+      if (surfRequested) animatedSurf.removeAttribute('src');
       roughSea?.removeEventListener('load', refreshWater);
       motion?.removeEventListener?.('change', refreshWater);
       doc.removeEventListener('visibilitychange', refreshWater);

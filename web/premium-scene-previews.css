@@ -30,7 +30,7 @@
   --bb-water: polygon(14.5% 42%, 100% 41%, 100% 53.6%, 89% 50.5%, 71.2% 48.6%, 65% 51.5%, 91% 61.8%, 54% 59%, 14.5% 54.5%);
 }
 .bbPremiumRegisteredPlate, .bbPremiumWindowLayer, .bbPremiumTreeMask, .bbPremiumWeatherShade, .bbPremiumCloudMask,
-.bbPremiumPrecipitation, .bbPremiumWindWater { position: absolute; inset: 0; pointer-events: none; }
+.bbPremiumPrecipitation, .bbPremiumWindWater, .bbPremiumSurfMask { position: absolute; inset: 0; pointer-events: none; }
 .bbPremiumWindowLayer { clip-path: var(--bb-window); transform-origin: top left; }
 .bbPremiumPreviewStage[data-scene="seoul-rooftop"] .bbPremiumWindowLayer {
   clip-path: polygon(9.2% 6.9%, 12.1% 6.9%, 25% 12.6%, 25% 44.2%, 12.1% 48.5%, 9.2% 48.5%);
@@ -44,7 +44,15 @@
 .bbPremiumPreviewStage[data-wind="true"] :is(.bbPremiumTreeMask, .bbPremiumCloudMask, .bbPremiumWindWater) { visibility: visible; }
 .bbPremiumPrecipitation { clip-path: var(--bb-outside); }
 .bbPremiumCloudMask { clip-path: var(--bb-sky); }
-.bbPremiumWindWater { clip-path: var(--bb-water); }
+.bbPremiumWindWater, .bbPremiumSurfMask { clip-path: var(--bb-water); }
+.bbPremiumSurfMask .bbPremiumSurfLoop {
+  position: absolute;
+  /* The animation covers rows 413–637 of the 1024-pixel scenery plate. */
+  inset: 40.332% 0 auto;
+  height: 21.973%;
+}
+.bbPremiumPreviewStage[data-time="sunset"] .bbPremiumSurfLoop { filter: sepia(.2) brightness(.85) saturate(.86); }
+.bbPremiumPreviewStage[data-time="night"] .bbPremiumSurfLoop { filter: brightness(.63) saturate(.72); }
 .bbPremiumPreviewStage[data-wind="true"] .bbPremiumSwayingTrees { animation: bbPremiumTrees 3.3s ease-in-out infinite alternate; }
 .bbPremiumPreviewStage[data-wind="true"] .bbPremiumCloudMask {
   background: radial-gradient(ellipse 8% 2% at 68% 30%, #eef8ff6b 28%, transparent 100%),
