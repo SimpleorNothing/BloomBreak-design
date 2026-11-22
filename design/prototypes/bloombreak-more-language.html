@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BloomBreak 더보기 · 언어</title>
+<style>
+:root{font-family:system-ui,sans-serif;color-scheme:light dark}
+body{margin:0;padding:20px;background:#e6ece3;color:#283d2f}
+main{max-width:430px;margin:auto}
+details{padding:12px 16px;margin-bottom:16px;background:#fffef9;border-radius:16px}
+details p{line-height:1.5}
+.sheet{--surface:#fffef9;--card:#e6ece3;--text:#283d2f;--action:#47765b;--on-action:#fff;--line:#a8b8aa;padding:20px;background:#fffaf0;color:var(--text);border-radius:28px}
+.sheet[data-theme="dark"]{--surface:#161616;--card:#242424;--text:#f5f5f5;--action:#f5f5f5;--on-action:#111;--line:#595959;background:#090909}
+h1{font-size:22px;margin:0 0 16px}
+.settings{border-radius:16px;background:var(--surface)}
+.row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 12px;padding:8px 14px;min-height:48px;font-size:14px}
+.row+.row{border-top:1px solid var(--line)}
+.picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:3px;background:var(--card);border-radius:15px}
+button{border:0;border-radius:12px;min-height:44px;padding:6px 9px;background:transparent;color:var(--text);font:600 14px/1.3 system-ui;cursor:pointer}
+button[aria-pressed="true"]{background:var(--action);color:var(--on-action)}
+.picker button[aria-pressed="true"]::before{content:'';display:inline-block;width:8px;height:5px;border:solid currentColor;border-width:0 0 2px 2px;transform:rotate(-45deg) translateY(-2px);margin-right:6px}
+button:focus-visible{outline:2px solid var(--text);outline-offset:2px}
+</style>
+<main>
+  <details open>
+    <summary>수정 이력 · v1.0.0</summary>
+    <p>2026-11-22. 화면 테마 안의 언어 카드를 더보기의 설정 묶음으로 옮겼어요. 설정을 위에 배치하고 화면 테마 바로 아래에 언어 행을 표시해요. 한국어와 English는 눌렀을 때 즉시 적용되고 선택된 버튼에 배경색과 체크가 표시돼요.</p>
+    <p>웹·Android 공통 개발 소스 적용. 새 APK·IPA 및 실기기 확인 전.</p>
+  </details>
+  <section class="sheet" data-theme="light" aria-labelledby="more">
+    <h1 id="more">더보기</h1>
+    <section class="settings" aria-label="설정">
+      <div class="row"><strong id="notice">알림</strong></div>
+      <div class="row"><strong id="appearance">화면 테마</strong><button id="theme" type="button" aria-pressed="false">밝은 화면</button></div>
+      <div class="row" role="group" aria-labelledby="language">
+        <strong id="language">언어</strong>
+        <div class="picker"><button type="button" lang="ko" data-language="ko" aria-pressed="true">한국어</button><button type="button" lang="en" data-language="en" aria-pressed="false">English</button></div>
+      </div>
+    </section>
+  </section>
+</main>
+<script>
+const labels={ko:{more:'더보기',notice:'알림',appearance:'화면 테마',language:'언어',settings:'설정',light:'밝은 화면',dark:'어두운 화면'},en:{more:'More',notice:'Notifications',appearance:'Appearance',language:'Language',settings:'Settings',light:'Light',dark:'Dark'}};
+const sheet=document.querySelector('.sheet');
+const appearance=document.querySelector('#theme');
+let selected='ko';
+function render(){
+  const copy=labels[selected],mode=sheet.dataset.theme;
+  document.documentElement.lang=selected;
+  for(const id of ['more','notice','appearance','language'])document.getElementById(id).textContent=copy[id];
+  document.querySelector('.settings').setAttribute('aria-label',copy.settings);
+  appearance.textContent=copy[mode];
+  appearance.setAttribute('aria-pressed',String(mode==='dark'));
+  document.querySelectorAll('[data-language]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.language===selected)));
+}
+appearance.onclick=()=>{sheet.dataset.theme=sheet.dataset.theme==='light'?'dark':'light';render()};
+document.querySelectorAll('[data-language]').forEach(button=>button.onclick=()=>{selected=button.dataset.language;render()});
+</script>
+</html>
