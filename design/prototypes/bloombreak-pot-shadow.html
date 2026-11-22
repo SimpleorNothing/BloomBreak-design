@@ -1,0 +1,137 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>화분 그림자 v1.0.0</title><style>/* Keep the physical contact fixed; only its light strength changes. */
+.potContactShadow{opacity:.82;transition:opacity 3s ease-in-out}
+.potShadowReveal{animation:bbPotShadowReveal 2.4s ease-out both}
+#room.live-day .potContactShadow{opacity:.72}
+#room.live-twilight .potContactShadow,#room.live-evening .potContactShadow{opacity:1}
+#room.live-lit-night .potContactShadow{opacity:.8}
+#room.live-night .potContactShadow{opacity:.4}
+#room.live-dawn .potContactShadow{opacity:.58}
+@keyframes bbPotShadowReveal{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .potContactShadow{transition:none}
+  .potShadowReveal{animation:none}
+}
+body{font:16px sans-serif;background:#eee6da;margin:24px;color:#302920}main{max-width:460px;margin:auto}svg{width:200px;overflow:visible}#room{padding:60px;text-align:center;background:radial-gradient(ellipse,#b77d52,#70442f);border-radius:50%;margin:40px 0}button{padding:12px;margin:4px}</style><main><details id="design-history" open><summary>수정이력 · v1.0.0 · 2026-11-23</summary><p>고정 그림자 → 가장자리로 흐려지는 넓은 그림자, 2.4초 등장·시간대 농도 3초 전환. 새 APK·IPA·실기기 미확인. BB-SCREEN:home / #869 보존.</p></details><p>테이블 위 접지와 부드러운 번짐 확인용 시안</p><section id="room" class="live-twilight"></section><button data-phase="live-day">낮</button><button data-phase="live-twilight">노을</button><button data-phase="live-lit-night">밤 조명</button><button data-phase="live-night">소등</button><button id="replay">다시 보기</button></main><script>
+(() => {
+  // Presentation only: thresholds, earned minutes and saved plant data stay unchanged.
+  const growthStages=['seed','germination','sprout','leaves','bud','bloom'];
+  function growthPose(sp,minutes){
+    const unchanged={stage:null,progress:1,x:1,y:1};
+    const boundaries=sp?.stageMinutes;
+    if(!Number.isFinite(minutes)||!Array.isArray(boundaries)||boundaries.length!==5||
+      boundaries.some((value,i)=>!Number.isFinite(value)||value<=(i?boundaries[i-1]:0)))return unchanged;
+    const elapsed=Math.max(0,minutes),next=boundaries.findIndex(value=>elapsed<value);
+    if(next<0)return {...unchanged,stage:'bloom'};
+    const from=next?boundaries[next-1]:0,progress=(elapsed-from)/(boundaries[next]-from);
+    // Existing artwork is the fully grown pose of each stage. Only foliage
+    // grows towards it; no scaling beyond the reviewed source or pot geometry.
+    const starts=[[.85,.85],[.80,.70],[.88,.80],[.92,.88],[.94,.86]][next];
+    return {stage:growthStages[next],progress,x:starts[0]+(1-starts[0])*progress,y:starts[1]+(1-starts[1])*progress};
+  }
+  function applyGrowth(frame,sp,minutes){
+    frame._growthPose=growthPose(sp,minutes);
+    frame._potGrowthLayout?.();
+    const seed=frame.querySelector('.potSeed'),pose=frame._growthPose;
+    if(seed)seed.setAttribute('transform','translate(50 16) scale('+pose.x+' '+pose.y+') translate(-50 -16)');
+  }
+  let ceramicPotId=0;
+  // Physical base rows in the original 512px photographs (not the cutout canvas edge).
+  const potContactRows={'sand-saucer.webp':456,'ivory-square.webp':460,'sage-bowl.webp':427,'charcoal-cylinder.webp':461,'taupe-clay.webp':470};
+  function contactShadowMarkup(baseY=92){
+    const id='pot-contact-'+(++ceramicPotId);
+    // Two fading ellipses: a close contact and a wider, softly cast shadow.
+    // Inside the pot SVG, these follow every placement/resize without stored state.
+    return '<defs><radialGradient id="'+id+'"><stop stop-color="#21170f" stop-opacity=".46"/><stop offset=".25" stop-color="#21170f" stop-opacity=".34"/><stop offset=".55" stop-color="#21170f" stop-opacity=".14"/><stop offset=".8" stop-color="#21170f" stop-opacity=".035"/><stop offset="1" stop-color="#21170f" stop-opacity="0"/></radialGradient></defs>'+
+      '<g class="potContactShadow" pointer-events="none" aria-hidden="true"><g class="potShadowReveal">'+
+      '<ellipse cx="64" cy="'+(baseY+2.5)+'" rx="49" ry="9" fill="url(#'+id+')"/>'+
+      '<ellipse cx="50" cy="'+baseY+'" rx="34" ry="4.5" fill="url(#'+id+')"/></g></g>';
+  }
+// The photographed opening and saucer are one asset; keep the soil anchor at (50,16).
+function photoMarkup(attributes='class="ceramicPot"',companion){
+ const appearance=window.BloomBreakCompanion?.potAppearance(companion||{companionPersona:'slow'});
+ if(!appearance?.photo)return '';
+ const y=16-appearance.soilY*100;
+ const file=appearance.photo.split(/[?#]/)[0].split('/').pop();
+ const contact=y+(potContactRows[file]||456)/512*100;
+ return '<svg '+attributes+' data-pot-photo="true" viewBox="0 0 100 100" aria-hidden="true">'+contactShadowMarkup(contact)+'<image class="potReferenceBody companionPotBody" href="'+appearance.photo+'" x="0" y="'+y+'" width="100" height="100" preserveAspectRatio="xMidYMid meet"/><g class="potOpening"><ellipse class="potRim" cx="50" cy="16" rx="39" ry="9" opacity="0"/><ellipse class="potSoil" cx="50" cy="16" rx="36" ry="8" opacity="0"/><path class="potLip" opacity="0"/></g></svg>';
+}
+function ceramicPotMarkup(attributes='class="ceramicPot"',companion){
+  const photo=photoMarkup(attributes,companion);if(photo)return photo;
+  const id='ceramic-'+(++ceramicPotId);
+  const appearance=companion&&window.BloomBreakCompanion?.potAppearance(companion);
+  const body=appearance?.body?'<image class="companionPotBody" href="'+appearance.body+'" x="4" y="16" width="92" height="76" preserveAspectRatio="none"/>':'';
+  // The reference stoneware body has no baked opening; soil remains a separate layer.
+  return '<svg '+attributes+' viewBox="0 0 100 100" aria-hidden="true"><defs>'+
+    '<linearGradient id="'+id+'-rim" x2="0" y2="1"><stop stop-color="#d4c2a8"/><stop offset="1" stop-color="#ac967a"/></linearGradient>'+
+    '<radialGradient id="'+id+'-soil"><stop stop-color="#4b3929"/><stop offset="1" stop-color="#241c16"/></radialGradient>'+
+    '<pattern id="'+id+'-earth" width="1" height="1" patternContentUnits="objectBoundingBox"><image href="assets/perspective/brown-potting-soil.webp?v=1" width="1" height="1" preserveAspectRatio="none"/></pattern></defs>'+
+    contactShadowMarkup()+
+    '<image class="potReferenceBody" href="assets/pots/sand-stoneware-front.webp?v=1" x="4" y="16" width="92" height="76" preserveAspectRatio="none"'+(body?' opacity="0"':'')+'/>'+body+
+    '<g class="potOpening"><ellipse class="potRim" cx="50" cy="16" rx="46" ry="12" fill="'+(body?appearance.rim:'url(#'+id+'-rim)')+'"/>'+
+    '<ellipse class="potSoil" cx="50" cy="16" rx="39" ry="9" fill="url(#'+id+'-soil)"/>'+
+    '<ellipse class="potSoilTexture" cx="50" cy="16" rx="39" ry="9" fill="url(#'+id+'-earth)"/>'+
+    '<path class="potLip" d="M4 16Q50 40 96 16" fill="none" stroke="'+(body?appearance.lip:'#cbb697')+'" stroke-width="2"/></g></svg>';
+}
+  function markup(size='small',companion){return ceramicPotMarkup(undefined,companion).replace('viewBox="0 0 100 100"','viewBox="0 0 100 100" preserveAspectRatio="none"');}
+  const visibleBounds=new WeakMap();
+  function fitScale(img,w,h,rootX,rootY,soilRatio,preferred){
+    if(!img.complete||!img.naturalWidth)return preferred;
+    let cached=visibleBounds.get(img),bounds=cached?.src===img.src?cached.bounds:null;
+    if(!bounds){
+      try{
+        const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;
+        const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0);
+        const pixels=ctx.getImageData(0,0,c.width,c.height).data;
+        let left=c.width,right=0,top=c.height;
+        for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(pixels[(y*c.width+x)*4+3]>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);}
+        bounds={left,right,top};visibleBounds.set(img,{src:img.src,bounds});
+      }catch(_){return preferred;}
+    }
+    return Math.min(preferred,w*.46/Math.max(1,rootX-bounds.left),w*.46/Math.max(1,bounds.right-rootX),h*(soilRatio-.055)/Math.max(1,rootY-bounds.top));
+  }
+  function render(frame,sp,stage,base='',companion){
+    frame._potObserver?.disconnect();
+    frame._potGrowthLayout=null;frame._growthPose=null;
+    frame.classList.add('potted-stage');frame.dataset.potSize=sp.potSize||'small';
+    frame.replaceChildren();frame.insertAdjacentHTML('beforeend',markup(sp.potSize,companion));
+    frame.querySelectorAll('image').forEach(node=>node.setAttribute('href',base+node.getAttribute('href')));
+    if(stage==='seed')frame.querySelector('.potOpening').insertAdjacentHTML('beforeend','<g class="potSeed"><ellipse cx="50" cy="16" rx="4" ry="2.4" fill="#b48a4f" stroke="#765633" stroke-width=".5"/><path d="M47 16h6m-5-1h4" stroke="#e0bd83" stroke-width=".5"/></g>');
+    if(stage==='seed'||stage==='empty')return;
+    const src=sp.foliageImages?.[stage]||sp.overlayImages?.[stage]||sp.growthImages?.[stage];
+    if(!src)return;
+    const img=document.createElement('img');img.className='stage-foliage';img.alt=sp.name;img.src=base+src+'?v=20261011-stage-review-2';frame.append(img);
+    function layout(){
+      if(!img.naturalWidth)return;
+      const size=typeof getComputedStyle==='function'?getComputedStyle(frame):null;
+      const w=parseFloat(size?.width)||frame.clientWidth,h=parseFloat(size?.height)||frame.clientHeight;
+      const pose=frame._growthPose||{x:1,y:1};
+      img.style.objectFit='fill';
+      if(sp.foliageImages?.[stage]){
+        const soil=sp.potSize==='large'?.5228:.5548;
+        const scale=fitScale(img,w,h,600,1650,soil,w*.9/1200);
+        img.dataset.potRootX='600';img.dataset.potRootY='1650';
+        Object.assign(img.style,{width:img.naturalWidth*scale*pose.x+'px',height:img.naturalHeight*scale*pose.y+'px',left:w*.5-600*scale*pose.x+'px',top:h*soil-1650*scale*pose.y+'px'});
+      }else{
+        const anchor=window.MindGardenFlowerFraming?.foliageAnchor(sp.id,stage);if(!anchor)return;
+        window.MindGardenFlowerFraming.prepareFoliage(img,sp.id,stage);
+        const factor=img.naturalWidth/anchor.referenceWidth;
+        const extracted=img.dataset.foliageReady==='1'&&Number.isFinite(Number(img.dataset.rootX))&&Number.isFinite(Number(img.dataset.rootY));
+        const rootFactor=img.dataset.rootWidth?img.naturalWidth/Number(img.dataset.rootWidth):1;
+        const root=extracted?Number(img.dataset.rootY)*rootFactor:anchor.y*factor;
+        const rootX=extracted?Number(img.dataset.rootX)*rootFactor:anchor.x*factor;
+        const scale=fitScale(img,w,h,rootX,root,.5548,.92*Math.min(w*.8,h*.53)/(anchor.width*factor));
+        img.dataset.potRootX=String(rootX);img.dataset.potRootY=String(root);
+        // A failed isolation still hides the original baked planter at the soil.
+        img.style.clipPath=extracted?'none':'inset(0 0 '+Math.max(0,100-root/img.naturalHeight*100)+'% 0)';
+        Object.assign(img.style,{width:img.naturalWidth*scale*pose.x+'px',height:img.naturalHeight*scale*pose.y+'px',left:w*.5-rootX*scale*pose.x+'px',top:h*.5548-root*scale*pose.y+'px'});
+      }
+    }
+    frame._potGrowthLayout=layout;
+    img.addEventListener('load',layout);layout();
+    if(window.ResizeObserver){frame._potObserver=new ResizeObserver(layout);frame._potObserver.observe(frame);}
+  }
+  window.MindGardenPots={markup,render,fitScale,photoMarkup,growthPose,applyGrowth,contactShadowMarkup};
+})();
+
+
+const room=document.getElementById("room");function render(){room.innerHTML=window.MindGardenPots.markup()}render();document.getElementById("replay").onclick=render;document.querySelectorAll("[data-phase]").forEach(b=>b.onclick=()=>room.className=b.dataset.phase);</script>
