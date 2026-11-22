@@ -1,3 +1,7 @@
+## 꽃멍 멤버십 · 2026-11-22
+
+[멤버십 비교표 시안](design/prototypes/bloombreak-monthly-subscription.html) v1.2.0 · [더보기 메뉴](design/prototypes/bloombreak-more-language.html) v1.5.0. 더 많은 소품은 모든 요금제에 포함합니다. 표는 상품을 행, 월 요금을 열로 표시합니다. 앱 개발 소스 대상이며 실제 판매·새 설치본 확인 전입니다.
+
 ## 공간 세 줄 개요 (2026-11-21)
 
 - 최신 기준: [공간 세 줄·세 칸](prototypes/bloombreak-space-three-rows.html), v1.1.0. 사용자 승인 시안을 바탕으로 기본 공간 / 프리미엄 공간(유료 결제) / 내가 만든 공간 3개 섹션과 3열 카드를 적용한다. 기본 공간은 실제 2종을 보존하고, 프리미엄 2종(동해안 바다 카페·호숫가)과 개인 공간 2개 + 새 공간 만들기를 표시한다. 개인 공간 3개 이상은 전체 보기 / 접기로 펼친다. D005, BB-SCREEN:space #889/#890 후속이다.
