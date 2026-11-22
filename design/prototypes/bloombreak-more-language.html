@@ -23,8 +23,8 @@ button:focus-visible{outline:2px solid var(--text);outline-offset:2px}
 </style>
 <main>
   <details open>
-    <summary>수정 이력 · v1.0.0</summary>
-    <p>2026-11-22. 화면 테마 안의 언어 카드를 더보기의 설정 묶음으로 옮겼어요. 설정을 위에 배치하고 화면 테마 바로 아래에 언어 행을 표시해요. 한국어와 English는 눌렀을 때 즉시 적용되고 선택된 버튼에 배경색과 체크가 표시돼요.</p>
+    <summary>수정 이력 · v1.1.0</summary>
+    <p>v1.1.0 · 2026-11-22. 더보기의 직접 선택 버튼을 현재 언어가 표시된 메뉴 행으로 바꿨어요. 누르면 선택창이 열리고 한국어/English를 선택하면 저장 후 더보기로 돌아가요. 뒤로·Escape는 변경 없이 복귀, ×는 닫기예요. 새 APK·IPA 및 실기기 미확인.</p><p>v1.0.0 · 2026-11-22. 화면 테마 안의 언어 카드를 더보기의 설정 묶음으로 옮겼어요. 설정을 위에 배치하고 화면 테마 바로 아래에 언어 행을 표시해요. 한국어와 English는 눌렀을 때 즉시 적용되고 선택된 버튼에 배경색과 체크가 표시돼요.</p>
     <p>웹·Android 공통 개발 소스 적용. 새 APK·IPA 및 실기기 확인 전.</p>
   </details>
   <section class="sheet" data-theme="light" aria-labelledby="more">
@@ -32,28 +32,39 @@ button:focus-visible{outline:2px solid var(--text);outline-offset:2px}
     <section class="settings" aria-label="설정">
       <div class="row"><strong id="notice">알림</strong></div>
       <div class="row"><strong id="appearance">화면 테마</strong><button id="theme" type="button" aria-pressed="false">밝은 화면</button></div>
-      <div class="row" role="group" aria-labelledby="language">
-        <strong id="language">언어</strong>
-        <div class="picker"><button type="button" lang="ko" data-language="ko" aria-pressed="true">한국어</button><button type="button" lang="en" data-language="en" aria-pressed="false">English</button></div>
-      </div>
+      <button class="row" id="languageMenu" type="button" aria-haspopup="dialog" style="width:100%;text-align:left"><strong id="language">언어</strong><span><span id="currentLanguage">한국어</span> ›</span></button>
     </section>
   </section>
+  <dialog id="languageDialog" class="sheet" aria-labelledby="languageHeading">
+    <div class="row"><button id="back" type="button" aria-label="더보기로 돌아가기">&lt;</button><h1 id="languageHeading">언어</h1><button id="close" type="button" aria-label="닫기">×</button></div>
+    <div class="picker" style="grid-template-columns:1fr"><button type="button" lang="ko" data-language="ko" aria-pressed="true">한국어</button><button type="button" lang="en" data-language="en" aria-pressed="false">English</button></div>
+  </dialog>
 </main>
 <script>
 const labels={ko:{more:'더보기',notice:'알림',appearance:'화면 테마',language:'언어',settings:'설정',light:'밝은 화면',dark:'어두운 화면'},en:{more:'More',notice:'Notifications',appearance:'Appearance',language:'Language',settings:'Settings',light:'Light',dark:'Dark'}};
 const sheet=document.querySelector('.sheet');
 const appearance=document.querySelector('#theme');
-let selected='ko';
+const dialog=document.getElementById('languageDialog'),opener=document.getElementById('languageMenu');
+let selected=localStorage.getItem('bbLanguagePrototype')==='en'?'en':'ko';
+opener.onclick=()=>{dialog.dataset.theme=sheet.dataset.theme;dialog.showModal()};
+document.getElementById('back').onclick=()=>dialog.close();
+document.getElementById('close').onclick=()=>{dialog.close();sheet.hidden=true};
+dialog.addEventListener('close',()=>opener.focus());
 function render(){
   const copy=labels[selected],mode=sheet.dataset.theme;
   document.documentElement.lang=selected;
   for(const id of ['more','notice','appearance','language'])document.getElementById(id).textContent=copy[id];
   document.querySelector('.settings').setAttribute('aria-label',copy.settings);
   appearance.textContent=copy[mode];
+  document.getElementById('languageHeading').textContent=copy.language;
+  document.getElementById('currentLanguage').textContent=selected==='en'?'English':'한국어';
+  document.getElementById('back').setAttribute('aria-label',selected==='en'?'Back to More':'더보기로 돌아가기');
+  document.getElementById('close').setAttribute('aria-label',selected==='en'?'Close':'닫기');
   appearance.setAttribute('aria-pressed',String(mode==='dark'));
   document.querySelectorAll('[data-language]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.language===selected)));
 }
 appearance.onclick=()=>{sheet.dataset.theme=sheet.dataset.theme==='light'?'dark':'light';render()};
-document.querySelectorAll('[data-language]').forEach(button=>button.onclick=()=>{selected=button.dataset.language;render()});
+document.querySelectorAll('[data-language]').forEach(button=>button.onclick=()=>{selected=button.dataset.language;localStorage.setItem('bbLanguagePrototype',selected);render();dialog.close()});
+render();
 </script>
 </html>
