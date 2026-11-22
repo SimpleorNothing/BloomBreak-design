@@ -12,13 +12,16 @@ details{padding:.5rem .8rem;background:#fff;border-radius:.6rem}
 #previews{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem}
 section{padding:.75rem;background:#fff;border-radius:.8rem}
 </style>
-<script src="../../web/premium-scene-previews.js?v=sea-motion-video-1" defer></script>
+<script src="../../web/premium-coastal-scenes.js?v=centered-20261122" defer></script>
+<script src="../../web/premium-scene-previews.js?v=centered-20261122" defer></script>
 </head>
 <body>
 <main>
 <h1>유료 배경 미리보기</h1>
 <details id="design-history" open>
-<summary>수정 이력 · v1.8.0</summary>
+<summary>수정 이력 · v1.9.1</summary>
+<p>2026-11-22 · v1.9.1 · 내리는 비·눈은 도심 공통 효과를 사용한다. 날씨 환경은 전용 원본 이미지로 제작하며 색상 필터로 대체하지 않는다. 구도·해상도 고정, 실내 보호. 강수 코드 공유/날씨 착색 제거, 새 날씨 환경 이미지 제작·교체 및 APK/실기기 검수는 남아 있다.</p>
+<p>2026-11-22 · v1.9.0 · 동해안 바다 카페의 중앙 정렬 테이블·암반 해안 승인 구도. 2836×6144 원본을 그대로 표시하고 시간·날씨는 같은 구도 위에 합성한다. 새 창밖·수면·실내 보호 마스크 적용. 웹/Android 개발 소스 동기화, 발행 APK/실기기 확인 전.</p>
 <p>2026-11-21 · v1.8.0 · 실제 동해 파도 영상에서 포말이 몰려오는 간격을 측정해 수면을 다시 합성했다. 큰 파도가 바위에 닿으면 거품이 넓게 번지고, 물이 빠지면서 실처럼 가늘어진다. 16초 영상으로 반복 재생하고 영상 재생이 어려우면 애니메이션 이미지를 표시한다.</p>
 <p>2026-11-21 · v1.7.0 · 바람을 켜면 푸른 동해의 파도가 고르지 않은 간격으로 밀려온다. 바위 주변에서 흰 포말이 갈라지고 퍼졌다가 얇아지며 빠지는 7초 흐름을 표현했다.</p>
 <p>2026-11-21 · v1.6.0 · 바람을 직접 켜면 동해의 파도와 흰 포말이 3초 주기로 이어서 움직인다. 서울 옥탑방의 화단은 뒤쪽 난간과 나란하도록 가로로 배치했다.</p>
@@ -36,7 +39,7 @@ section{padding:.75rem;background:#fff;border-radius:.8rem}
 document.addEventListener('DOMContentLoaded', () => {
   const previews = document.querySelector('#previews');
   const api = window.BloomBreakPremiumScenePreviews;
-  for (const scene of api.scenes) {
+  for (const scene of window.BloomBreakCoastalScenes.scenes) {
     const section = document.createElement('section');
     const title = document.createElement('h2');
     const view = document.createElement('div');
@@ -49,3 +52,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
