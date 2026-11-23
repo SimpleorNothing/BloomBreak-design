@@ -1,6 +1,21 @@
+## 2026-11-24 · 동해안 낮 비·눈 전용 배경 연결
+
+첨부0.4.201/264에서 비·눈 입자가 맑은 낮 사진 위에만 표시되는 원인을 확인했다. east-sea-cafe의 낮 rain/snow 경로를 별도 day-rain/day-snow 원화로 연결한다. 맑음·노을·밤의 기존 경로, 과거 hash URL 읽기, 공간 ID·화분·저장 좌표를 보존한다. 비 원화는 흐린 하늘·젖은 암반·수면의 작은 빗물 흔적, 눈 원화는 흐린 겨울 하늘·암반/수목 적설을 포함하고 정지 강수 입자를 추가하지 않는다. 움직이는 비·눈/파도는 기존 공통 렌더러가 같은 마스크에서 합성한다.
+
+2836×6144 무손실 RGB WebP2장. 기존 제작된852×1846 생성 원화의 RealESRGAN_x4plus 재구성 결과에 원래 실내를 보호한 자산을 재사용한다. 네이티브17MP 생성 원화 또는 실제 세부 복원으로 주장하지 않는다. 보호 마스크 밖 실내 RGB 차이0, 웹/Android 바이트·Git blob SHA 일치, 두 파일 모두 Android 캡처 브리지12MB 한도 안이다. 원본·배포 해시와 재구성 경로는 web/data/east-sea-weather-20261124.json에 기록한다.
+
+홈·꽃멍·공간 미리보기·배경 갤러리·초대용 수면 로딩의 공통 plate 선택에 적용한다. iPhone도 공통 웹 소스를 준비해 사용한다. 별도 갤러리9종 시안을 앱 전체에 교체한 것이 아니며 노을/밤 비·눈 전용 원화 연결은 미완료다. 개발 소스·회귀 검증과 실제 APK/IPA 설치는 별도이며 새 설치본을 발행하지 않는다. 파도 홈 중단은 #1321에서264 통합 브랜치에 머지되었다(320b261d); main에는 원래 중단 조건이 없다. BB-SCREEN:space #890/D005, gaze #878/D028 보존. 시안 v1.12.0.
+
+검증: 전용/기존 Canvas 회귀18/18, 실제 원화·마스크 디코딩 후 맑음·비·눈3조합 시간차 픽셀 변화·실내 침범0, 지정2개 이미지 strict 규격 위반0. 기존 맑음 경로에서 새 라우팅 회귀 실패를 확인했다. 로컬 Chromium/WebView는 실행하지 못했으며 실기기·신규 APK/IPA 검수는 미완료다. 전체 이미지 검사는 부분 체크아웃13개에 대한 현황으로 저장소 전체 합격을 뜻하지 않는다.
+
 ## 2026-11-24 · 공간 이름 통일
 
-한강뷰 거실 · 삼청동 찻집 · 오로라 산장 · 동해 바다 카페 · 호숫가 오두막. [앱 PR #1325](https://github.com/SimpleorNothing/BloomBreak/pull/1325) 머지 e00b72302ed33703df079dc39b8d7d705f408e83과 공간 관련 시안 4개를 동기화했다. 공간 ID·이미지·기존 저장값은 유지한다. 로컬 관련 검사15건 통과. Codemagic 브랜치 조회 오류로 원격 검증 미실행, 사용자 머지 재요청에 따라 병합했다. 신규 APK·IPA·실기기 확인 전이다.
+사용자 승인 이름: 한강뷰 거실 · 삼청동 찻집 · 오로라 산장 · 동해 바다 카페 · 호숫가 오두막. 카탈로그·기본 대체 목록·공간 카드·화분 추가·미리보기·배경 도감의 표시 이름을 동기화한다. 공간 ID·이미지 경로·배치·저장 형식·개인 공간 이름은 유지한다. BB-SCREEN:space D005/#889/#890, plant D013/#874의 원 주석을 보존한다. 웹/Android 개발 소스 반영, 새 APK·IPA 발행 및 실기기 확인 전이다.
+
+- [bloombreak-space-three-rows.html](prototypes/bloombreak-space-three-rows.html) v1.2.0
+- [bloombreak-planting-spaces.html](prototypes/bloombreak-planting-spaces.html) v1.3.0
+- [bloombreak-premium-backgrounds.html](prototypes/bloombreak-premium-backgrounds.html) v1.11.0
+- [bloombreak-space-preview-planting.html](prototypes/bloombreak-space-preview-planting.html) v1.3.0
 
 ## 2026-11-24 · 전체 8종 개화 원화 통합 재디자인 (최신)
 
@@ -316,3 +331,7 @@
 - BB-SCREEN:together #882 후속. 기존 D033과 원 주석 보존. 시안 `design/prototypes/bloombreak-chat-two-states.html` v1.1.0. 웹·Android 내장 JS/CSS/index 동일.
 - 관련 Node 회귀 60/60 통과(초대자/친구·발신자 중심·좌석 변경·화면 축소·3명·퇴장 기록 포함), 구문 확인. 로컬 Chromium은 socket() EPERM으로 시작하지 못해 실제 브라우저 배치는 미확인. 신규 APK/AAB/IPA 빌드·실기기 반영은 미확인이며 이번 작업에서 발행하지 않는다. Codemagic 현재 head와 PR 머지는 별도 확인한다.
 
+
+## 2026-11-24 · 오로라 공간 분류 이동
+
+오로라 산장(이전 표시 이름: 핀란드 오로라 쉼터)을 기본 공간에서 프리미엄 공간으로 옮긴다. 공간 메뉴와 화분 추가의 분류를 맞추고 기존 ID·선택·화분/성장 기록·영상은 유지한다. 최신 공간 표시 이름·동해안 날씨 변경도 보존한다. 가격·구독 권한 집행 변경은 포함하지 않는다. BB-SCREEN:space D005 / #890 보존. 웹/Android 개발 소스 적용, 새 APK·IPA·실기기 미확인.
