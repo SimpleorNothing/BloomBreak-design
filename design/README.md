@@ -1,3 +1,7 @@
+## 함께 보기 초대 기본 아이콘 (2026-11-23)
+
+- [함께 보기 아이콘 시안](prototypes/bloombreak-together-avatars.html) v1.0.1: 새 초대의 기본 선택은 색연필 강아지(dog)다. 사용자가 직접 선택한 아이콘과 친구 참여 기본값은 유지한다. BB-SCREEN:together / #882 후속. 웹·Android 개발 소스 반영, 발행 APK·IPA·실기기 미확인.
+
 ## 2026-11-23 · 동해안 천장 조명 제거·구름·움직임
 
 [배경 시안](prototypes/bloombreak-premium-backgrounds.html) v1.10.0. 왼쪽 천장 조명·전선·갓을 낮/노을에서 제거하고 맑은 하늘에 구름을 추가한다. 2836×6144·테이블·등대·해안 구도를 보존한다. 파도 영상 의존을 제거하고 비 그리기 오류 후 2D 낙하를 유지한다. D005/#890, D028/#878 원 주석 보존. 웹/Android 소스 적용이며 새 APK/IPA·실기기는 미확인이다. [검증 범위](../docs/COASTAL_LAMP_CLOUD_MOTION_20261123.md).
