@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>화분 그림자 v1.0.0</title><style>/* Keep the physical contact fixed; only its light strength changes. */
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>화분 그림자 v1.2.0</title><style>/* Keep the physical contact fixed; only its light strength changes. */
 .potContactShadow{opacity:.82;transition:opacity 3s ease-in-out}
 .potShadowReveal{animation:bbPotShadowReveal 2.4s ease-out both}
 #room.live-day .potContactShadow{opacity:.72}
@@ -11,7 +11,24 @@
   .potContactShadow{transition:none}
   .potShadowReveal{animation:none}
 }
-body{font:16px sans-serif;background:#eee6da;margin:24px;color:#302920}main{max-width:460px;margin:auto}svg{width:200px;overflow:visible}#room{padding:60px;text-align:center;background:radial-gradient(ellipse,#b77d52,#70442f);border-radius:50%;margin:40px 0}button{padding:12px;margin:4px}</style><main><details id="design-history" open><summary>수정이력 · v1.0.0 · 2026-11-23</summary><p>고정 그림자 → 가장자리로 흐려지는 넓은 그림자, 2.4초 등장·시간대 농도 3초 전환. 새 APK·IPA·실기기 미확인. BB-SCREEN:home / #869 보존.</p></details><p>테이블 위 접지와 부드러운 번짐 확인용 시안</p><section id="room" class="live-twilight"></section><button data-phase="live-day">낮</button><button data-phase="live-twilight">노을</button><button data-phase="live-lit-night">밤 조명</button><button data-phase="live-night">소등</button><button id="replay">다시 보기</button></main><script>
+body{font:16px sans-serif;background:#eee6da;margin:24px;color:#302920}main{max-width:460px;margin:auto}svg{width:200px;overflow:visible}#room{padding:60px;text-align:center;background:radial-gradient(ellipse,#b77d52,#70442f);border-radius:50%;margin:40px 0}button{padding:12px;margin:4px}/* Keep the physical contact fixed; only its light strength changes. */
+.potContactShadow{opacity:.82;transition:opacity 3s ease-in-out}
+.potShadowReveal{animation:bbPotShadowReveal 2.4s ease-out both}
+#room.live-day .potContactShadow{opacity:.72}
+#room.live-twilight .potContactShadow,#room.live-evening .potContactShadow{opacity:1}
+#room.live-lit-night .potContactShadow{opacity:.8}
+#room.live-night .potContactShadow{opacity:.4}
+#room.live-dawn .potContactShadow{opacity:.58}
+@keyframes bbPotShadowReveal{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .potContactShadow{transition:none}
+  .potShadowReveal{animation:none}
+}
+
+/* Photo blending owns the shadow during sunset, including export seeks. */
+#room[data-pot-shadow-synced="1"] .potContactShadow{opacity:var(--pot-shadow-strength);transition:none}
+#room[data-pot-shadow-synced="1"] .potShadowReveal{animation:none}
+</style><main><details id="design-history" open><summary>수정이력 · v1.2.0 · 2026-11-23</summary><p>v1.2.0: 사용자 1번 테이블 바닥 그림자 기준으로 오른쪽 아래 30도 투영, 짙은 따뜻한 암부와 부드러운 경계. 개발 소스 적용, 신규 APK·실기기 미확인.</p><p>v1.0.0: 고정 그림자 → 가장자리로 흐려지는 넓은 그림자, 2.4초 등장·시간대 농도 3초 전환. 새 APK·IPA·실기기 미확인. BB-SCREEN:home / #869 보존.</p></details><p>배경과 같은 낮·노을·밤 가중치로 그림자 농도를 변경하는 시안</p><button id="blendReplay">낮 → 노을 → 밤 재생</button><section id="room" class="live-twilight"></section><button data-phase="live-day">낮</button><button data-phase="live-twilight">노을</button><button data-phase="live-lit-night">밤 조명</button><button data-phase="live-night">소등</button><button id="replay">다시 보기</button></main><script>
 (() => {
   // Presentation only: thresholds, earned minutes and saved plant data stay unchanged.
   const growthStages=['seed','germination','sprout','leaves','bud','bloom'];
@@ -39,11 +56,12 @@ body{font:16px sans-serif;background:#eee6da;margin:24px;color:#302920}main{max-
   const potContactRows={'sand-saucer.webp':456,'ivory-square.webp':460,'sage-bowl.webp':427,'charcoal-cylinder.webp':461,'taupe-clay.webp':470};
   function contactShadowMarkup(baseY=92){
     const id='pot-contact-'+(++ceramicPotId);
-    // Two fading ellipses: a close contact and a wider, softly cast shadow.
-    // Inside the pot SVG, these follow every placement/resize without stored state.
-    return '<defs><radialGradient id="'+id+'"><stop stop-color="#21170f" stop-opacity=".46"/><stop offset=".25" stop-color="#21170f" stop-opacity=".34"/><stop offset=".55" stop-color="#21170f" stop-opacity=".14"/><stop offset=".8" stop-color="#21170f" stop-opacity=".035"/><stop offset="1" stop-color="#21170f" stop-opacity="0"/></radialGradient></defs>'+
+    // Match the reference table's floor shadow: lower right, warm dark core.
+    // Rotate only the cast layer around the physical base; keep contact fixed.
+    return '<defs><radialGradient id="'+id+'"><stop stop-color="#21170f" stop-opacity=".46"/><stop offset=".25" stop-color="#21170f" stop-opacity=".34"/><stop offset=".55" stop-color="#21170f" stop-opacity=".14"/><stop offset=".8" stop-color="#21170f" stop-opacity=".035"/><stop offset="1" stop-color="#21170f" stop-opacity="0"/></radialGradient>'+
+      '<radialGradient id="'+id+'-cast"><stop stop-color="#21170f" stop-opacity=".72"/><stop offset=".35" stop-color="#21170f" stop-opacity=".55"/><stop offset=".65" stop-color="#21170f" stop-opacity=".27"/><stop offset=".85" stop-color="#21170f" stop-opacity=".08"/><stop offset="1" stop-color="#21170f" stop-opacity="0"/></radialGradient></defs>'+
       '<g class="potContactShadow" pointer-events="none" aria-hidden="true"><g class="potShadowReveal">'+
-      '<ellipse cx="64" cy="'+(baseY+2.5)+'" rx="49" ry="9" fill="url(#'+id+')"/>'+
+      '<ellipse class="potCastShadow" cx="80" cy="'+baseY+'" rx="60" ry="14" transform="rotate(30 50 '+baseY+')" fill="url(#'+id+'-cast)"/>'+
       '<ellipse cx="50" cy="'+baseY+'" rx="34" ry="4.5" fill="url(#'+id+')"/></g></g>';
   }
 // The photographed opening and saucer are one asset; keep the soil anchor at (50,16).
@@ -130,8 +148,21 @@ function ceramicPotMarkup(attributes='class="ceramicPot"',companion){
     img.addEventListener('load',layout);layout();
     if(window.ResizeObserver){frame._potObserver=new ResizeObserver(layout);frame._potObserver.observe(frame);}
   }
-  window.MindGardenPots={markup,render,fitScale,photoMarkup,growthPose,applyGrowth,contactShadowMarkup};
+
+  // Consume the renderer's actual day/dusk/night photo weights; no second clock.
+  function syncSceneLighting(room,weights){
+    if(!room?.dataset||typeof room.querySelectorAll!=='function')return;
+    const shadows=room.querySelectorAll('.potContactShadow');
+    const key='--pot-shadow-strength';
+    if(!weights||['source','day','dusk','night'].some(k=>!Number.isFinite(weights[k])||weights[k]<0||weights[k]>1)){
+      delete room.dataset.potShadowSynced;shadows.forEach(node=>node.style.removeProperty(key));return;
+    }
+    const strength=Math.max(0,Math.min(1,.12*(weights.source+weights.day)+weights.dusk+.65*weights.night));
+    room.dataset.potShadowSynced='1';shadows.forEach(node=>node.style.setProperty(key,String(strength)));
+  }
+  window.MindGardenPots={syncSceneLighting,markup,render,fitScale,photoMarkup,growthPose,applyGrowth,contactShadowMarkup};
 })();
 
 
-const room=document.getElementById("room");function render(){room.innerHTML=window.MindGardenPots.markup()}render();document.getElementById("replay").onclick=render;document.querySelectorAll("[data-phase]").forEach(b=>b.onclick=()=>room.className=b.dataset.phase);</script>
+const room=document.getElementById("room");function render(){room.innerHTML=window.MindGardenPots.markup()}render();document.getElementById("replay").onclick=render;document.querySelectorAll("[data-phase]").forEach(b=>b.onclick=()=>room.className=b.dataset.phase);
+</script><script>let blendFrame=0;document.getElementById("blendReplay").onclick=()=>{cancelAnimationFrame(blendFrame);const started=performance.now();function tick(now){const p=Math.min(1,(now-started)/8000),first=p<.5,t=first?p*2:(p-.5)*2,m=t*t*(3-2*t);window.MindGardenPots.syncSceneLighting(room,{source:0,day:first?1-m:0,dusk:first?m:1-m,night:first?0:m});if(p<1)blendFrame=requestAnimationFrame(tick)}blendFrame=requestAnimationFrame(tick)};document.querySelectorAll("[data-phase]").forEach(b=>b.addEventListener("click",()=>{cancelAnimationFrame(blendFrame);window.MindGardenPots.syncSceneLighting(room,null)}));</script>
