@@ -1,3 +1,7 @@
+## 2026-11-24 · 공간 이름 통일
+
+한강뷰 거실 · 삼청동 찻집 · 오로라 산장 · 동해 바다 카페 · 호숫가 오두막. [앱 PR #1325](https://github.com/SimpleorNothing/BloomBreak/pull/1325) 머지 e00b72302ed33703df079dc39b8d7d705f408e83과 공간 관련 시안 4개를 동기화했다. 공간 ID·이미지·기존 저장값은 유지한다. 로컬 관련 검사15건 통과. Codemagic 브랜치 조회 오류로 원격 검증 미실행, 사용자 머지 재요청에 따라 병합했다. 신규 APK·IPA·실기기 확인 전이다.
+
 ## 꽃멍 멤버십 · 2026-11-22
 
 [멤버십 비교표 시안](design/prototypes/bloombreak-monthly-subscription.html) v1.2.0 · [더보기 메뉴](design/prototypes/bloombreak-more-language.html) v1.5.0. 더 많은 소품은 모든 요금제에 포함합니다. 표는 상품을 행, 월 요금을 열로 표시합니다. 앱 개발 소스 대상이며 실제 판매·새 설치본 확인 전입니다.
