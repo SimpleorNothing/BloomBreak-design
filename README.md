@@ -1,3 +1,7 @@
+## 2026-11-24 · 오로라 움직임·호수 반사·화분 중앙
+
+[동작 시안](design/prototypes/bloombreak-aurora-motion.html) v1.0.0 · [테이블 배치](design/prototypes/bloombreak-scene-table-defaults.html) v1.1.0. 영상 재생에 의존하지 않는 원본 기반 Canvas 움직임, 가로 잔물결 반사, 상판 중앙의 화분 받침을 적용합니다. 앱 PR [#1327](https://github.com/SimpleorNothing/BloomBreak/pull/1327), main `6ec5d9f2`. 현재 head Codemagic 필수 검사·관련 로컬14/14 통과. 웹/Android 개발 소스 동기화이며 새 발행 APK/IPA·실기기 반영은 미확인입니다.
+
 ## 2026-11-24 · 공간 이름 통일
 
 한강뷰 거실 · 삼청동 찻집 · 오로라 산장 · 동해 바다 카페 · 호숫가 오두막. [앱 PR #1325](https://github.com/SimpleorNothing/BloomBreak/pull/1325) 머지 e00b72302ed33703df079dc39b8d7d705f408e83과 공간 관련 시안 4개를 동기화했다. 공간 ID·이미지·기존 저장값은 유지한다. 로컬 관련 검사15건 통과. Codemagic 브랜치 조회 오류로 원격 검증 미실행, 사용자 머지 재요청에 따라 병합했다. 신규 APK·IPA·실기기 확인 전이다.
