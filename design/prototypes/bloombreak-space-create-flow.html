@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>새 공간 만들기 흐름 시안 v1.0.0</title>
+<style>
+:root{
+  --page:#e4e8df;--sheet:#fdf9ee;--card:#e8ede6;--card2:#f1f3ec;--line:#c9d3c8;--ink:#23352a;--sub:#5d6b62;
+  --green:#4a7659;--green-d:#3c614a;--on-green:#fff;--soft:#b4c7b4;--warn:#9a5b2c;--on-warn:#fff;--note:#fff;--focus:#2f6fd6;
+  --scrim:rgba(20,28,22,.45);--toast:#23352a;--toast-ink:#fff;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#101512;--sheet:#1b221d;--card:#26302a;--card2:#212a24;--line:#3a473e;--ink:#e8efe7;--sub:#a9b6ac;
+  --green:#7fb08e;--green-d:#9cc6a8;--on-green:#10241a;--soft:#4f6857;--warn:#e0a56f;--on-warn:#2a1606;--note:#1b221d;--focus:#8ab4ff;
+  --scrim:rgba(0,0,0,.6);--toast:#e8efe7;--toast-ink:#13201a;
+}}
+:root[data-theme="dark"]{
+  --page:#101512;--sheet:#1b221d;--card:#26302a;--card2:#212a24;--line:#3a473e;--ink:#e8efe7;--sub:#a9b6ac;
+  --green:#7fb08e;--green-d:#9cc6a8;--on-green:#10241a;--soft:#4f6857;--warn:#e0a56f;--on-warn:#2a1606;--note:#1b221d;--focus:#8ab4ff;
+  --scrim:rgba(0,0,0,.6);--toast:#e8efe7;--toast-ink:#13201a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--page);color:var(--ink);font-family:-apple-system,"Pretendard","Apple SD Gothic Neo","Noto Sans KR",Roboto,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 48px}
+header.top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+header.top h1{font-size:20px}
+header.top p{color:var(--sub);font-size:14px}
+.theme{display:flex;gap:6px}
+.theme button{padding:8px 12px;border-radius:999px;background:var(--card);font-size:13px}
+.theme button[aria-pressed="true"]{background:var(--green);color:var(--on-green)}
+details.history{background:var(--note);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin-bottom:16px;font-size:14px;line-height:1.6}
+details.history summary{font-weight:700;cursor:pointer}
+details.history table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+details.history th,details.history td{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.map{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.map button{padding:8px 11px;border-radius:999px;background:var(--card);font-size:13px;line-height:1.2}
+.map button[aria-current="step"]{background:var(--green);color:var(--on-green);font-weight:700}
+.map .arrow{align-self:center;color:var(--sub);font-size:12px}
+.stage{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;align-items:flex-start}
+.phone{width:384px;max-width:100%;height:832px;border-radius:40px;background:var(--page);box-shadow:0 0 0 10px #1f2a23,0 20px 50px rgba(0,0,0,.25);position:relative;overflow:hidden}
+.notes{flex:1 1 320px;max-width:520px;background:var(--note);border:1px solid var(--line);border-radius:18px;padding:18px 20px;font-size:14px;line-height:1.65}
+.notes h2{font-size:18px;margin-bottom:4px}
+.notes .tag{display:inline-block;font-size:12px;color:var(--sub);margin-bottom:10px}
+.notes h3{font-size:14px;margin:14px 0 6px;color:var(--green-d)}
+.notes ul{padding-left:18px;display:grid;gap:4px}
+.notes .chg{background:var(--card2);border-radius:12px;padding:10px 12px;margin-top:6px}
+
+/* ---------- phone UI ---------- */
+.home{position:absolute;inset:0;background:linear-gradient(#cfe0ec,#e7efe6 55%,#d9d2c4);}
+.home .tabbar{position:absolute;left:16px;right:16px;bottom:18px;height:86px;border-radius:30px;background:var(--sheet);display:grid;grid-template-columns:repeat(4,1fr);align-items:center;text-align:center;font-size:13px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.sheet{position:absolute;left:0;right:0;bottom:0;top:28px;background:var(--sheet);border-radius:30px 30px 0 0;display:flex;flex-direction:column;box-shadow:0 -8px 30px rgba(0,0,0,.18)}
+.sheet.full{top:0;border-radius:0;padding-top:env(safe-area-inset-top)}
+.shead{display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:14px 12px 6px}
+.shead h2{text-align:center;font-size:19px}
+.iconbtn{width:44px;height:44px;display:grid;place-items:center;font-size:24px;line-height:1;border-radius:12px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px 22px 4px}
+.steps button{display:grid;gap:7px;font-size:13px;color:var(--sub);padding:4px 0}
+.steps button i{display:block;height:5px;border-radius:3px;background:var(--line)}
+.steps button.done i{background:var(--soft)}
+.steps button.done{color:var(--ink)}
+.steps button.cur i{background:var(--green)}
+.steps button.cur{color:var(--ink);font-weight:800}
+.steps button:disabled{cursor:default}
+.body{flex:1;overflow:auto;padding:14px 22px 8px}
+.body h3{font-size:20px;margin:6px 0 6px}
+.body .lead{color:var(--sub);font-size:15px;line-height:1.55}
+.foot{display:grid;grid-template-columns:1fr 1.7fr;gap:10px;padding:10px 22px calc(18px + env(safe-area-inset-bottom))}
+.foot.one{grid-template-columns:1fr}
+.foot.eq{grid-template-columns:1fr 1fr}
+.foot.eq .btn{font-size:16px;padding:0 8px}
+.btn{min-height:56px;border-radius:18px;font-weight:800;font-size:17px;padding:0 14px}
+.btn.pri{background:var(--green);color:var(--on-green)}
+.btn.sec{background:var(--card);border:1px solid var(--line)}
+.btn.ghost{background:none;color:var(--green-d);text-decoration:underline;min-height:44px;font-size:15px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.pick button{min-height:118px;border-radius:20px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;align-content:center;gap:10px;font-weight:800;font-size:16px}
+.pick svg{width:34px;height:34px;stroke:var(--ink);fill:none;stroke-width:1.6}
+.aiRow{margin-top:16px;display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:14px;background:var(--card2);color:var(--sub);font-size:14px}
+.badge{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--card);color:var(--sub)}
+.recent{margin-top:18px;font-size:14px;color:var(--sub)}
+.recent .row{display:flex;gap:8px;margin-top:8px}
+.recent .row button{width:64px;height:84px;border-radius:12px;overflow:hidden;background:var(--card)}
+.recent img{width:100%;height:100%;object-fit:cover}
+.frame{position:relative;width:258px;height:344px;margin:12px auto 0;border-radius:22px;overflow:hidden;background:#000;touch-action:none;cursor:grab}
+.frame img{position:absolute;left:50%;top:50%;transform-origin:center;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.frame .zone{position:absolute;left:38%;width:24%;bottom:16%;height:17%;border:2px dashed rgba(255,255,255,.95);border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,.14)}
+.frame .zone span{position:absolute;left:50%;top:-24px;transform:translateX(-50%);white-space:nowrap;font-size:12px;color:#fff;background:rgba(0,0,0,.45);padding:2px 8px;border-radius:999px}
+.zoom{display:flex;gap:10px;align-items:center;margin:14px 4px 0;font-size:14px;color:var(--sub)}
+.zoom input{flex:1;accent-color:var(--green);height:32px}
+.field{margin-top:16px;display:grid;gap:8px}
+.field label{font-weight:800;font-size:15px}
+.field input{height:56px;border-radius:16px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font:inherit;font-size:17px;padding:0 16px}
+.hint{font-size:14px;color:var(--sub);line-height:1.5}
+.count{justify-self:end;font-size:13px;color:var(--sub)}
+.thumb{width:140px;height:186px;border-radius:18px;overflow:hidden;margin:10px auto 0;position:relative}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.toggle{margin-top:16px;display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:18px;background:var(--card);border:1px solid var(--line)}
+.toggle .t{flex:1}
+.toggle b{display:block;font-size:16px}
+.toggle small{display:block;color:var(--sub);font-size:13.5px;line-height:1.45;margin-top:3px}
+.switch{width:52px;height:32px;border-radius:999px;background:var(--line);position:relative;flex:none}
+.switch::after{content:"";position:absolute;left:3px;top:3px;width:26px;height:26px;border-radius:50%;background:#fff;transition:left .15s}
+.switch[aria-checked="true"]{background:var(--green)}
+.switch[aria-checked="true"]::after{left:23px}
+.scrim{position:absolute;inset:0;background:var(--scrim);display:flex;align-items:flex-end}
+.scrim.center{align-items:center;justify-content:center;padding:24px}
+.bottomSheet{width:100%;background:var(--sheet);border-radius:26px 26px 0 0;padding:8px 22px calc(18px + env(safe-area-inset-bottom))}
+.bottomSheet .shead{padding:6px 0}
+.bottomSheet .shead h2{font-size:18px}
+.dialog{background:var(--sheet);border-radius:22px;padding:22px;width:100%;max-width:330px}
+.dialog h2{font-size:18px;margin-bottom:8px}
+.dialog p{color:var(--sub);font-size:15px;line-height:1.55}
+.dialog .foot{padding:16px 0 0}
+details.info{margin-top:10px;font-size:14px;color:var(--sub)}
+details.info summary{cursor:pointer;color:var(--ink);font-weight:700;min-height:44px;display:flex;align-items:center}
+.progress{margin:22px 0 10px;height:8px;border-radius:999px;background:var(--card);overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--green);transition:width .3s}
+.stepsList{list-style:none;display:grid;gap:10px;font-size:15px}
+.stepsList li{display:flex;gap:10px;align-items:center;color:var(--sub)}
+.stepsList li::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none}
+.stepsList li.on{color:var(--ink);font-weight:700}
+.stepsList li.on::before{border-color:var(--green);border-right-color:transparent;animation:spin 1s linear infinite}
+.stepsList li.ok{color:var(--ink)}
+.stepsList li.ok::before{background:var(--green);border-color:var(--green)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.stepsList li.on::before{animation:none}.snow{display:none}}
+.mask{position:absolute;left:4%;top:2%;width:91%;height:74%;border:2px solid #9fe0b4;background:rgba(127,200,150,.18);border-radius:4px}
+.legend{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--sub);justify-content:center;margin-top:8px}
+.legend i{width:14px;height:14px;border:2px solid #9fe0b4;background:rgba(127,200,150,.3);border-radius:3px}
+.snow{position:absolute;left:4%;top:2%;width:91%;height:74%;overflow:hidden;pointer-events:none}
+.snow b{position:absolute;top:-6px;width:4px;height:4px;border-radius:50%;background:#fff;opacity:.9;animation:fall linear infinite}
+@keyframes fall{to{transform:translate(-10px,280px)}}
+.seg{display:flex;gap:6px;justify-content:center;margin-top:10px}
+.seg button{min-height:36px;padding:0 12px;border-radius:999px;background:var(--card);font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--sheet)}
+.notice{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--card2);font-size:14.5px;line-height:1.5}
+.notice.warn{border-left:4px solid var(--warn)}
+.shead2{display:flex;justify-content:space-between;align-items:center;padding:20px 22px 6px}
+.shead2 h2{font-size:24px}
+.closeRound{width:56px;height:56px;border-radius:50%;background:#fff;font-size:30px;box-shadow:0 2px 10px rgba(0,0,0,.08);color:#23352a}
+.sec3 h4{font-size:19px;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.badge2{font-size:13px;font-weight:600;border:1.5px solid var(--sub);border-radius:8px;padding:2px 7px;color:var(--sub)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid3 .c{border-radius:18px;background:var(--card);padding:6px 6px 8px;display:grid;gap:6px;text-align:center;position:relative}
+.grid3 .c .pic{display:block;aspect-ratio:3/4;border-radius:13px;overflow:hidden;position:relative;background:#cfd8cd}
+.grid3 .c em{font-style:normal;font-weight:800;font-size:12.5px}
+.grid3 .c .more{position:absolute;right:4px;top:4px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.92);color:#23352a;font-size:18px;font-weight:900}
+.grid3 .soon{background:none;border:1.5px dashed var(--soft);align-content:center;min-height:150px;color:var(--sub)}
+.grid3 .soon b{font-size:13px;color:var(--ink)}
+.grid3 .soon small{font-size:11.5px;line-height:1.4}
+.grid3 .add{display:grid;padding:6px}
+.grid3 .add .pic{background:none;display:grid;place-items:center;align-content:center;gap:10px;font-weight:800;font-size:13px;aspect-ratio:3/4.6}
+.grid3 .add .pic b{width:46px;height:46px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-size:28px;font-weight:400}
+.grid3 .new{outline:3px solid var(--green);outline-offset:2px}
+.toast{position:absolute;left:22px;right:22px;bottom:120px;background:var(--toast);color:var(--toast-ink);border-radius:14px;padding:12px 14px;font-size:14.5px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.toast button{color:inherit;font-weight:800;text-decoration:underline;min-height:36px}
+.done{text-align:center;padding-top:30px}
+.done .ok{width:64px;height:64px;border-radius:50%;margin:0 auto 14px;background:var(--green);color:var(--on-green);display:grid;place-items:center;font-size:32px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <div>
+    <h1>새 공간 만들기 · 전체 흐름 시안 v1.0.0</h1>
+    <p>공간 › 내가 만든 공간 › 새 공간 만들기 → 사진 · 구도 · 이름 · 날씨 → 저장 → 화분 놓기. 화면을 직접 눌러 보거나 아래 흐름에서 골라 보세요.</p>
+  </div>
+  <div class="theme" role="group" aria-label="화면 테마">
+    <button type="button" data-theme-set="light" aria-pressed="false">밝게</button>
+    <button type="button" data-theme-set="dark" aria-pressed="false">어둡게</button>
+    <button type="button" data-theme-set="auto" aria-pressed="true">기기 설정</button>
+  </div>
+</header>
+
+<details class="history" open>
+  <summary>수정 이력 · v1.0.0 · 2026-11-24</summary>
+  <table>
+    <thead><tr><th>버전 / 날짜</th><th>메뉴·항목</th><th>변경 전 → 변경 후</th><th>APK 반영</th></tr></thead>
+    <tbody>
+      <tr><td>v1.0.0 / 2026-11-24</td><td>공간 › 내가 만든 공간 › 새 공간 만들기 (D005·D014·D006)</td><td>단계별 시안(사진 선택 v1.0.0, 사진 분석 안내 v1.0.0, 날씨 효과 분석 v1.0.0)을 한 흐름으로 정리. 날씨 단계의 버튼 3개(사진만 저장 / 이전 / 날씨 효과 분석하기) → ‘창밖 눈·비 효과’ 스위치 1개와 [이전][저장하기]. 미리보기에 꽃멍 시계 글자(‘이번 쉼 …’)가 찍히던 문제 → 원본 사진만 표시. 만드는 동안 하단 탭 숨김. 진입 카드 이름 ‘새 공간 만들기’와 만들기 화면 제목(‘내 공간 만들기’)을 ‘새 공간 만들기’로 통일. 내가 만든 공간 카드 썸네일에도 시계 글자가 찍히는 문제 지적. 완료 단계 표시를 눌러 그 단계로 돌아가기. 중간 닫기 확인. 저장 후 ‘이 공간에 화분 놓기’ 바로가기.</td><td>미반영 (시안만)</td></tr>
+    </tbody>
+  </table>
+</details>
+
+<nav class="map" id="map" aria-label="흐름 단계"></nav>
+
+<div class="stage">
+  <div class="phone" id="phone" aria-live="polite"></div>
+  <section class="notes" id="notes" aria-live="polite"></section>
+</div>
+</div>
+
+<script>
+const IMG='data:image/webp;base64,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';
+const S={screen:'entry',view:'mask',zoom:1.15,x:0,y:0,name:'',fx:false,progress:0,fromPlant:false};
+const STEPS=['사진','구도','이름','날씨'];
+const FLOW=[
+ ['entry','공간 › 새 공간 만들기'],['photo','1 사진'],['compose','2 구도'],['name','3 이름'],['weather','4 날씨'],
+ ['consent','전송 안내'],['analyzing','분석 중'],['result','분석 결과'],['fail','분석 실패'],['done','저장 완료'],['exit','닫기 확인'],['error','사진 오류']
+];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const spaceName=()=>S.name.trim()||'내가 만든 공간';
+
+function head(step){
+  const back=step===1?`go('entry')`:`go('${['','photo','compose','name'][step-1]}')`;
+  return `<div class="shead"><button class="iconbtn" aria-label="이전 단계로" onclick="${back}">&lt;</button><h2 id="ttl">새 공간 만들기</h2><button class="iconbtn" aria-label="새 공간 만들기 닫기" onclick="go('exit')">&times;</button></div>
+  <div class="steps" role="list" aria-label="단계 ${step} / 4">${STEPS.map((n,i)=>{const k=i+1,cls=k<step?'done':k===step?'cur':'';const to=['photo','compose','name','weather'][i];
+   return `<button role="listitem" class="${cls}" ${k<step?`onclick="go('${to}')" aria-label="${n} 단계로 돌아가기 (완료)"`:'disabled'} ${k===step?'aria-current="step"':''}><i></i>${n}</button>`}).join('')}</div>`;
+}
+function frame(full){return `<div class="sheet full" role="dialog" aria-modal="true" aria-labelledby="ttl">${full}</div>`;}
+function img(style=''){return `<img src="${IMG}" alt="" style="${style}">`;}
+
+const SCREENS={
+ entry:()=>`<div class="home"><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="ttl">
+   <div class="shead2"><h2 id="ttl">공간</h2><button class="closeRound" aria-label="공간 닫기">&times;</button></div>
+   <div class="body sec3">
+     <h4>기본 공간</h4><div class="grid3">${card('한강뷰 거실','#3b4a5e')}${card('삼청동 찻집','#9a7b5d')}<div class="c soon"><small>새로운 풍경이 계속 찾아와요</small></div></div>
+     <h4>더 많은 공간 <span class="badge2">멤버십</span></h4><div class="grid3">${card('동해 바다 카페','',true)}${card('호숫가 오두막','#5d8bb0')}${card('오로라 산장','#14283a')}<div class="c soon"><b>새 공간 준비 중</b><small>새로운 풍경이 계속 찾아와요</small></div></div>
+     <h4>내가 만든 공간</h4><div class="grid3">
+       ${card('내가 만든 공간 1','#6f8a99',false,true)}
+       ${S.saved?card(spaceName(),'',true,true,true):''}
+       <button class="c add" onclick="go('photo')" aria-label="새 공간 만들기: 내 사진으로 공간 만들기"><span class="pic"><b>+</b>새 공간 만들기</span></button>
+     </div>
+   </div></div>
+   ${S.saved?`<div class="toast" role="status">‘${esc(spaceName())}’을 저장했어요.<button onclick="go('done')">화분 놓기</button></div>`:''}
+ </div>`,
+
+ photo:()=>frame(`${head(1)}<div class="body">
+   <h3>사진을 골라주세요</h3><p class="lead">화분을 놓을 자리가 보이면 좋아요.</p>
+   <div class="pick">
+     <button onclick="go('compose')"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>사진 찍기</button>
+     <button onclick="go('compose')"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M4 16l5-5 4 4 3-3 4 4"/><circle cx="15.5" cy="9" r="1.4"/></svg>앨범 선택</button>
+   </div>
+   <div class="aiRow"><span>AI로 공간 다듬기</span><span class="badge">준비 중</span></div>
+   <p class="hint" style="margin-top:14px">JPG·PNG·WebP, 4MB 이하. 사진은 이 기기에만 저장돼요.</p>
+   <p style="margin-top:8px"><button class="btn ghost" onclick="go('error')">오류 예시 보기</button></p>
+ </div>`),
+
+ compose:()=>frame(`${head(2)}<div class="body">
+   <h3>화분을 놓을 자리를 남겨요</h3><p class="lead">사진을 끌어 옮기고, 아래에서 확대해요. 점선 안에 화분이 놓여요.</p>
+   <div class="frame" id="frame" tabindex="0" role="application" aria-label="사진 구도. 방향키로 이동, 더하기와 빼기로 확대와 축소">
+     <img id="cimg" src="${IMG}" alt="">
+     <div class="zone"><span>화분 자리</span></div>
+   </div>
+   <div class="zoom"><span aria-hidden="true">－</span><input id="zr" type="range" min="1" max="2.2" step="0.01" value="${S.zoom}" aria-label="사진 확대 비율"><span aria-hidden="true">＋</span></div>
+   <p style="text-align:center"><button class="btn ghost" onclick="S.zoom=1.15;S.x=0;S.y=0;render()">처음 구도로</button></p>
+ </div><div class="foot"><button class="btn sec" onclick="go('photo')">이전</button><button class="btn pri" onclick="go('name')">이 구도로 계속</button></div>`),
+
+ name:()=>frame(`${head(3)}<div class="body">
+   <h3>공간에 이름을 붙여요</h3>
+   <div class="thumb">${img(composeStyle(140/258))}</div>
+   <div class="field"><label for="nm">공간 이름</label><input id="nm" maxlength="20" value="${esc(S.name)}" placeholder="내가 만든 공간" autocomplete="off"><span class="count" id="cnt">${S.name.length} / 20</span>
+   <p class="hint">이름을 비우면 ‘내가 만든 공간’으로 저장해요. 나중에 공간 관리에서 바꿀 수 있어요.</p></div>
+ </div><div class="foot"><button class="btn sec" onclick="go('compose')">이전</button><button class="btn pri" onclick="go('weather')">다음</button></div>`),
+
+ weather:()=>frame(`${head(4)}<div class="body">
+   <h3>창밖에 날씨를 더할까요? <span style="font-weight:500;color:var(--sub);font-size:15px">(선택)</span></h3>
+   <div class="thumb" style="width:170px;height:226px">${img(composeStyle(170/258))}</div>
+   <div class="toggle"><div class="t"><b id="fxl">창밖 눈·비 효과</b><small>켜면 저장할 때 사진을 분석해 창문·실외 영역을 찾아요. 전송 여부는 다음에 한 번 더 물어봐요.</small></div>
+     <button class="switch" role="switch" aria-checked="${S.fx}" aria-labelledby="fxl" onclick="S.fx=!S.fx;render()"></button></div>
+   <p class="hint" style="margin-top:10px">끄고 저장해도 사진 배경으로 바로 쓸 수 있어요. 효과는 나중에 공간 관리에서 켤 수 있어요.</p>
+ </div><div class="foot"><button class="btn sec" onclick="go('name')">이전</button><button class="btn pri" onclick="go(S.fx?'consent':'done')">저장하기</button></div>`),
+
+ consent:()=>SCREENS.weather()+`<div class="scrim" onclick="if(event.target===this)go('weather')"><div class="bottomSheet" role="dialog" aria-modal="true" aria-labelledby="ct">
+   <div class="shead"><span></span><h2 id="ct">이 사진을 분석할까요?</h2><button class="iconbtn" aria-label="닫기" onclick="go('weather')">&times;</button></div>
+   <p class="lead" style="font-size:15px;line-height:1.6">사진 축소본을 Cloudflare AI로 보내 창문과 눈·비 효과 위치를 분석해요. 사람·개인정보도 전송될 수 있어요.</p>
+   <details class="info"><summary>전송 정보</summary><p>JPEG(긴 쪽 최대 1024px)을 BloomBreak의 Cloudflare 서버로 보내요. 분석이 끝나면 서버 사진은 지워져요. 동의는 저장하지 않고 전송할 때마다 물어봐요.</p></details>
+   <div class="foot eq" style="padding:14px 0 0"><button class="btn sec" onclick="S.fx=false;go('done')">분석 없이 저장</button><button class="btn pri" onclick="go('analyzing')">전송하고 분석</button></div>
+ </div></div>`,
+
+ analyzing:()=>frame(`<div class="shead"><span></span><h2 id="ttl">날씨 효과 분석 중</h2><span></span></div><div class="body">
+   <div class="thumb" style="width:170px;height:226px">${img(composeStyle(170/258))}</div>
+   <div class="progress" role="progressbar" aria-label="분석 진행" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${S.progress}"><i style="width:${S.progress}%"></i></div>
+   <ol class="stepsList"><li class="${S.progress>=34?'ok':'on'}">사진을 전송하고 있어요</li><li class="${S.progress>=67?'ok':S.progress>=34?'on':''}">창문과 실외 영역을 찾고 있어요</li><li class="${S.progress>=100?'ok':S.progress>=67?'on':''}">효과 위치를 정리하고 있어요</li></ol>
+   <p class="hint" style="margin-top:14px">보통 10초 안에 끝나요. 취소하면 사진만 저장할지 물어봐요.</p>
+ </div><div class="foot one"><button class="btn sec" onclick="clearInterval(T);go('weather')">취소</button></div>`),
+
+ result:()=>frame(`<div class="shead"><button class="iconbtn" aria-label="날씨 단계로" onclick="go('weather')">&lt;</button><h2 id="ttl">분석 결과</h2><span></span></div><div class="body">
+   <div class="thumb" style="width:216px;height:288px">${img(composeStyle(216/258))}${S.view==='mask'?'<div class="mask"></div>':S.view==='snow'?'<div class="snow">'+snow()+'</div>':''}</div>
+   <div class="seg" role="group" aria-label="미리보기 방식">${[['photo','사진'],['mask','효과 영역'],['snow','눈 미리보기']].map(([k,l])=>`<button aria-pressed="${(S.view||'mask')===k}" onclick="S.view='${k}';render()">${l}</button>`).join('')}</div>
+   ${S.view==='mask'||!S.view?'<p class="legend"><i></i>눈·비가 내리는 창밖 영역</p>':''}
+   <div class="notice">창밖에 눈·비 효과를 적용할 수 있어요. 실내와 창틀은 그대로 둬요.</div>
+   <p style="text-align:center"><button class="btn ghost" onclick="go('analyzing')">다시 분석하기</button></p>
+ </div><div class="foot eq"><button class="btn sec" onclick="S.fx=false;go('done')">효과 없이 저장</button><button class="btn pri" onclick="go('done')">이대로 저장</button></div>`),
+
+ fail:()=>frame(`<div class="shead"><button class="iconbtn" aria-label="날씨 단계로" onclick="go('weather')">&lt;</button><h2 id="ttl">분석하지 못했어요</h2><span></span></div><div class="body">
+   <div class="thumb" style="width:170px;height:226px">${img(composeStyle(170/258))}</div>
+   <div class="notice warn">이 사진에서 창문을 찾지 못했어요. 창밖이 보이도록 구도를 바꾸거나, 효과 없이 저장할 수 있어요.</div>
+   <p class="hint" style="margin-top:10px">네트워크 오류였다면 ‘다시 시도’를 눌러 주세요. 만든 사진과 이름은 그대로 있어요.</p>
+   <p style="text-align:center"><button class="btn ghost" onclick="go('compose')">구도 다시 고르기</button></p>
+ </div><div class="foot eq"><button class="btn sec" onclick="S.fx=false;go('done')">효과 없이 저장</button><button class="btn pri" onclick="go('analyzing')">다시 시도</button></div>`),
+
+ done:()=>frame(`<div class="shead"><span></span><h2 id="ttl">공간을 저장했어요</h2><button class="iconbtn" aria-label="닫기" onclick="S.saved=true;go('entry')">&times;</button></div><div class="body done">
+   <div class="ok" aria-hidden="true">✓</div>
+   <div class="thumb" style="width:150px;height:200px">${img(composeStyle(150/258))}</div>
+   <h3 style="margin-top:14px">‘${esc(spaceName())}’</h3>
+   <p class="lead">${S.fx?'창밖 눈·비 효과가 켜졌어요.':'사진 배경으로 저장했어요. 날씨 효과는 공간 관리에서 켤 수 있어요.'}</p>
+ </div><div class="foot"><button class="btn sec" onclick="S.saved=true;go('entry')">${S.fromPlant?'화분 심기로':'공간 목록'}</button><button class="btn pri" onclick="S.saved=true;go('entry')">이 공간에 화분 놓기</button></div>`),
+
+ exit:()=>SCREENS.weather()+`<div class="scrim center"><div class="dialog" role="alertdialog" aria-modal="true" aria-labelledby="xt" aria-describedby="xd">
+   <h2 id="xt">만들던 공간을 닫을까요?</h2><p id="xd">고른 사진과 구도, 이름은 저장되지 않아요.</p>
+   <div class="foot eq"><button class="btn sec" onclick="go('weather')">계속 만들기</button><button class="btn pri" style="background:var(--warn);color:var(--on-warn)" onclick="S.saved=false;go('entry')">닫기</button></div>
+ </div></div>`,
+
+ error:()=>SCREENS.photo()+`<div class="toast" role="alert">사진을 읽지 못했거나 용량이 커요. 다른 사진으로 다시 시도해 주세요.<button onclick="go('photo')">확인</button></div>`
+};
+
+const NOTES={
+ entry:['공간 시트 · 진입점','D005 공간 / BB-SCREEN:space',
+  ['‘내가 만든 공간’ 섹션의 마지막 칸 <b>새 공간 만들기</b> 카드(＋ 원형 아이콘)로 들어가요. 섹션이 비어 있어도 같은 자리에 보여요.','화분 심기 › 장소 선택에서도 같은 카드로 들어와요. 이 경우 완료 화면의 보조 버튼이 ‘화분 심기로’가 돼요.','저장 직후에는 새 카드에 테두리를 표시하고, 하단 알림에서 바로 ‘화분 놓기’로 이어 가요.'],
+  ['기존 섹션(기본 공간 / 더 많은 공간·멤버십 / 내가 만든 공간)과 카드 모양 유지.','변경: 만들기 화면 제목 ‘내 공간 만들기’ → 카드와 같은 ‘새 공간 만들기’.','현재 앱 버그: ‘내가 만든 공간 1’ 썸네일 위쪽에도 꽃멍 시계 글자(‘이번 쉼 …’)가 찍혀 있어요. 썸네일은 저장한 원본 사진으로 만들어야 해요.','추가: 저장 직후 새 카드 강조와 화분 놓기 알림.']],
+ photo:['1 · 사진','D014',
+  ['두 카드는 같은 크기(높이 118px)로 터치 영역을 넉넉히 해요.','AI로 공간 다듬기는 한 줄 + ‘준비 중’ 배지만 보여요.','형식·용량 안내를 카드 아래에 미리 적어 실패를 줄여요.'],
+  ['기존 사진 선택 v1.0.0 유지.','추가: 형식·용량(JPG·PNG·WebP, 4MB) 사전 안내, ‘이 기기에만 저장’ 문구.','만드는 동안 하단 탭(내 화분·공간·꾸미기·더보기)을 숨기는 전체 화면. 지금은 탭이 시트 아래로 비쳐 하단 버튼과 겹쳐 보여요.']],
+ compose:['2 · 구도','D014',
+  ['사진을 끌어 옮기고 슬라이더로 확대해요. 키보드: 방향키 이동, +/- 확대.','점선은 화분이 놓일 자리예요. 3:4 비율 그대로 저장돼요.','‘처음 구도로’로 언제든 되돌려요.'],
+  ['기존 문구 유지(‘사진을 끌어 옮기고, 아래에서 확대해요. 점선 안에 화분이 놓여요.’).','변경: 상단 단계 표시에서 완료한 단계를 눌러 돌아갈 수 있어요.']],
+ name:['3 · 이름','',
+  ['이름은 선택이에요. 비우면 ‘내가 만든 공간’으로 저장돼요.','20자 제한과 글자 수를 보여줘요.','작은 미리보기로 지금 만드는 공간을 확인해요.'],
+  ['추가: 글자 수 표시, ‘나중에 공간 관리에서 바꿀 수 있어요’ 안내.']],
+ weather:['4 · 날씨 (선택)','D006',
+  ['<b>버튼 3개 → 스위치 1개 + [이전][저장하기]</b>. 날씨 효과는 선택 기능이라, 마지막 행동은 언제나 ‘저장하기’ 하나예요.','스위치를 켜고 저장하면 전송 안내가 뜨고, 끄면 바로 저장돼요.','미리보기는 원본 사진만 보여줘요.'],
+  ['현재 앱: ‘사진만 저장’, ‘이전’, ‘날씨 효과 분석하기’ 세 버튼이 위아래로 나뉘어, 저장이 어디인지 헷갈려요.','현재 앱 버그: 미리보기 위쪽에 꽃멍 시계 글자(‘이번 쉼 0분 3초’)가 찍혀 있어요. 사진 캡처 대신 고른 원본을 써야 해요.','현재 앱: 하단 탭이 시트 뒤로 비쳐 하단 버튼 좌우에 초록 띠가 보여요.']],
+ consent:['전송 안내','D006 · 사진 분석 안내 v1.0.0',
+  ['핵심 두 문장 + 접힌 전송 정보.','동의는 저장하지 않고 매번 물어봐요.','‘분석 없이 저장’을 고르면 효과를 끄고 그대로 저장해요(흐름이 끊기지 않음).'],
+  ['기존 사진 분석 안내 v1.0.0 문구 유지.','변경: ‘분석 없이 사용’ → ‘분석 없이 저장’(이 흐름의 마지막 행동과 맞춤).']],
+ analyzing:['분석 중','',
+  ['세 단계 진행 표시로 기다리는 이유를 알려줘요.','취소하면 날씨 단계로 돌아가고 사진·이름은 유지돼요.','동작 줄이기 설정에서는 회전 표시를 멈춰요.'],
+  ['추가: 단계별 진행 표시와 예상 시간.']],
+ result:['분석 결과','날씨 효과 분석 v1.0.0',
+  ['‘사진 / 효과 영역 / 눈 미리보기’로 결과를 바로 확인해요.','결과 안내는 미리보기 바로 아래, 버튼 위에 둬요.','마음에 안 들면 ‘효과 없이 저장’ 또는 ‘다시 분석하기’.'],
+  ['추가: 효과 영역 표시와 눈 미리보기 전환.']],
+ fail:['분석 실패','',
+  ['창문을 못 찾은 경우와 네트워크 오류를 한 화면에서 다뤄요.','기본 행동은 ‘다시 시도’, 대안은 ‘효과 없이 저장’과 ‘구도 다시 고르기’.','만든 사진과 이름은 그대로 유지돼요.'],
+  ['추가: 실패 원인별 다음 행동 안내.']],
+ done:['저장 완료','',
+  ['저장한 공간을 바로 보여주고, 다음 행동은 ‘이 공간에 화분 놓기’.','화분 심기에서 들어왔다면 보조 버튼이 ‘화분 심기로’가 돼요.','공간 목록으로 돌아가면 새 카드가 강조돼요.'],
+  ['현재 앱: ‘공간을 저장했어요.’ 짧은 알림만 있고 다음 행동이 없어요.']],
+ exit:['닫기 확인','',
+  ['사진을 고른 뒤 ×를 누르면 한 번 확인해요.','‘계속 만들기’가 기본, ‘닫기’는 경고 색.','사진 고르기 전(1단계 시작)에는 확인 없이 닫혀요.'],
+  ['추가: 만들던 내용이 실수로 사라지지 않게 확인.']],
+ error:['사진 오류','',
+  ['읽을 수 없는 파일·용량 초과는 하단 알림으로 알려주고 같은 화면에 머물러요.','기존 문구 유지: ‘사진을 읽지 못했거나 용량이 커요. 다른 사진으로 다시 시도해 주세요.’'],
+  ['기존 오류 문구 유지.']]
+};
+
+function card(name,color,useImg,mine,isNew){return `<div class="c${isNew?' new':''}"><span class="pic" style="${color?'background:'+color:''}">${useImg?img('width:100%;height:100%;object-fit:cover'):''}${mine?'<button class="more" aria-label="'+esc(name)+' 더보기">⋮</button>':''}</span><em>${esc(name)}</em></div>`;}
+function composeStyle(scale){return `width:${330*S.zoom*scale}px;position:absolute;left:50%;top:50%;transform:translate(calc(-50% + ${S.x*scale}px),calc(-50% + ${S.y*scale}px))`;}
+function snow(){let h='';for(let i=0;i<36;i++)h+=`<b style="left:${(i*37)%100}%;animation-duration:${3+((i*7)%30)/10}s;animation-delay:-${(i*13)%40/10}s"></b>`;return h;}
+let T;
+function go(s){if(s!=='analyzing')clearInterval(T);if(s==='photo'&&S.screen==='entry'){S.zoom=1.15;S.x=0;S.y=0;S.name='';S.fx=false;S.view='mask';}S.screen=s;render();
+  if(s==='analyzing'){S.progress=0;render();T=setInterval(()=>{S.progress+=17;if(S.progress>=100){clearInterval(T);S.progress=100;S.screen=S.failNext?'fail':'result';S.failNext=!S.failNext;}render();},500);}
+  const f=$('#phone [role=dialog] h2, #phone [role=alertdialog] h2');}
+function render(){
+  $('#phone').innerHTML=SCREENS[S.screen]();
+  const n=NOTES[S.screen];
+  $('#notes').innerHTML=`<h2>${n[0]}</h2><span class="tag">${n[1]||'&nbsp;'}</span><h3>UX</h3><ul>${n[2].map(x=>`<li>${x}</li>`).join('')}</ul><h3>현재 앱 대비</h3><div class="chg"><ul>${n[3].map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  $('#map').innerHTML=FLOW.map(([k,l],i)=>`${i&&[1,2,3,4,5].includes(i)?'<span class="arrow" aria-hidden="true">›</span>':''}<button type="button" onclick="go('${k}')" ${S.screen===k?'aria-current="step"':''}>${l}</button>`).join('');
+  if(S.screen==='compose')bindCompose();
+  if(S.screen==='entry'){const bd=$('#phone .body');if(bd)bd.scrollTop=bd.scrollHeight;}
+  const nm=$('#nm');if(nm)nm.oninput=()=>{S.name=nm.value;$('#cnt').textContent=nm.value.length+' / 20';};
+}
+function bindCompose(){
+  const f=$('#frame'),im=$('#cimg'),zr=$('#zr');
+  const apply=()=>{im.style.cssText=composeStyle(1);};apply();
+  let d=null;
+  f.onpointerdown=e=>{d={x:e.clientX-S.x,y:e.clientY-S.y};f.setPointerCapture(e.pointerId);};
+  f.onpointermove=e=>{if(!d)return;S.x=Math.max(-120,Math.min(120,e.clientX-d.x));S.y=Math.max(-120,Math.min(120,e.clientY-d.y));apply();};
+  f.onpointerup=f.onpointercancel=()=>{d=null;};
+  f.onkeydown=e=>{const k=e.key,st=10;if(k==='ArrowLeft')S.x-=st;else if(k==='ArrowRight')S.x+=st;else if(k==='ArrowUp')S.y-=st;else if(k==='ArrowDown')S.y+=st;else if(k==='+'||k==='=')S.zoom=Math.min(2.2,S.zoom+.05);else if(k==='-')S.zoom=Math.max(1,S.zoom-.05);else return;e.preventDefault();zr.value=S.zoom;apply();};
+  zr.oninput=()=>{S.zoom=+zr.value;apply();};
+}
+document.querySelectorAll('[data-theme-set]').forEach(b=>b.onclick=()=>{const v=b.dataset.themeSet;if(v==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.dataset.theme=v;document.querySelectorAll('[data-theme-set]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));});
+render();
+</script>
+</body>
+</html>
