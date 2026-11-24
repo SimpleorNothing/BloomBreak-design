@@ -97,6 +97,7 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
 .messages:not(:empty)::after{content:"";display:block;width:10px;height:6px;margin:-5px auto 0;background:#fffaf0;clip-path:polygon(0 0,100% 0,50% 100%)}
 .timeline{position:absolute;left:8%;right:8%;bottom:31%;max-height:38%;overflow:auto;display:grid;gap:8px;visibility:hidden;pointer-events:auto}
 [data-visible="true"] .timeline{visibility:visible}.timeline-row{display:grid;grid-template-columns:42% 16% 42%;align-items:end;gap:0}.timeline-row .bubble{grid-column:1;grid-row:1;justify-self:center}.timeline-row.me .bubble{grid-column:3}.timeline-row time{grid-column:2;grid-row:1;text-align:left;padding-left:4px}.timeline-row.me time{text-align:right;padding:0 4px 0 0}.timeline-row time{color:white;font-size:10px;white-space:nowrap;text-shadow:0 1px 4px #000}.timeline-row.me time{order:-1}.timeline-row .bubble:last-child::after{display:none}.person .messages{display:none}
+.timeline-row,.timeline-row.me{display:block;position:relative;margin-left:22%;width:fit-content;max-width:35%}.timeline-row.me{margin-left:70%}.timeline-row .bubble{display:block}.timeline-row time,.timeline-row.me time{position:absolute;right:calc(100% + 5px);top:50%;transform:translateY(-50%);padding:0;order:initial}.phone[data-mode="avatars"] .timeline{display:none}.phone[data-mode="avatars"] .person .messages{display:grid}.timed{position:relative;width:fit-content;max-width:100%}.timed time{position:absolute;right:calc(100% + 5px);top:50%;transform:translateY(-50%);white-space:nowrap;font-size:9px;color:white;text-shadow:0 1px 4px #000}.mode-toggle{position:absolute;top:11%;left:5%;border:1px solid #fff5;border-radius:20px;padding:6px 10px;background:#22372e;color:white;z-index:2}
 </style>
 </head>
 <body>
@@ -106,7 +107,8 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
     <p>풍경을 터치하면 말풍선이 나타나고, 마지막 터치 5초 후 사라집니다.</p>
   </header>
   <details id="design-history" open>
-    <summary>수정 이력 · v1.1.0 · 2026-11-23</summary>
+    <summary>수정 이력 · v1.2.0 · 2026-11-24</summary>
+    <p>v1.2.0 · 2026-11-24: 초대자·친구 공통으로 이력의 발신자 이름을 제거하고 모든 시간을 말풍선 바로 왼쪽에 표시한다. 아이콘 위 메시지도 같은 방식이며 참여자 이름은 아이콘 아래 유지한다. 화면 가장자리에서 시간 잘림을 방지한다. 웹·Android 소스 적용, 새 APK·IPA·운영 배포·실기기 미확인.</p>
     <p>v1.1.0 · 2026-11-23: 대화 이력 말풍선의 가로 중심을 발신자 아이콘 중심에 맞춘다. 화면 좌우 끝 정렬에서 참여자별 실제 위치 정렬로 변경하며 시간순·오전/오후 시간·최근 5개와 전체 대화 동작은 유지한다. 3명 이상은 시간을 말풍선 아래에 표시한다. 웹·Android 개발 소스 적용, 신규 APK·IPA·실기기·브라우저 배치 미확인.</p>
     <p>v1.0.9 · 2026-11-22: 초대자와 친구 공통으로 최근 대화를 하나의 시간순 목록으로 표시한다. 상대는 왼쪽, 나는 오른쪽이며 각 말풍선 옆에 오전 10:35 형식의 시간을 붙인다. 검은 바탕 없이 풍경과 기존 말풍선 색을 유지한다. 전체 대화도 같은 방식이다. 웹·Android 소스 검증, 새 APK·실기기·운영 친구 화면 미확인.</p>
     <p>v1.0.8 · 2026-11-22: 입력 중인 글은 자기 화면에만 보이고 서버나 상대에게 전송하지 않는다. 전송 버튼 또는 한글 조합이 끝난 Enter로 보낸 메시지만 공유한다. 이전 버전 상대의 초안도 표시하지 않는다. 웹·Android 소스 반영, 새 APK·실기기 미확인.</p>
@@ -193,6 +195,8 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
 </main>
 <script>
 for (const phone of document.querySelectorAll('.phone')) {
+  const toggle=document.createElement('button');toggle.type='button';toggle.className='mode-toggle';toggle.textContent='아이콘 위 메시지 보기';phone.append(toggle);toggle.onclick=()=>{const avatars=phone.dataset.mode!=='avatars';phone.dataset.mode=avatars?'avatars':'history';toggle.textContent=avatars?'메시지 이력 보기':'아이콘 위 메시지 보기';showTemporarily();};
+  for(const bubble of phone.querySelectorAll('.messages .bubble')){const row=document.createElement('div');row.className='timed';bubble.before(row);const time=document.createElement('time');time.textContent='오후 12:21';row.append(time,bubble);}
   const scene = phone.querySelector('.scene');
   const groups = [...phone.querySelectorAll('.messages')];
   const composer = phone.querySelector('.composer');
@@ -233,6 +237,7 @@ for (const phone of document.querySelectorAll('.phone')) {
 </script>
 </body>
 </html>
+
 
 
 
