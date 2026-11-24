@@ -1,3 +1,7 @@
+## 2026-11-24 · 오로라 움직임·호수 반사·화분 중앙
+
+[동작 시안](prototypes/bloombreak-aurora-motion.html) v1.0.0 · [테이블 배치](prototypes/bloombreak-scene-table-defaults.html) v1.1.0. 영상 재생에 의존하지 않는 원본 기반 Canvas 움직임, 가로 잔물결 반사, 상판 중앙의 화분 받침을 적용합니다. 앱 PR [#1327](https://github.com/SimpleorNothing/BloomBreak/pull/1327), main `6ec5d9f2`. 현재 head Codemagic 필수 검사·관련 로컬14/14 통과. 웹/Android 개발 소스 동기화이며 새 발행 APK/IPA·실기기 반영은 미확인입니다.
+
 ## 2026-11-24 · 동해안 낮 비·눈 전용 배경 연결
 
 첨부0.4.201/264에서 비·눈 입자가 맑은 낮 사진 위에만 표시되는 원인을 확인했다. east-sea-cafe의 낮 rain/snow 경로를 별도 day-rain/day-snow 원화로 연결한다. 맑음·노을·밤의 기존 경로, 과거 hash URL 읽기, 공간 ID·화분·저장 좌표를 보존한다. 비 원화는 흐린 하늘·젖은 암반·수면의 작은 빗물 흔적, 눈 원화는 흐린 겨울 하늘·암반/수목 적설을 포함하고 정지 강수 입자를 추가하지 않는다. 움직이는 비·눈/파도는 기존 공통 렌더러가 같은 마스크에서 합성한다.
