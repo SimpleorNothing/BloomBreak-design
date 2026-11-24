@@ -1,6 +1,10 @@
 ## 2026-11-24 · 오로라 움직임·호수 반사·화분 중앙
 
-[동작 시안](prototypes/bloombreak-aurora-motion.html) v1.0.0 · [테이블 배치](prototypes/bloombreak-scene-table-defaults.html) v1.1.0. 영상 재생에 의존하지 않는 원본 기반 Canvas 움직임, 가로 잔물결 반사, 상판 중앙의 화분 받침을 적용합니다. 앱 PR [#1327](https://github.com/SimpleorNothing/BloomBreak/pull/1327), main `6ec5d9f2`. 현재 head Codemagic 필수 검사·관련 로컬14/14 통과. 웹/Android 개발 소스 동기화이며 새 발행 APK/IPA·실기기 반영은 미확인입니다.
+- 영상 autoplay/디코더 의존을 제거하고 승인 원본 하늘을 Canvas 24fps로 이동·변형한다. 호수의 좁은 세로 녹색 점광은 깨끗한 수면을 페더 합성해 지우고 가로로 끊긴 잔물결 반사로 바꾼다. 창틀·설경·실내는 원본 픽셀을 유지한다. 원본 WebP/MP4 파일은 변경하지 않는다.
+- 오로라 첫 화분 래퍼 중심 y .762 → .724, x .5/너비 .16 유지. 기존의 정확한 자동 기본값만 읽기 시 보정하고 수동 배치·개인 사진·다른 공간·저장 데이터·성장 기록은 유지한다. 큰 화분의 기존 받침 접점 보정을 공유한다.
+- 웹/Android JS·로더 동일. 실제 Native Canvas 픽셀 검사와 카탈로그·생명주기·Android/iOS 내장 이미지 브리지·지연 응답·배치 검사 총9/9 통과. 시스템 모션 줄이기 고정·화면 숨김/화면 밖/종료 정지·캡처 경로 유지. Chromium 실행 파일이 없어 실제 브라우저·WebView 검수는 미완료다. 새 APK/IPA 발행·기기 설치·운영 배포 확인은 별도이며 기존 설치본에 적용됐다고 주장하지 않는다.
+- 시안: design/prototypes/bloombreak-aurora-motion.html v1.0.0. BB-SCREEN:space #890 / gaze #878 / edit #875 후속, D005/D028/D029/D030 원 주석 보존. 현재 head 필수 CI·머지는 변경 PR에서 별도 확인한다.
+
 
 ## 2026-11-24 · 동해안 낮 비·눈 전용 배경 연결
 
