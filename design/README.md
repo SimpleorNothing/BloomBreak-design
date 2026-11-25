@@ -1,3 +1,11 @@
+## 2026-11-26 · 카테고리 멤버십 표시·월5천원 배경 선택
+
+사용자 승인 시안 v2.0을 구현한다. 각 공간·소품 카드의 멤버십 버튼을 제거하고 카테고리 제목 옆 작은 표시로 통일한다. 표시의 결제 연결과 카드 미리보기·소품 선택은 유지한다. 공간/멤버십 화면에서 ‘멤버십 공간 1개 고르기’ → 세 공간 중 단일 초안 → 미리보기 → 확인 → 서버 저장 후 사용 가능 흐름을 제공한다. 구매 확인 후 미선택 상태는 선택 화면으로 연결한다. 기존 선택 정책(결제 기간당1곳, 기간 종료 후 변경)과 기존 화분 유지 정책을 보존한다. 서버가 확인한 계정별 선택·기간을 사용하며 기기 localStorage는 권한 근거로 사용하지 않는다. Android에도 같은 신규 배치 확인을 적용한다.
+
+서버 변경: `workers/space-studio/migrations/0005_membership_background.sql`을 기존0004 뒤에 먼저 적용한 뒤 Worker를 배포해야 한다. 계정 삭제 시 선택은 membership_accounts 행과 함께 삭제된다. 기존 기기 전용 선택은 계정 확인 없이 자동 이관하지 않으며 최초 서버 선택을 다시 받는다. 서버 권한·계정·기간·상품을 확인하고 세 공간 ID만 허용한다. 실제 스토어 결제/운영DB 마이그레이션/Worker 배포는 이번 PR로 완료되지 않는다.
+
+관련 Node83/83 통과: 카테고리 한국어·영어/미러, 서버 선택·중복/타계정·미결제·기간·만료·조작 요청 거부, Android 확인·계정 전환·저장실패 미지급·단일 초안·확정, 기존 Android/iOS 구매 회귀. 모의 네이티브/스토어·메모리DB 검증이다. Chromium 실행 파일 부재로 브라우저/WebView 실제 배치·스토어 테스트 주문·신규APK/IPA는 미확인이다. 발행 빌드 번호 유지. BB-SCREEN:space D005/#889/#890 및 꾸미기 D007/D008·멤버십 D019/D020 원 주석 보존. 필수 원격CI·머지는 PR에서 확인한다.
+
 ## 2026-11-25 · 상품별 멤버십 표시와 결제 화면 연결
 
 사용자 첨부의 테두리 ‘멤버십’ 표시를 공간 섹션 제목과 각 추가 공간·추가 소품에 독립 버튼으로 제공한다. 표시를 누르면 기존 꽃멍 멤버십 비교·결제 화면을 연다. 카드 본문의 공간 미리보기와 이미 보유한 소품 선택을 유지하고, 미보유 소품 본문도 같은 결제 화면으로 연결한다. AI 공간 다듬기의 ‘이용권 받기’는 같은 ‘멤버십’ 표시로 통일한다. 버튼은 44px 터치 영역·키보드 포커스·한국어/영어 접근성 이름을 제공하고 버튼 안에 버튼을 중첩하지 않는다. 진입만으로 로그인·구매·권한 지급을 시작하지 않는다. 기존 요금·로그인·스토어 사전 확인·영수증 검증을 유지한다.
@@ -159,7 +167,7 @@ Canvas 픽셀·실제 메뉴/초대 캡처·비/눈·GPU 오류 대체 회귀를
 
 사용자 승인 이름: 한강뷰 거실 · 삼청동 찻집 · 오로라 산장 · 동해 바다 카페 · 호숫가 오두막. 카탈로그·기본 대체 목록·공간 카드·화분 추가·미리보기·배경 도감의 표시 이름을 동기화한다. 공간 ID·이미지 경로·배치·저장 형식·개인 공간 이름은 유지한다. BB-SCREEN:space D005/#889/#890, plant D013/#874의 원 주석을 보존한다. 웹/Android 개발 소스 반영, 새 APK·IPA 발행 및 실기기 확인 전이다.
 
-- [bloombreak-space-three-rows.html](prototypes/bloombreak-space-three-rows.html) v1.2.0
+- [bloombreak-space-three-rows.html](prototypes/bloombreak-space-three-rows.html) v1.5.0 (v1.4.0 멤버십 배지 버튼, v1.5.0 멤버십 추가 공간 선택)
 - [bloombreak-planting-spaces.html](prototypes/bloombreak-planting-spaces.html) v1.3.0
 - [bloombreak-premium-backgrounds.html](prototypes/bloombreak-premium-backgrounds.html) v1.11.0
 - [bloombreak-space-preview-planting.html](prototypes/bloombreak-space-preview-planting.html) v1.3.0
