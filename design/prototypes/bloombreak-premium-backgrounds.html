@@ -12,14 +12,15 @@ details{padding:.5rem .8rem;background:#fff;border-radius:.6rem}
 #previews{display:grid;grid-template-columns:repeat(auto-fit,minmax(16rem,1fr));gap:1rem}
 section{padding:.75rem;background:#fff;border-radius:.8rem}
 </style>
-<script src="../../web/premium-coastal-scenes.js?v=coastal-270-snow-surf-20261126-coastal-approved-sky-20261125-calm-coast-20261124-1-east-sea-weather-20261124-coastal-motion-20261123-centered-20261122-east-sea-sunset-20261122-lighthouse-flash-1" defer></script>
+<script src="../../web/premium-coastal-scenes.js?v=coastal-motion-recovery-20261126-coastal-270-snow-surf-20261126-coastal-approved-sky-20261125-calm-coast-20261124-1-east-sea-weather-20261124-coastal-motion-20261123-centered-20261122-east-sea-sunset-20261122-lighthouse-flash-1" defer></script>
 <script src="../../web/premium-scene-previews.js?v=coastal-lamp-clouds-20261123-centered-20261122-east-sea-sunset-20261122" defer></script>
 </head>
 <body>
 <main>
 <h1>유료 배경 미리보기</h1>
 <details id="design-history" open>
-<summary>수정 이력 · v1.17.0</summary>
+<summary>수정 이력 · v1.18.0</summary>
+<p>2026-11-26 · v1.18.0 · 변경 전: 그리기 오류 한 번 후 효과 전체 정지, 승인 하늘이 비 캔버스를 가림. 변경 후: 오류 프레임 이후 복구·진단 기록, 기존 마스크 안의 비를 승인 하늘 위에 합성. 원본·실내 보호·화분/UI 배치·모션 줄이기 보존. Chromium9조합 일반/모션 줄이기·오류 복구 확인. 새 APK/WebView·실기기는 미확인. D005/#890·D028/#878 보존.</p>
 <p>2026-11-26 · v1.17.0 · 270의 낮·눈 등 승인 하늘 누락을9조합 연결로 수정. Android 파도는 기존 영상의288개 이미지 프레임으로 재생해 미디어 디코더 의존 제거. 기존 마스크·해안·실내·화분 배치와 모션 줄이기 보존. 기존 시안 확대 출력 바이트 재사용이며 새 네이티브6K 원화가 아님. 개발 소스·로컬 검사 반영, 새 APK/WebView·실기기 미확인. D005/#890·D028/#878 보존.</p>
 <p>2026-11-25 · v1.16.0 · 낮 맑음의 작은 구름 → 승인 9종 시안의 맑은 하늘을 기존 하늘 마스크 안에 합성. 바다·등대·실내·화분 배치 보존. 바람 끔 잔파도·켬 큰 파도 유지. 갤러리 미리보기·다운로드도 같은 하늘 합성. APK 서명 전 렌더러·구름·마스크 해시와 진입 로더 검증 추가. 원본은 기존 852×1846 생성 이미지의 확대 출력이며 새로운 네이티브 6K 이미지가 아님. 개발 소스 반영, 새 APK/실제 WebView·실기기 미확인. D005/#890·D028/#878 원 주석 보존.</p>
 <p>2026-11-24 · v1.15.0 · 266 파도 재점검: 기존 바람 끔에서 수면 완전 정지 → 바람 끔에서도 동해 잔파도, 바람 켬에서 큰 파도. 호숫가의 바람 끔은 정지 유지. 모션 줄이기·화면 숨김·실내 보호·노을 합성 유지. 웹/Android 소스 반영, 기존266 APK에는 미포함·신규 APK/IPA 및 실기기 확인 전. D005/D028 원 주석 보존.</p>
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
 
 
 
