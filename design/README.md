@@ -1,3 +1,9 @@
+## 2026-11-26 · 최종 성장 후 꽃멍 감상
+
+개화 후 풍성함 성장까지 완료(lushComplete)하면 꽃멍 성장 안내와 하단 진행 바를 숨긴다. 풍성함 모델이 없는 경로는 기존 complete를 최종 기준으로 쓴다. 성장 중·씨앗 대기는 기존 안내를 유지하며 새 씨앗으로 바꾸면 다시 표시한다. 글귀는 기존 8초 표시·60~120초 간격을 유지하고 꽃멍·쉼 기록 적립은 계속한다. 한글·영문 및 Android/iPhone 공통 웹 소스에 적용한다. D028 / BB-SCREEN:gaze #878 원 주석 보존.
+
+시안: `design/prototypes/bloombreak-gaze-growth-complete.html` v1.0.0. 신규 경계·언어·미러·글귀 검사6건과 기존 글귀8건, 성장/적립4건 총18/18 통과. 기존 post-bloom-growth 마지막1건은 수정 전 main에서도 ownedCopy 미정의 fixture로 실패함을 재현했다. Chromium 실행 파일 부재로 실제 브라우저/WebView 및 실기기 검수는 미확인이다. 웹/Android JS·CSS·진입 로더 동일. iOS는 tools/prepare-ios-webassets.py로 같은 web 소스를 패키징한다. 신규 APK/AAB/IPA를 실행하지 않았으며 발행 빌드 번호는 유지한다. 현재 head 필수 원격 CI·머지·운영 배포는 PR에서 별도 확인한다.
+
 ## 2026-11-26 · 더보기 5개 그룹 재정리
 
 1그룹은 성장 기록·꽃 이야기·기록 저장·복원, 2그룹은 알림·홈 화면 위젯·화면 테마·언어(로그인 시 계정 관리 포함), 3그룹은 꽃멍 멤버십 단독, 4그룹은 도움말과 문의·앱 정보, 5그룹은 심사 계정 로그인이다. 기존 버튼을 이동해 저장·복원·인증·결제 동작과 한국어/영어 표시를 유지한다. BB-SCREEN:more D011/D012 및 D025 원 주석을 보존한다. 시안 `design/prototypes/bloombreak-more-language.html` v1.6.0.
