@@ -98,16 +98,24 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
 .timeline{position:absolute;left:8%;right:8%;bottom:31%;max-height:38%;overflow:auto;display:grid;gap:8px;visibility:hidden;pointer-events:auto}
 [data-visible="true"] .timeline{visibility:visible}.timeline-row{display:grid;grid-template-columns:42% 16% 42%;align-items:end;gap:0}.timeline-row .bubble{grid-column:1;grid-row:1;justify-self:center}.timeline-row.me .bubble{grid-column:3}.timeline-row time{grid-column:2;grid-row:1;text-align:left;padding-left:4px}.timeline-row.me time{text-align:right;padding:0 4px 0 0}.timeline-row time{color:white;font-size:10px;white-space:nowrap;text-shadow:0 1px 4px #000}.timeline-row.me time{order:-1}.timeline-row .bubble:last-child::after{display:none}.person .messages{display:none}
 .timeline-row,.timeline-row.me{display:block;position:relative;margin-left:22%;width:fit-content;max-width:35%}.timeline-row.me{margin-left:70%}.timeline-row .bubble{display:block}.timeline-row time,.timeline-row.me time{position:absolute;right:calc(100% + 5px);top:50%;transform:translateY(-50%);padding:0;order:initial}.phone[data-mode="avatars"] .timeline{display:none}.phone[data-mode="avatars"] .person .messages{display:grid}.timed{position:relative;width:fit-content;max-width:100%}.timed time{position:absolute;right:calc(100% + 5px);top:50%;transform:translateY(-50%);white-space:nowrap;font-size:9px;color:white;text-shadow:0 1px 4px #000}.mode-toggle{position:absolute;top:11%;left:5%;border:1px solid #fff5;border-radius:20px;padding:6px 10px;background:#22372e;color:white;z-index:2}
+/* v1.3: available-height timeline and isolated live sender columns. */
+.phone:not([data-mode="avatars"])[data-visible="true"] .timeline{top:3%;bottom:31%;max-height:none;padding-top:44px;align-content:start}
+.phone:not([data-mode="avatars"])[data-visible="true"] :is(.toolbar,.room-clock){visibility:hidden}
+.mode-toggle{top:2%;left:auto;right:4%;min-height:44px}
+.timed{display:grid;justify-items:center;gap:2px;min-width:0}
+.timed time{position:static;transform:none;justify-self:start;white-space:normal;overflow-wrap:anywhere}
+.timeline .bubble{max-height:none;overflow:visible}
 </style>
 </head>
 <body>
 <main>
   <header>
     <h1>함께 보기 대화 시안</h1>
-    <p>풍경을 터치하면 말풍선이 나타나고, 마지막 터치 5초 후 사라집니다.</p>
+    <p>풍경을 터치하면 전체 대화를 표시합니다. 화면을 넘는 이력은 스크롤하고 대화 닫기로 풍경에 돌아갑니다.</p>
   </header>
   <details id="design-history" open>
-    <summary>수정 이력 · v1.2.0 · 2026-11-24</summary>
+    <summary>수정 이력 · v1.3.0 · 2026-11-26</summary>
+    <p>v1.3.0: 입력 중 시간과 말풍선을 참여자 열 안에 배치해 겹침을 방지한다. 풍경 터치 시 최근 5개 제한 없이 퇴장자 포함 전체 대화를 시간순으로 불러온다. 가용 화면 전체 높이·세로 스크롤, 읽는 동안 유지, 대화 닫기로 복귀. 웹·Android 개발 소스 적용, 새 APK·IPA·실기기 미확인. BB-SCREEN:together #882 후속, 기존 D033/D036 보존.</p>
     <p>v1.2.0 · 2026-11-24: 초대자·친구 공통으로 이력의 발신자 이름을 제거하고 모든 시간을 말풍선 바로 왼쪽에 표시한다. 아이콘 위 메시지도 같은 방식이며 참여자 이름은 아이콘 아래 유지한다. 화면 가장자리에서 시간 잘림을 방지한다. 웹·Android 소스 적용, 새 APK·IPA·운영 배포·실기기 미확인.</p>
     <p>v1.1.0 · 2026-11-23: 대화 이력 말풍선의 가로 중심을 발신자 아이콘 중심에 맞춘다. 화면 좌우 끝 정렬에서 참여자별 실제 위치 정렬로 변경하며 시간순·오전/오후 시간·최근 5개와 전체 대화 동작은 유지한다. 3명 이상은 시간을 말풍선 아래에 표시한다. 웹·Android 개발 소스 적용, 신규 APK·IPA·실기기·브라우저 배치 미확인.</p>
     <p>v1.0.9 · 2026-11-22: 초대자와 친구 공통으로 최근 대화를 하나의 시간순 목록으로 표시한다. 상대는 왼쪽, 나는 오른쪽이며 각 말풍선 옆에 오전 10:35 형식의 시간을 붙인다. 검은 바탕 없이 풍경과 기존 말풍선 색을 유지한다. 전체 대화도 같은 방식이다. 웹·Android 소스 검증, 새 APK·실기기·운영 친구 화면 미확인.</p>
@@ -159,7 +167,7 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
     </div>
   </article>
   <article>
-    <div class="caption"><h2>5초 후</h2><p>상단 정보·시계·말풍선이 사라지고 참여자 아이콘과 입력창은 남습니다.</p></div>
+    <div class="caption"><h2>실시간 말풍선</h2><p>상단 정보·시계·말풍선이 사라지고 참여자 아이콘과 입력창은 남습니다.</p></div>
     <div class="phone" data-visible="false">
       <button class="scene" aria-expanded="false" type="button" aria-label="풍경 터치로 최근 대화 보기"></button>
       <div class="toolbar">
@@ -195,7 +203,7 @@ h2 { font-size: 17px; margin: 0 0 3px; letter-spacing: -.035em; }
 </main>
 <script>
 for (const phone of document.querySelectorAll('.phone')) {
-  const toggle=document.createElement('button');toggle.type='button';toggle.className='mode-toggle';toggle.textContent='아이콘 위 메시지 보기';phone.append(toggle);toggle.onclick=()=>{const avatars=phone.dataset.mode!=='avatars';phone.dataset.mode=avatars?'avatars':'history';toggle.textContent=avatars?'메시지 이력 보기':'아이콘 위 메시지 보기';showTemporarily();};
+  const toggle=document.createElement('button');toggle.type='button';toggle.className='mode-toggle';toggle.textContent='대화 닫기';phone.append(toggle);toggle.onclick=()=>{const avatars=phone.dataset.mode!=='avatars';phone.dataset.mode=avatars?'avatars':'history';toggle.textContent=avatars?'전체 대화 보기':'대화 닫기';showTemporarily();};
   for(const bubble of phone.querySelectorAll('.messages .bubble')){const row=document.createElement('div');row.className='timed';bubble.before(row);const time=document.createElement('time');time.textContent='오후 12:21';row.append(time,bubble);}
   const scene = phone.querySelector('.scene');
   const groups = [...phone.querySelectorAll('.messages')];
@@ -212,10 +220,12 @@ for (const phone of document.querySelectorAll('.phone')) {
   function showTemporarily() {
     setVisible(true);
     clearTimeout(hideTimer);
-    hideTimer = setTimeout(() => setVisible(false), 5000);
+    if(phone.dataset.mode==='avatars')hideTimer = setTimeout(() => setVisible(false), 5000);
   }
 
-  scene.addEventListener('click', showTemporarily);
+  scene.addEventListener('click',()=>{phone.dataset.mode='history';toggle.textContent='대화 닫기';showTemporarily();phone.querySelector('.timeline').scrollTop=phone.querySelector('.timeline').scrollHeight;});
+  const timeline=phone.querySelector('.timeline');
+  for(let i=5;i<=30;i++){const row=document.createElement('div');row.className='timeline-row'+(i%2?' me':'');const bubble=document.createElement('span');bubble.className='bubble';bubble.textContent='함께 보는 풍경 · 대화 '+i;const time=document.createElement('time');time.textContent='오후 11:'+String(i).padStart(2,'0');row.append(bubble,time);timeline.append(row);}
   composer.querySelector('.emoji').addEventListener('click', () => {
     input.setRangeText('🙂', input.selectionStart, input.selectionEnd, 'end');
     input.focus();
@@ -229,7 +239,7 @@ for (const phone of document.querySelectorAll('.phone')) {
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
     bubble.textContent = message;
-    row.append(bubble,time);const timeline=phone.querySelector('.timeline');timeline.append(row);while(timeline.children.length>5)timeline.firstElementChild.remove();timeline.scrollTop=timeline.scrollHeight;
+    row.append(bubble,time);const timeline=phone.querySelector('.timeline');timeline.append(row);timeline.scrollTop=timeline.scrollHeight;
     composer.reset();
     showTemporarily();
   });
@@ -237,6 +247,8 @@ for (const phone of document.querySelectorAll('.phone')) {
 </script>
 </body>
 </html>
+
+
 
 
 
